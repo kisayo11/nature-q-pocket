@@ -1,4 +1,6 @@
 // Google Sheets Auto-Sync Utility
+import defaultQuizData from '../data/quizData.json';
+
 const SPREADSHEET_ID = '1kHG6C2qzSdWtrJXv-yHrC5rSUyUq4199MS_KL0m4CGE';
 
 async function fetchSheetGViz(tabName) {
@@ -155,7 +157,20 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
         }).filter(Boolean);
 
         if (quizRows.length > 0) {
-          result.updatedQuiz = quizRows;
+          // Merge sheet quiz rows with master defaultQuizData (sheet rows take priority by ID)
+          const sheetMap = new Map();
+          quizRows.forEach((q) => {
+            if (q.id) sheetMap.set(q.id, q);
+          });
+          const merged = defaultQuizData.map((item) => {
+            return sheetMap.has(item.id) ? { ...item, ...sheetMap.get(item.id) } : item;
+          });
+          quizRows.forEach((q) => {
+            if (q.id && !merged.some((m) => m.id === q.id)) {
+              merged.push(q);
+            }
+          });
+          result.updatedQuiz = merged;
         }
       }
     } catch (e) {

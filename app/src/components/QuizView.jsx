@@ -21,6 +21,7 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
 
   const [quizMode, setQuizMode] = useState('quiz'); // 'quiz' | 'flashcard'
   const [filterMode, setFilterMode] = useState('all'); // 'all' | 'wrong' | 'must'
+  const [questionCount, setQuestionCount] = useState(30); // 10 | 30 | 45
   
   // Shuffled items state (랜덤 셔플된 문제 리스트)
   const [shuffledList, setShuffledList] = useState(() => shuffleArray(rawList));
@@ -46,8 +47,9 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
     setShowResult(false);
   }, [quizList]);
 
-  // Active Questions filtered by Mode
+  // Active Questions filtered by Mode & Count
   const activeQuestions = useMemo(() => {
+    let list = shuffledList;
     if (filterMode === 'wrong') {
       const filtered = shuffledList.filter((q) => wrongQuestionIds[q.id]);
       return filtered.length > 0 ? filtered : shuffledList;
@@ -57,8 +59,12 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
       const filtered = shuffledList.filter((q) => mustRules.includes(q.rule));
       return filtered.length > 0 ? filtered : shuffledList;
     }
-    return shuffledList;
-  }, [shuffledList, filterMode, wrongQuestionIds]);
+    // Standard 'all' mode: limit to questionCount (e.g. 30 questions)
+    if (questionCount && list.length > questionCount) {
+      return list.slice(0, questionCount);
+    }
+    return list;
+  }, [shuffledList, filterMode, wrongQuestionIds, questionCount]);
 
   const currentQ = activeQuestions[currentIdx] || activeQuestions[0] || rawList[0];
 
@@ -250,6 +256,47 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
           <span>순서 섞기</span>
         </button>
       </div>
+
+      {/* 2-1. Question Count Selector (30문항 실전모의 / 45문항 전체 / 10문항 스피드) */}
+      {filterMode === 'all' && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 4px', fontSize: '11.5px', color: 'var(--text-sub)' }}>
+          <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span>출제 범위:</span>
+            <strong style={{ color: 'var(--primary)' }}>{activeQuestions.length}문항</strong>
+          </span>
+          <div style={{ display: 'flex', gap: 5 }}>
+            {[
+              { count: 30, label: '30문항 (실전모의)' },
+              { count: 45, label: '45문항 (전체)' },
+              { count: 10, label: '10문항 (스피드)' }
+            ].map(({ count, label }) => (
+              <button
+                key={count}
+                onClick={() => {
+                  setQuestionCount(count);
+                  setCurrentIdx(0);
+                  setSelectedOption(null);
+                  setShowResult(false);
+                }}
+                style={{
+                  padding: '4px 9px',
+                  borderRadius: '12px',
+                  border: '1px solid',
+                  borderColor: questionCount === count ? 'var(--primary)' : 'var(--border)',
+                  background: questionCount === count ? 'var(--primary-light)' : 'var(--surface-raised)',
+                  color: questionCount === count ? 'var(--primary)' : 'var(--text-sub)',
+                  fontWeight: questionCount === count ? 800 : 600,
+                  fontSize: '11px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* MODE 1: 실전 모의 퀴즈 */}
       {quizMode === 'quiz' && (

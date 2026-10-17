@@ -23,7 +23,6 @@ export default function PocketCardReader({
   const [copied, setCopied] = useState(false);
   const [checkedPoints, setCheckedPoints] = useState({});
   const [speaking, setSpeaking] = useState(false);
-  const [pdfViewMode, setPdfViewMode] = useState('pdf'); // 'pdf' | 'text'
 
   if (!rule) return null;
 
@@ -293,7 +292,7 @@ export default function PocketCardReader({
             </div>
           )}
 
-          {/* TAB 3: 공식 규정집 원본 (PDF 뷰어 + 텍스트 모드 전환) */}
+          {/* TAB 3: 공식 규정집 원본 (PDF 전용 뷰어) */}
           {activeTab === 'fulltext' && (
             <div className="tab-pane-fade">
               {/* PDF Control & Notice Bar */}
@@ -332,55 +331,19 @@ export default function PocketCardReader({
                     <BookOpen size={13} />
                     <span>핸드북</span>
                   </a>
-                  <button
-                    className={`pdf-btn-action ${pdfViewMode === 'text' ? 'active' : ''}`}
-                    onClick={() => setPdfViewMode((prev) => (prev === 'pdf' ? 'text' : 'pdf'))}
-                    title="PDF / 텍스트 보기 전환"
-                  >
-                    <FileText size={13} />
-                    <span>{pdfViewMode === 'pdf' ? '텍스트 모드' : 'PDF 뷰어'}</span>
-                  </button>
                 </div>
               </div>
 
-              {pdfViewMode === 'pdf' ? (
-                <div className="pdf-iframe-container">
-                  <iframe
-                    src={`${rule.pdfUrl || `/regulations/${rule.code}.pdf`}#toolbar=0&navpanes=0`}
-                    title={`${rule.code} ${rule.title} 규정집 원문`}
-                    className="pdf-embed-frame"
-                  />
-                  <div className="pdf-fallback-hint">
-                    <span>💡 스마트폰에서 확대·축소나 인쇄가 필요하시면 상단 <strong>[새 창 열기]</strong>를 터치하세요.</span>
-                  </div>
+              <div className="pdf-iframe-container">
+                <iframe
+                  src={`${rule.pdfUrl || `/regulations/${rule.code}.pdf`}#toolbar=0&navpanes=0`}
+                  title={`${rule.code} ${rule.title} 규정집 원문`}
+                  className="pdf-embed-frame"
+                />
+                <div className="pdf-fallback-hint">
+                  <span>💡 스마트폰에서 확대·축소나 인쇄가 필요하시면 상단 <strong>[새 창 열기]</strong>를 터치하세요.</span>
                 </div>
-              ) : (
-                <div className="clean-fulltext-card">
-                  {(rule.fullTextSnippet || rule.purpose || '원문 준비 중입니다.').split('\n\n').map((paragraph, pIdx) => {
-                    const trimmed = paragraph.trim();
-                    if (!trimmed) return null;
-
-                    // Section Header styling
-                    if (trimmed.startsWith('[') && trimmed.includes(']')) {
-                      const lines = trimmed.split('\n');
-                      const header = lines[0];
-                      const content = lines.slice(1).join('\n');
-                      return (
-                        <div key={pIdx} className="fulltext-section-box">
-                          <div className="fulltext-sec-header">{header}</div>
-                          <div className="fulltext-sec-body">{content}</div>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <p key={pIdx} className="fulltext-para">
-                        {trimmed}
-                      </p>
-                    );
-                  })}
-                </div>
-              )}
+              </div>
             </div>
           )}
         </div>
