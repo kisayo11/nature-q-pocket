@@ -56,8 +56,8 @@ export default function EmergencyModal({ type, onClose }) {
               <div className="detail-subheading">인원별 초기 행동 요령</div>
               <div style={{ background: 'var(--surface-raised)', borderRadius: '8px', padding: '10px 12px', fontSize: '13px', lineHeight: 1.6 }}>
                 <div><strong>• 1인 근무:</strong> 최초 발견자가 "00호실 불났어요!" 구두 전파 ➔ 내선 900 통보 및 발신기 누름 ➔ 소화기 초기진화</div>
-                <div><strong>• 2인 근무:</strong> 1명(선임간호사) 통보/방송의뢰 ➔ 1명(간병사) 소화기 진화 및 피난 유도</div>
-                <div><strong>• 3인 이상:</strong> 1명(통보/방송) ➔ 1명(간호사A: 피난유도) ➔ 1명(간호사B/간병: 초기진화)</div>
+                <div><strong>• 2인 근무:</strong> 1명(선임간호사: 통보 및 방송의뢰) ➔ 1명(보조간호인력: 소화기 진화 및 피난 유도)</div>
+                <div><strong>• 3인 이상:</strong> 1명(통보/방송의뢰) ➔ 1명(피난 유도 및 방화문 폐쇄) ➔ 1명(소화기/소화전 초기진화)</div>
               </div>
             </div>
 
@@ -155,11 +155,11 @@ export default function EmergencyModal({ type, onClose }) {
               <div style={{ background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: '8px', fontSize: '13px' }}>
                 <div style={{ marginBottom: 6 }}>
                   <strong>• 혈액·체액 유출 (Spill Kit):</strong><br />
-                  <span style={{ color: 'var(--danger)', fontWeight: 800 }}>물 99ml + 락스 1ml = 약 5,000 ppm (1:99 희석, 당일 사용)</span>
+                  <span style={{ color: 'var(--danger)', fontWeight: 800 }}>물 900ml + 락스 100ml = 5,000 ppm (1:10 희석, 당일 사용)</span>
                 </div>
                 <div>
                   <strong>• 일상 환경·바닥 소독:</strong><br />
-                  <span style={{ color: 'var(--primary)', fontWeight: 800 }}>물 1L + 락스 10ml = 약 500 ppm (100배 희석, 10분 침적)</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: 800 }}>물 1L + 락스 10ml = 500 ppm (1:100 희석, 10분 침적)</span>
                 </div>
               </div>
             </div>
