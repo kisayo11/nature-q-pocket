@@ -82,6 +82,28 @@ export default function HomeHub({
         </div>
       </section>
 
+      {/* Official Printed Handbook Quick Access Banner */}
+      <a
+        href="/nature_handbook_print.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="handbook-print-banner"
+      >
+        <div className="hp-banner-left">
+          <div className="hp-banner-icon">
+            <BookOpen size={20} color="var(--primary)" />
+          </div>
+          <div className="hp-banner-info">
+            <div className="hp-banner-badge">원내 실물 배포본 전자책</div>
+            <strong className="hp-banner-title">인증 요약 핸드북 소책자 (74P 전체본)</strong>
+            <span className="hp-banner-sub">휴대용 실물 책자 전체 페이지 열람 및 인쇄</span>
+          </div>
+        </div>
+        <div className="hp-banner-arrow">
+          <ChevronRight size={18} />
+        </div>
+      </a>
+
       {/* 2. Emergency 1-Tap Fast Contact (비상 대응 4종) */}
       <section className="hub-clean-section">
         <div className="section-head-bar">

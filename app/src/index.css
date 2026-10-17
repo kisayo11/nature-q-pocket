@@ -367,6 +367,84 @@ input, select {
   line-height: 1.4;
 }
 
+/* Official Printed Handbook Banner */
+.handbook-print-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, hsl(168, 60%, 96%), hsl(168, 40%, 93%));
+  border: 1px solid hsla(168, 80%, 28%, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 13px 16px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+  margin-top: -4px;
+}
+
+[data-theme='dark'] .handbook-print-banner {
+  background: linear-gradient(135deg, hsl(168, 40%, 12%), hsl(168, 30%, 15%));
+  border-color: hsla(168, 60%, 40%, 0.3);
+}
+
+.handbook-print-banner:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary);
+}
+
+.hp-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hp-banner-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
+}
+
+.hp-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hp-banner-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.2px;
+}
+
+.hp-banner-title {
+  font-size: calc(14px * var(--font-scale));
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.hp-banner-sub {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.hp-banner-arrow {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
 /* Clean Sections */
 .hub-clean-section {
   display: flex;

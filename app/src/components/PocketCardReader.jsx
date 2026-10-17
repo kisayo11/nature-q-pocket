@@ -280,7 +280,7 @@ export default function PocketCardReader({
                           <input
                             type="checkbox"
                             checked={isChecked}
-                            onChange={() => {}}
+                            onChange={() => { }}
                             className="clean-checkbox-input"
                           />
                           <span className="clean-check-label">{pt}</span>
@@ -321,6 +321,16 @@ export default function PocketCardReader({
                   >
                     <Download size={13} />
                     <span>다운로드</span>
+                  </a>
+                  <a
+                    href="/nature_handbook_print.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pdf-btn-action handbook-link"
+                    title="핸드북 파일 열람"
+                  >
+                    <BookOpen size={13} />
+                    <span>핸드북</span>
                   </a>
                   <button
                     className={`pdf-btn-action ${pdfViewMode === 'text' ? 'active' : ''}`}
