@@ -162,14 +162,8 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* 1. Header */}
+      {/* 1. Header (Clean Minimalist Mobile Header) */}
       <Header
-        fontScale={fontScale}
-        setFontScale={setFontScale}
-        theme={theme}
-        setTheme={setTheme}
-        inspectMode={inspectMode}
-        setInspectMode={setInspectMode}
         onOpenEmergency={setEmergencyModal}
         syncStatus={syncStatus}
       />
@@ -231,6 +225,12 @@ export default function App() {
             onSelectDept={handleSelectDept}
             onSyncSheets={handleManualSync}
             syncStatus={syncStatus}
+            theme={theme}
+            setTheme={setTheme}
+            fontScale={fontScale}
+            setFontScale={setFontScale}
+            inspectMode={inspectMode}
+            setInspectMode={setInspectMode}
           />
         )}
       </main>

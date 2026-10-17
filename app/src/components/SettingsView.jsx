@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import {
-  Settings, RefreshCw, Smartphone, ShieldCheck, Check,
-  ExternalLink, Building2, HelpCircle
+  Settings, RefreshCw, ShieldCheck, Check,
+  ExternalLink, Building2, Sun, Moon, Type, Eye
 } from 'lucide-react';
 
 export default function SettingsView({
   selectedDept,
   onSelectDept,
   onSyncSheets,
-  syncStatus
+  syncStatus,
+  theme = 'light',
+  setTheme = () => {},
+  fontScale = 1,
+  setFontScale = () => {},
+  inspectMode = false,
+  setInspectMode = () => {}
 }) {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
@@ -28,7 +34,7 @@ export default function SettingsView({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      {/* 1. Department Selection (간편 부서 선택) */}
+      {/* 1. Department Selection (소속 부서 선택) */}
       <div className="calc-card">
         <div className="calc-title">
           <Building2 size={18} color="var(--primary)" /> 내 소속 부서 설정
@@ -65,7 +71,115 @@ export default function SettingsView({
         </div>
       </div>
 
-      {/* 2. Google Sheets Live Auto-Sync */}
+      {/* 2. Display & View Options (화면 및 뷰 설정) */}
+      <div className="calc-card">
+        <div className="calc-title">
+          <Settings size={18} color="var(--primary)" /> 화면 및 뷰 설정
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 4 }}>
+          {/* Theme Option */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>화면 테마</span>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button
+                onClick={() => setTheme('light')}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid',
+                  borderColor: theme === 'light' ? 'var(--primary)' : 'var(--border)',
+                  background: theme === 'light' ? 'var(--primary-light)' : 'var(--surface-raised)',
+                  color: theme === 'light' ? 'var(--primary)' : 'var(--text-sub)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  cursor: 'pointer'
+                }}
+              >
+                <Sun size={13} /> 라이트
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid',
+                  borderColor: theme === 'dark' ? 'var(--primary)' : 'var(--border)',
+                  background: theme === 'dark' ? 'var(--primary-light)' : 'var(--surface-raised)',
+                  color: theme === 'dark' ? 'var(--primary)' : 'var(--text-sub)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  cursor: 'pointer'
+                }}
+              >
+                <Moon size={13} /> 다크
+              </button>
+            </div>
+          </div>
+
+          {/* Font Scale Option */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid var(--border-light)' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>글자 크기</span>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {[
+                { label: '보통', scale: 1 },
+                { label: '크게', scale: 1.15 },
+                { label: '아주크게', scale: 1.3 }
+              ].map((item) => (
+                <button
+                  key={item.scale}
+                  onClick={() => setFontScale(item.scale)}
+                  style={{
+                    padding: '6px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid',
+                    borderColor: fontScale === item.scale ? 'var(--primary)' : 'var(--border)',
+                    background: fontScale === item.scale ? 'var(--primary-light)' : 'var(--surface-raised)',
+                    color: fontScale === item.scale ? 'var(--primary)' : 'var(--text-sub)',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Inspector Mode Option */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid var(--border-light)' }}>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>조사위원 대응 모드</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>수검 중 모의퀴즈 탭을 숨기고 정식 규정만 표출합니다.</div>
+            </div>
+            <button
+              onClick={() => setInspectMode(!inspectMode)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                border: '1px solid',
+                borderColor: inspectMode ? 'var(--primary)' : 'var(--border)',
+                background: inspectMode ? 'var(--primary)' : 'var(--surface-raised)',
+                color: inspectMode ? '#fff' : 'var(--text-sub)',
+                fontSize: '12px',
+                fontWeight: 800,
+                cursor: 'pointer'
+              }}
+            >
+              {inspectMode ? '켜짐' : '꺼짐'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Google Sheets Live Auto-Sync */}
       <div className="calc-card">
         <div className="calc-title">
           <RefreshCw size={18} color="var(--primary)" /> 구글 스프레드시트 실시간 연동
@@ -118,7 +232,7 @@ export default function SettingsView({
         </button>
       </div>
 
-      {/* 3. System Info Card */}
+      {/* 4. System Info Card */}
       <div className="calc-card">
         <div className="calc-title">
           <ShieldCheck size={18} color="var(--primary)" /> 규정집 기준 정보
@@ -126,7 +240,7 @@ export default function SettingsView({
         <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
           <div>• <strong>의료기관:</strong> 네이처 요양병원 (223병상)</div>
           <div>• <strong>적용 기준:</strong> 보건복지부 요양병원 4주기 인증기준 (Ver 4.1)</div>
-          <div>• <strong>원내 원문:</strong> 병원 최신 개정 한글(HWP) 규정집 58개 전문 100% 탑재</div>
+          <div>• <strong>원내 원문:</strong> 병원 최신 개정 한글(HWP) 및 결재본 PDF 58개 전문 100% 탑재</div>
           <div>• <strong>평가 일정:</strong> 2026년 11월 25일 ~ 27일</div>
         </div>
       </div>
