@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import {
   X, Copy, Check, ChevronLeft, ChevronRight, Bookmark,
   AlertTriangle, HelpCircle, FileText, CheckCircle2,
-  Volume2, Clock, ShieldCheck, BookOpen, Layers
+  Volume2, Clock, ShieldCheck, BookOpen, Layers,
+  ExternalLink, Download
 } from 'lucide-react';
 
 export default function PocketCardReader({
@@ -22,6 +23,7 @@ export default function PocketCardReader({
   const [copied, setCopied] = useState(false);
   const [checkedPoints, setCheckedPoints] = useState({});
   const [speaking, setSpeaking] = useState(false);
+  const [pdfViewMode, setPdfViewMode] = useState('pdf'); // 'pdf' | 'text'
 
   if (!rule) return null;
 
@@ -175,7 +177,7 @@ export default function PocketCardReader({
             onClick={() => setActiveTab('fulltext')}
           >
             <BookOpen size={14} />
-            <span>원문 전문</span>
+            <span>공식 원문 (PDF)</span>
           </button>
         </div>
 
@@ -291,38 +293,84 @@ export default function PocketCardReader({
             </div>
           )}
 
-          {/* TAB 3: 규정 전문 (HWP 최신본 전문 열람) */}
+          {/* TAB 3: 공식 규정집 원본 (PDF 뷰어 + 텍스트 모드 전환) */}
           {activeTab === 'fulltext' && (
             <div className="tab-pane-fade">
-              <div className="fulltext-notice-box">
-                <ShieldCheck size={14} color="var(--primary)" />
-                <span>네이처 요양병원 최신 정식 규정집 (HWP 원문)</span>
+              {/* PDF Control & Notice Bar */}
+              <div className="pdf-viewer-control-bar">
+                <div className="pdf-meta-left">
+                  <span className="pdf-official-tag">공식 결재본 (Ver.4)</span>
+                  <span className="pdf-doc-code">규정 {rule.code}.pdf</span>
+                </div>
+                <div className="pdf-actions-right">
+                  <a
+                    href={rule.pdfUrl || `/regulations/${rule.code}.pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pdf-btn-action"
+                    title="새 창으로 원본 전체화면 열람"
+                  >
+                    <ExternalLink size={13} />
+                    <span>새 창 열기</span>
+                  </a>
+                  <a
+                    href={rule.pdfUrl || `/regulations/${rule.code}.pdf`}
+                    download={`네이처요양병원_${rule.code}_${rule.title}.pdf`}
+                    className="pdf-btn-action"
+                    title="PDF 파일 다운로드"
+                  >
+                    <Download size={13} />
+                    <span>다운로드</span>
+                  </a>
+                  <button
+                    className={`pdf-btn-action ${pdfViewMode === 'text' ? 'active' : ''}`}
+                    onClick={() => setPdfViewMode((prev) => (prev === 'pdf' ? 'text' : 'pdf'))}
+                    title="PDF / 텍스트 보기 전환"
+                  >
+                    <FileText size={13} />
+                    <span>{pdfViewMode === 'pdf' ? '텍스트 모드' : 'PDF 뷰어'}</span>
+                  </button>
+                </div>
               </div>
-              <div className="clean-fulltext-card">
-                {rule.fullTextSnippet.split('\n\n').map((paragraph, pIdx) => {
-                  const trimmed = paragraph.trim();
-                  if (!trimmed) return null;
 
-                  // Section Header styling
-                  if (trimmed.startsWith('[') && trimmed.includes(']')) {
-                    const lines = trimmed.split('\n');
-                    const header = lines[0];
-                    const content = lines.slice(1).join('\n');
+              {pdfViewMode === 'pdf' ? (
+                <div className="pdf-iframe-container">
+                  <iframe
+                    src={`${rule.pdfUrl || `/regulations/${rule.code}.pdf`}#toolbar=0&navpanes=0`}
+                    title={`${rule.code} ${rule.title} 규정집 원문`}
+                    className="pdf-embed-frame"
+                  />
+                  <div className="pdf-fallback-hint">
+                    <span>💡 스마트폰에서 확대·축소나 인쇄가 필요하시면 상단 <strong>[새 창 열기]</strong>를 터치하세요.</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="clean-fulltext-card">
+                  {(rule.fullTextSnippet || rule.purpose || '원문 준비 중입니다.').split('\n\n').map((paragraph, pIdx) => {
+                    const trimmed = paragraph.trim();
+                    if (!trimmed) return null;
+
+                    // Section Header styling
+                    if (trimmed.startsWith('[') && trimmed.includes(']')) {
+                      const lines = trimmed.split('\n');
+                      const header = lines[0];
+                      const content = lines.slice(1).join('\n');
+                      return (
+                        <div key={pIdx} className="fulltext-section-box">
+                          <div className="fulltext-sec-header">{header}</div>
+                          <div className="fulltext-sec-body">{content}</div>
+                        </div>
+                      );
+                    }
+
                     return (
-                      <div key={pIdx} className="fulltext-section-box">
-                        <div className="fulltext-sec-header">{header}</div>
-                        <div className="fulltext-sec-body">{content}</div>
-                      </div>
+                      <p key={pIdx} className="fulltext-para">
+                        {trimmed}
+                      </p>
                     );
-                  }
-
-                  return (
-                    <p key={pIdx} className="fulltext-para">
-                      {trimmed}
-                    </p>
-                  );
-                })}
-              </div>
+                  })}
+                </div>
+              )}
             </div>
           )}
         </div>

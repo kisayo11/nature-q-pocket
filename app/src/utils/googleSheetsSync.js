@@ -62,6 +62,40 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
       console.warn('Golden numbers sheet sync note:', e.message);
     }
 
+    // 2.5 Fetch Live Rules Master & PDF URLs (02_57개규정_마스터)
+    try {
+      const rulesSheet = await fetchSheetGViz('02_57개규정_마스터');
+      if (rulesSheet?.table?.rows?.length > 0 && currentRules?.length > 0) {
+        const rowMap = {};
+        rulesSheet.table.rows.forEach((r) => {
+          const c = r.c;
+          const code = c[0]?.v !== undefined && c[0]?.v !== null ? String(c[0].v).trim() : '';
+          if (!code) return;
+          rowMap[code] = {
+            title: c[1]?.v ? String(c[1].v).trim() : undefined,
+            quickAnswer: c[4]?.v ? String(c[4].v).trim() : undefined,
+            faq: c[6]?.v ? String(c[6].v).trim() : undefined,
+            customPdfUrl: c[8]?.v ? String(c[8].v).trim() : undefined,
+          };
+        });
+
+        const merged = currentRules.map((cr) => {
+          const update = rowMap[cr.code];
+          if (!update) return cr;
+          return {
+            ...cr,
+            title: update.title || cr.title,
+            quickAnswer: update.quickAnswer || cr.quickAnswer,
+            faq: update.faq || cr.faq,
+            pdfUrl: update.customPdfUrl || cr.pdfUrl || `/regulations/${cr.code}.pdf`,
+          };
+        });
+        result.updatedRules = merged;
+      }
+    } catch (e) {
+      console.warn('Rules master sheet sync note:', e.message);
+    }
+
     // 3. Fetch Quiz Database (05_일일퀴즈_암기카드)
     try {
       const quizData = await fetchSheetGViz('05_일일퀴즈_암기카드');

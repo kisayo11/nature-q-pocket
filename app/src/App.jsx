@@ -94,6 +94,9 @@ export default function App() {
           if (syncRes.updatedQuiz && syncRes.updatedQuiz.length > 0) {
             setQuizList(syncRes.updatedQuiz);
           }
+          if (syncRes.updatedRules && syncRes.updatedRules.length > 0) {
+            setRules(syncRes.updatedRules);
+          }
           const nowStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
           setSyncStatus({ synced: true, time: nowStr });
         }

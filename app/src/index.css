@@ -1367,6 +1367,105 @@ input, select {
 }
 
 /* Fulltext Clean Card Viewer */
+/* Official PDF Viewer Controls & Frame */
+.pdf-viewer-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.pdf-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pdf-official-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 3px 7px;
+  border-radius: var(--radius-xs);
+}
+
+.pdf-doc-code {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+.pdf-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pdf-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 5px 9px;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pdf-btn-action:hover {
+  background: var(--surface-raised);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.pdf-btn-action.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.pdf-iframe-container {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.pdf-embed-frame {
+  width: 100%;
+  height: 60vh;
+  min-height: 440px;
+  border: none;
+  background: #f8fafc;
+}
+
+.pdf-fallback-hint {
+  padding: 8px 12px;
+  background: var(--surface-raised);
+  border-top: 1px solid var(--border-light);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.pdf-fallback-hint strong {
+  color: var(--primary);
+}
+
 .fulltext-notice-box {
   display: flex;
   align-items: center;
