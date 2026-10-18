@@ -1,11 +1,14 @@
 import React from 'react';
-import { Award, ShieldAlert, Settings } from 'lucide-react';
+import {
+  Award, ShieldAlert, Settings, Home, BookOpen, Clock, Calculator, HelpCircle
+} from 'lucide-react';
 
 export default function Header({
   onOpenEmergency,
   onOpenSettings,
   syncStatus,
-  activeTab
+  activeTab,
+  onNavigateTab
 }) {
   const dDay = Math.ceil((new Date('2026-11-25') - new Date()) / (1000 * 60 * 60 * 24));
 
@@ -13,7 +16,11 @@ export default function Header({
     <header className="top-header-clean">
       <div className="top-bar-clean">
         {/* Hospital Brand Title */}
-        <div className="brand-badge-clean">
+        <div
+          className="brand-badge-clean"
+          onClick={() => onNavigateTab && onNavigateTab('home')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="brand-logo-icon">
             <Award size={18} color="#fff" />
           </div>
@@ -27,6 +34,45 @@ export default function Header({
             <span className="brand-subtitle">인증 Q-POCKET</span>
           </div>
         </div>
+
+        {/* Desktop Navigation Bar (Only visible on screens >= 768px) */}
+        <nav className="header-desktop-nav">
+          <button
+            className={`hd-nav-link ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('home')}
+          >
+            <Home size={15} />
+            <span>홈</span>
+          </button>
+          <button
+            className={`hd-nav-link ${activeTab === 'handbook' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('handbook')}
+          >
+            <BookOpen size={15} />
+            <span>규정집</span>
+          </button>
+          <button
+            className={`hd-nav-link ${activeTab === 'golden' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('golden')}
+          >
+            <Clock size={15} />
+            <span>기준수치</span>
+          </button>
+          <button
+            className={`hd-nav-link ${activeTab === 'calc' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('calc')}
+          >
+            <Calculator size={15} />
+            <span>계산기</span>
+          </button>
+          <button
+            className={`hd-nav-link ${activeTab === 'quiz' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('quiz')}
+          >
+            <HelpCircle size={15} />
+            <span>모의퀴즈</span>
+          </button>
+        </nav>
 
         {/* Right Actions: D-Day, Emergency Call, Settings */}
         <div className="header-actions-clean">

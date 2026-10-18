@@ -206,12 +206,13 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* 1. Header (Clean Minimalist Mobile Header) */}
+      {/* 1. Header (Clean Minimalist Mobile & Desktop Header) */}
       <Header
         onOpenEmergency={setEmergencyModal}
         onOpenSettings={() => setActiveTab('settings')}
         syncStatus={syncStatus}
         activeTab={activeTab}
+        onNavigateTab={setActiveTab}
       />
 
       {/* 2. Main Body Content */}

@@ -2097,3 +2097,277 @@ input, select {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ==========================================================================
+   8. RESPONSIVE HYBRID & DESKTOP ARCHITECTURE (>= 768px, >= 1024px)
+   ========================================================================== */
+
+/* Header Desktop Navigation GNB */
+.header-desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+.hd-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-sub);
+  background: transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.hd-nav-link:hover {
+  background: var(--surface-raised);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+.hd-nav-link.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 800;
+  border-color: hsla(168, 80%, 28%, 0.2);
+}
+
+/* HomeHub: 4 Core Shortcuts Grid */
+.hub-core-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.hub-core-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s ease;
+}
+
+.hub-core-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.hub-core-card.active-tracer {
+  border-color: #059669;
+  background: #f0fdf4;
+}
+
+.hub-core-card.active-quick {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.hub-core-card.active-dept {
+  border-color: #9333ea;
+  background: #faf5ff;
+}
+
+.hcc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hcc-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hcc-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.hcc-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* HomeHub: Compact Emergency Strip */
+.hub-emergency-strip {
+  background: var(--surface);
+  border: 1px dashed var(--danger);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hub-emergency-strip:hover {
+  background: var(--danger-light);
+}
+
+.hes-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hes-badge {
+  background: var(--danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+.hes-numbers {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.hes-link {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* HomeHub: Segmented Control Bar */
+.hub-segmented-bar {
+  display: flex;
+  gap: 6px;
+  background: var(--surface-raised);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.hsb-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sub);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.hsb-tab.active {
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 800;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.hub-tab-pane {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ==========================================================================
+   DESKTOP / TABLET MEDIA QUERIES (>= 768px)
+   ========================================================================== */
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 1180px;
+    padding-bottom: 30px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+  }
+
+  .main-content {
+    padding: 20px 24px;
+  }
+
+  /* Desktop Header */
+  .top-header-clean {
+    padding: 12px 24px;
+  }
+
+  .header-desktop-nav {
+    display: flex;
+  }
+
+  /* Hide bottom nav on desktop */
+  .bottom-nav {
+    display: none !important;
+  }
+
+  /* HomeHub 2-Column Responsive Grid */
+  .home-hub-clean-wrap {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .home-hub-col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 76px;
+  }
+
+  .home-hub-col-right {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Handbook 2/3 Column Grid */
+  .pocket-items-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 12px;
+  }
+
+  /* Golden Numbers Multi-Column Grid */
+  .cgc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 12px;
+  }
+
+  /* Modal Centered Popup on Desktop */
+  .modal-overlay {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .modal-sheet {
+    border-radius: var(--radius-xl);
+    max-width: 720px;
+    max-height: 85vh;
+  }
+}
+
