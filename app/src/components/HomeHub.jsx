@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert, HeartPulse, Flame, Droplets, BookOpen,
   ArrowRight, CheckCircle2, Clock, ChevronRight,
   ShieldCheck, Stethoscope, HelpCircle, FileText
 } from 'lucide-react';
+import {
+  DEPARTMENTS,
+  DEPARTMENT_QUICK_ANSWERS,
+  getRulesByDept
+} from '../utils/deptUtils';
+import TracerScenariosCard from './TracerScenariosCard';
 
 export default function HomeHub({
   rules = [],
@@ -12,32 +18,24 @@ export default function HomeHub({
   onSelectDept,
   onNavigateTab,
   onOpenRule,
-  onOpenEmergency
+  onOpenEmergency,
+  onOpenMustPass
 }) {
   const mustPassRules = rules.filter((r) => r.isMustPass);
   const mustPassTotal = mustPassRules.length || 8;
   const mustPassCheckedCount = mustPassRules.filter((r) => checkedMustPass[r.code]).length;
   const masteryRate = Math.round((mustPassCheckedCount / mustPassTotal) * 100);
 
-  // 3-Second Spoken Answers
-  const quickAnswerList = [
-    { code: '1.1', title: '환자 확인', answer: '이름과 생년월일(2가지 지표)을 개방형 질문으로 확인합니다.', color: 'emerald' },
-    { code: '1.2', title: '낙상 고위험', answer: 'Morse 51점 이상 환자는 침상과 전산에 빨간 스티커를 부착합니다.', color: 'amber' },
-    { code: '3.2.3', title: '신체보호대', answer: '의사 1일 1회 처방 후 2시간마다 관찰 기록, 10~30분 일시 해제합니다.', color: 'purple' },
-    { code: '4.2', title: '약품 냉장보관', answer: '냉장고 2~8℃ 유지(1일 2회 점검), 인슐린 개봉 후 28일간 사용합니다.', color: 'blue' },
-    { code: '10.6', title: '화재 비상통보', answer: '원무과(내선 900)에 즉시 통보하고 C급(독립) ➔ B급(부축) ➔ A급(침상) 대피합니다.', color: 'rose' },
-    { code: '3.2.1', title: '심폐소생술(CPR)', answer: '내선 900번으로 "CPR + 발생장소" 순으로 2회 원내 방송을 요청합니다.', color: 'teal' },
-  ];
+  // Active Department for 3-Second Quick Answers (기본값: 내 소속 부서)
+  const [activeAnswerDept, setActiveAnswerDept] = useState(selectedDept || '간호부');
 
-  // Official Departments
-  const departments = [
-    { name: '간호부', icon: '🩺', count: '28개' },
-    { name: '진료부', icon: '👨‍⚕️', count: '16개' },
-    { name: '원무과', icon: '📋', count: '12개' },
-    { name: '영양팀', icon: '🥗', count: '8개' },
-    { name: '시설팀', icon: '🔧', count: '14개' },
-    { name: '약제과', icon: '💊', count: '6개' },
-  ];
+  useEffect(() => {
+    if (selectedDept) {
+      setActiveAnswerDept(selectedDept);
+    }
+  }, [selectedDept]);
+
+  const currentQuickAnswers = DEPARTMENT_QUICK_ANSWERS[activeAnswerDept] || DEPARTMENT_QUICK_ANSWERS['간호부'];
 
   return (
     <div className="home-hub-clean-wrap">
@@ -62,7 +60,7 @@ export default function HomeHub({
           <div className="hero-progress-head">
             <span className="hp-title">
               <ShieldCheck size={15} color="var(--primary)" />
-              <span>★ 8대 필수 조사항목 숙지</span>
+              <span>★ 10대 탈락방지 필수 규정 (Must-Pass)</span>
             </span>
             <span className="hp-score">
               <strong>{mustPassCheckedCount}</strong> / {mustPassTotal}항목 ({masteryRate}%)
@@ -92,6 +90,75 @@ export default function HomeHub({
           </div>
           <ChevronRight size={17} className="hhl-arrow" />
         </a>
+      </section>
+
+      {/* P1: 🚨 10대 필수 탈락방지 규정 핫라인 배너 */}
+      <section className="hub-section-block" style={{ marginTop: '8px', marginBottom: '8px' }}>
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
+            border: '1.5px solid #fda4af',
+            borderRadius: '14px',
+            padding: '13px 15px',
+            boxShadow: '0 2px 8px rgba(225, 29, 72, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            cursor: 'pointer',
+            transition: 'transform 0.15s ease'
+          }}
+          onClick={() => {
+            if (onOpenMustPass) onOpenMustPass();
+            else onNavigateTab('handbook');
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 38,
+              height: 38,
+              borderRadius: '10px',
+              background: '#e11d48',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '19px',
+              flexShrink: 0,
+              boxShadow: '0 2px 6px rgba(225,29,72,0.3)'
+            }}>
+              🚨
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#fff', background: '#e11d48', padding: '1px 6px', borderRadius: '4px' }}>
+                  탈락 방지
+                </span>
+                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#9f1239' }}>
+                  10대 필수 규정 100% 합격 핫라인
+                </span>
+              </div>
+              <div style={{ fontSize: '11px', color: '#881337', marginTop: 2 }}>
+                환자안전·화재·CPR·보호대 등 불인증 직결 10개 핵심 규정 집중 점검
+              </div>
+            </div>
+          </div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 3,
+            background: '#fff',
+            color: '#e11d48',
+            padding: '5px 9px',
+            borderRadius: '8px',
+            fontSize: '11px',
+            fontWeight: 800,
+            border: '1px solid #fecdd3',
+            flexShrink: 0
+          }}>
+            <span>원클릭</span>
+            <ChevronRight size={13} />
+          </div>
+        </div>
       </section>
 
       {/* 2. Emergency 1-Tap Fast Contact (시원한 2x2 그리드) */}
@@ -159,7 +226,7 @@ export default function HomeHub({
         </div>
       </section>
 
-      {/* 3. Essential 3-Second Oral Answers (스와이프 카드) */}
+      {/* 3. Essential 3-Second Oral Answers (부서별 맞춤 스와이프 카드) */}
       <section className="hub-section-block">
         <div className="hub-sec-header">
           <div className="hub-sec-title">
@@ -174,8 +241,43 @@ export default function HomeHub({
           </button>
         </div>
 
+        {/* 6대 부서 구두 답변 탭 스위처 */}
+        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', padding: '0 0 10px', scrollbarWidth: 'none' }}>
+          {DEPARTMENTS.map((dept) => {
+            const isActive = activeAnswerDept === dept.name;
+            return (
+              <button
+                key={dept.id}
+                onClick={() => setActiveAnswerDept(dept.name)}
+                style={{
+                  padding: '6px 11px',
+                  borderRadius: '16px',
+                  fontSize: '11.5px',
+                  fontWeight: isActive ? 800 : 600,
+                  background: isActive ? 'var(--primary)' : 'var(--surface-raised)',
+                  color: isActive ? '#fff' : 'var(--text-muted)',
+                  border: '1px solid',
+                  borderColor: isActive ? 'var(--primary)' : 'var(--border)',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <span>{dept.icon}</span>
+                <span>{dept.name}</span>
+                {selectedDept === dept.name && (
+                  <span style={{ fontSize: '9px', padding: '1px 4px', borderRadius: '4px', background: isActive ? 'rgba(255,255,255,0.25)' : 'var(--border)', color: isActive ? '#fff' : 'var(--text-muted)' }}>내부서</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
         <div className="quick-answers-scroll">
-          {quickAnswerList.map((item, idx) => (
+          {currentQuickAnswers.map((item, idx) => (
             <div
               key={idx}
               className={`quick-answer-card border-${item.color}`}
@@ -183,7 +285,7 @@ export default function HomeHub({
             >
               <div className="qac-top">
                 <span className="qac-code">규정 {item.code}</span>
-                <span className="qac-tag">구두 답변</span>
+                <span className="qac-tag">{activeAnswerDept} 답변</span>
               </div>
               <h3 className="qac-title">{item.title}</h3>
               <p className="qac-text">"{item.answer}"</p>
@@ -196,7 +298,10 @@ export default function HomeHub({
         </div>
       </section>
 
-      {/* 4. Department Filter Chips (컴팩트 2열 칩) */}
+      {/* P0: 5대(6대) 돌발 상황별 Tracer(추적조사) 현장 행동시나리오 인터랙티브 카드 */}
+      <TracerScenariosCard onOpenRule={onOpenRule} />
+
+      {/* 4. Department Filter Chips (실제 규정 개수 실시간 연동) */}
       <section className="hub-section-block">
         <div className="hub-sec-header">
           <div className="hub-sec-title">
@@ -206,20 +311,25 @@ export default function HomeHub({
         </div>
 
         <div className="dept-chips-grid">
-          {departments.map((dept, idx) => (
-            <button
-              key={idx}
-              className={`dept-chip-btn ${selectedDept === dept.name ? 'active' : ''}`}
-              onClick={() => {
-                onSelectDept(dept.name);
-                onNavigateTab('handbook');
-              }}
-            >
-              <span className="dcb-icon">{dept.icon}</span>
-              <span className="dcb-name">{dept.name}</span>
-              <span className="dcb-count">{dept.count}</span>
-            </button>
-          ))}
+          {DEPARTMENTS.map((dept, idx) => {
+            const ruleCount = getRulesByDept(rules, dept.name).length;
+            const isSelected = selectedDept === dept.name;
+
+            return (
+              <button
+                key={idx}
+                className={`dept-chip-btn ${isSelected ? 'active' : ''}`}
+                onClick={() => {
+                  onSelectDept(dept.name);
+                  onNavigateTab('handbook');
+                }}
+              >
+                <span className="dcb-icon">{dept.icon}</span>
+                <span className="dcb-name">{dept.name}</span>
+                <span className="dcb-count">{ruleCount}개</span>
+              </button>
+            );
+          })}
         </div>
       </section>
 

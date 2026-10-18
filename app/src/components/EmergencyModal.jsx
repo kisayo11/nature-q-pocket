@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Flame, HeartPulse, Droplets, ShieldAlert, X, PhoneCall, AlertTriangle, Clock } from 'lucide-react';
 
 export default function EmergencyModal({ type, onClose }) {
+  const [currentType, setCurrentType] = useState(() => (type === 'menu' ? 'fire' : type));
+
+  useEffect(() => {
+    if (type && type !== 'menu') {
+      setCurrentType(type);
+    }
+  }, [type]);
+
   // Timer for AED 3-minute golden time
   const [secondsLeft, setSecondsLeft] = useState(180);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -29,18 +37,57 @@ export default function EmergencyModal({ type, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
+        {/* Modal Top Header */}
         <div className="modal-header">
           <div className="modal-title">
-            {type === 'fire' && <><Flame color="var(--danger)" /> 화재 비상 대응 (코드 레드)</>}
-            {type === 'cpr' && <><HeartPulse color="hsl(30, 95%, 45%)" /> 심폐소생술 & 제세동기 (코드 블루)</>}
-            {type === 'spill' && <><Droplets color="hsl(270, 70%, 50%)" /> Spill Kit (혈액·화학물질 유출)</>}
-            {type === 'security' && <><ShieldAlert color="var(--secondary)" /> 원내 보안 비상 (폭력·도난·이탈)</>}
+            {currentType === 'fire' && <><Flame color="var(--danger)" /> 화재 비상 대응 (코드 레드)</>}
+            {currentType === 'cpr' && <><HeartPulse color="hsl(30, 95%, 45%)" /> 심폐소생술 & 제세동기 (코드 블루)</>}
+            {currentType === 'spill' && <><Droplets color="hsl(270, 70%, 50%)" /> Spill Kit (혈액·화학물질 유출)</>}
+            {currentType === 'security' && <><ShieldAlert color="var(--secondary)" /> 원내 보안 비상 (폭력·도난·이탈)</>}
           </div>
           <button className="close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
+        {/* 4-Way Quick Emergency Category Switcher Bar */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, marginBottom: 14 }}>
+          {[
+            { id: 'fire', label: '화재(900)', icon: Flame, color: 'var(--danger)' },
+            { id: 'cpr', label: 'CPR(900)', icon: HeartPulse, color: 'hsl(30, 95%, 45%)' },
+            { id: 'spill', label: '유출(스필)', icon: Droplets, color: 'hsl(270, 70%, 50%)' },
+            { id: 'security', label: '보안(901)', icon: ShieldAlert, color: 'var(--secondary)' }
+          ].map((item) => {
+            const Icon = item.icon;
+            const isActive = currentType === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setCurrentType(item.id)}
+                style={{
+                  padding: '8px 2px',
+                  borderRadius: '8px',
+                  border: '1.5px solid',
+                  borderColor: isActive ? item.color : 'var(--border)',
+                  background: isActive ? 'var(--surface-raised)' : 'var(--surface)',
+                  color: isActive ? item.color : 'var(--text-muted)',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 3,
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <Icon size={14} color={isActive ? item.color : 'var(--text-muted)'} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* 1. Fire Emergency Content */}
-        {type === 'fire' && (
+        {currentType === 'fire' && (
           <div>
             <div className="quick-answer-banner" style={{ background: 'var(--danger-light)', borderColor: 'var(--danger)' }}>
               <div style={{ color: 'var(--danger)', fontWeight: 800, marginBottom: 4 }}>🚨 화재 발견 시 즉시 통보 번호</div>
@@ -87,7 +134,7 @@ export default function EmergencyModal({ type, onClose }) {
         )}
 
         {/* 2. CPR & AED Content */}
-        {type === 'cpr' && (
+        {currentType === 'cpr' && (
           <div>
             <div className="quick-answer-banner" style={{ background: 'hsl(45, 100%, 94%)', borderColor: 'hsl(40, 95%, 50%)' }}>
               <div style={{ color: 'hsl(30, 95%, 40%)', fontWeight: 800, marginBottom: 4 }}>⚡ CPR 비상방송 요청</div>
@@ -141,7 +188,7 @@ export default function EmergencyModal({ type, onClose }) {
         )}
 
         {/* 3. Spill Kit Content */}
-        {type === 'spill' && (
+        {currentType === 'spill' && (
           <div>
             <div className="quick-answer-banner" style={{ background: 'hsl(270, 70%, 95%)', borderColor: 'hsl(270, 60%, 60%)' }}>
               <div style={{ color: 'hsl(270, 60%, 45%)', fontWeight: 800, marginBottom: 4 }}>🧪 혈액 및 체액 Spill Kit 처리 5단계</div>
@@ -171,7 +218,7 @@ export default function EmergencyModal({ type, onClose }) {
         )}
 
         {/* 4. Security Content */}
-        {type === 'security' && (
+        {currentType === 'security' && (
           <div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid var(--secondary)' }}>

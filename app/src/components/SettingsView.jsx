@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import {
   Settings, RefreshCw, ShieldCheck, Check,
-  ExternalLink, Building2, Sun, Moon, Type, Eye
+  ExternalLink, Building2, Sun, Moon, Type, Eye,
+  Trash2, AlertTriangle
 } from 'lucide-react';
+import { DEPARTMENTS } from '../utils/deptUtils';
 
 export default function SettingsView({
   selectedDept,
@@ -14,12 +16,11 @@ export default function SettingsView({
   fontScale = 1,
   setFontScale = () => {},
   inspectMode = false,
-  setInspectMode = () => {}
+  setInspectMode = () => {},
+  onResetAllData
 }) {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
-
-  const departments = ['간호부', '진료부', '원무과', '영양팀', '시설팀', '약제과'];
 
   const triggerSync = async () => {
     setSyncing(true);
@@ -43,31 +44,37 @@ export default function SettingsView({
           소속 부서를 선택하면 홈 화면과 규정집에서 해당 부서 규정이 우선 정렬됩니다.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-          {departments.map((d) => (
-            <button
-              key={d}
-              onClick={() => onSelectDept(d)}
-              style={{
-                padding: '12px 8px',
-                borderRadius: '8px',
-                border: '1.5px solid',
-                borderColor: selectedDept === d ? 'var(--primary)' : 'var(--border)',
-                background: selectedDept === d ? 'var(--primary-light)' : 'var(--surface-raised)',
-                color: selectedDept === d ? 'var(--primary)' : 'var(--text-main)',
-                fontWeight: selectedDept === d ? 800 : 600,
-                fontSize: '13px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 4
-              }}
-            >
-              {selectedDept === d && <Check size={14} />}
-              <span>{d}</span>
-            </button>
-          ))}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+          {DEPARTMENTS.map((dept) => {
+            const isSelected = selectedDept === dept.name;
+            return (
+              <button
+                key={dept.id}
+                onClick={() => onSelectDept(dept.name)}
+                style={{
+                  padding: '11px 10px',
+                  borderRadius: '10px',
+                  border: '1.5px solid',
+                  borderColor: isSelected ? 'var(--primary)' : 'var(--border)',
+                  background: isSelected ? 'var(--primary-light)' : 'var(--surface-raised)',
+                  color: isSelected ? 'var(--primary)' : 'var(--text-main)',
+                  fontWeight: isSelected ? 800 : 600,
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>{dept.icon}</span>
+                  <span>{dept.name}</span>
+                </div>
+                {isSelected && <Check size={14} color="var(--primary)" />}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -232,7 +239,43 @@ export default function SettingsView({
         </button>
       </div>
 
-      {/* 4. System Info Card */}
+      {/* 4. Reset Learning Data Card */}
+      <div className="calc-card" style={{ borderColor: 'var(--danger-light)' }}>
+        <div className="calc-title" style={{ color: 'var(--danger)' }}>
+          <Trash2 size={18} color="var(--danger)" /> 학습 및 체크 기록 초기화
+        </div>
+        <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: 12, lineHeight: 1.5 }}>
+          기기(브라우저)에 저장된 <strong>규정 북마크, 8대 필수 숙지 체크, 골든넘버 암기 체크, 오답노트, 실천 점검 수칙</strong>을 초기 상태로 깨끗하게 비웁니다.
+        </p>
+
+        <button
+          onClick={() => {
+            if (window.confirm('정말로 모든 학습 체크, 북마크, 오답노트 기록을 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
+              onResetAllData && onResetAllData();
+            }
+          }}
+          style={{
+            width: '100%',
+            padding: '11px',
+            borderRadius: '8px',
+            border: '1px solid var(--danger)',
+            background: 'var(--danger-light)',
+            color: 'var(--danger)',
+            fontWeight: 800,
+            fontSize: '13px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6
+          }}
+        >
+          <Trash2 size={14} />
+          <span>모든 학습 및 체크 기록 초기화</span>
+        </button>
+      </div>
+
+      {/* 5. System Info Card */}
       <div className="calc-card">
         <div className="calc-title">
           <ShieldCheck size={18} color="var(--primary)" /> 규정집 기준 정보

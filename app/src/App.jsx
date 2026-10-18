@@ -36,6 +36,7 @@ export default function App() {
 
   // Chapter filter for handbook
   const [chapterFilter, setChapterFilter] = useState(null);
+  const [mustPassFilter, setMustPassFilter] = useState(false);
 
   // Active Reading Rule Modal
   const [activeRuleCode, setActiveRuleCode] = useState(null);
@@ -43,10 +44,44 @@ export default function App() {
   // Emergency Modal
   const [emergencyModal, setEmergencyModal] = useState(null);
 
-  // System Settings
-  const [fontScale, setFontScale] = useState(1);
-  const [theme, setTheme] = useState('light');
-  const [inspectMode, setInspectMode] = useState(false);
+  // System Settings with LocalStorage Persistence
+  const [fontScale, setFontScale] = useState(() => {
+    const saved = localStorage.getItem('nature_font_scale');
+    return saved ? parseFloat(saved) : 1;
+  });
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('nature_theme') || 'light';
+  });
+  const [inspectMode, setInspectMode] = useState(() => {
+    return localStorage.getItem('nature_inspect_mode') === 'true';
+  });
+
+  const handleUpdateTheme = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('nature_theme', newTheme);
+  };
+
+  const handleUpdateFontScale = (newScale) => {
+    setFontScale(newScale);
+    localStorage.setItem('nature_font_scale', String(newScale));
+  };
+
+  const handleUpdateInspectMode = (newMode) => {
+    setInspectMode(newMode);
+    localStorage.setItem('nature_inspect_mode', String(newMode));
+  };
+
+  // Reset All Learning & Check Data
+  const handleResetAllData = () => {
+    localStorage.removeItem('nature_bookmarked_rules');
+    localStorage.removeItem('nature_mustpass_checked');
+    localStorage.removeItem('nature_golden_memorized');
+    localStorage.removeItem('nature_wrong_quiz_ids');
+    localStorage.removeItem('nature_rule_checkpoints');
+    setBookmarkedCodes({});
+    setCheckedMustPass({});
+    alert('모든 학습 체크리스트, 북마크, 오답노트가 초기화되었습니다.');
+  };
 
   // Live Sync Status
   const [syncStatus, setSyncStatus] = useState({ synced: false, time: null });
@@ -115,7 +150,16 @@ export default function App() {
 
   // Navigate to Handbook with Chapter
   const handleOpenChapter = (chapterId) => {
+    setMustPassFilter(false);
     setChapterFilter(chapterId);
+    setActiveTab('handbook');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Navigate to Handbook with Must-Pass filter
+  const handleOpenMustPass = () => {
+    setMustPassFilter(true);
+    setChapterFilter(null);
     setActiveTab('handbook');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -165,7 +209,9 @@ export default function App() {
       {/* 1. Header (Clean Minimalist Mobile Header) */}
       <Header
         onOpenEmergency={setEmergencyModal}
+        onOpenSettings={() => setActiveTab('settings')}
         syncStatus={syncStatus}
+        activeTab={activeTab}
       />
 
       {/* 2. Main Body Content */}
@@ -181,6 +227,7 @@ export default function App() {
             onOpenRule={handleOpenRule}
             onOpenChapter={handleOpenChapter}
             onOpenEmergency={setEmergencyModal}
+            onOpenMustPass={handleOpenMustPass}
           />
         )}
 
@@ -190,6 +237,7 @@ export default function App() {
             rules={rules}
             initialChapter={chapterFilter}
             initialDept={selectedDept}
+            initialMustPassOnly={mustPassFilter}
             bookmarkedCodes={bookmarkedCodes}
             onToggleBookmark={handleToggleBookmark}
             checkedMustPass={checkedMustPass}
@@ -214,6 +262,7 @@ export default function App() {
         {activeTab === 'quiz' && (
           <QuizView
             quizList={quizList}
+            rules={rules}
             userProfile={{ dept: selectedDept }}
           />
         )}
@@ -226,11 +275,12 @@ export default function App() {
             onSyncSheets={handleManualSync}
             syncStatus={syncStatus}
             theme={theme}
-            setTheme={setTheme}
+            setTheme={handleUpdateTheme}
             fontScale={fontScale}
-            setFontScale={setFontScale}
+            setFontScale={handleUpdateFontScale}
             inspectMode={inspectMode}
-            setInspectMode={setInspectMode}
+            setInspectMode={handleUpdateInspectMode}
+            onResetAllData={handleResetAllData}
           />
         )}
       </main>
@@ -281,14 +331,6 @@ export default function App() {
             <span className="nav-tab-label">모의퀴즈</span>
           </button>
         )}
-
-        <button
-          className={`nav-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          <Settings size={20} />
-          <span className="nav-tab-label">설정</span>
-        </button>
       </nav>
 
       {/* 4. Single Rule Pocket Reader (3분할 탭 모달) */}

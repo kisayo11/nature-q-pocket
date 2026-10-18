@@ -9,24 +9,11 @@
     <!-- Pretendard Font (Official CDN) -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    
     <title>네이처 요양병원 스마트 규정집</title>
-    <script>
-      // Clear legacy service worker & cache
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for (let reg of registrations) {
-            reg.unregister();
-          }
-        });
-      }
-      if ('caches' in window) {
-        caches.keys().then(function(names) {
-          for (let name of names) {
-            caches.delete(name);
-          }
-        });
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>

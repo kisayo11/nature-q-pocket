@@ -15,10 +15,13 @@ export default function GoldenNumbersView({ onSelectRule }) {
 
   const categories = ['전체', '시간', '온도', '주기', '수치'];
 
-  const toggleMemorized = (index, e) => {
+  const getItemKey = (item) => `${item.category}_${item.name}_${item.value}`;
+
+  const toggleMemorized = (item, e) => {
     e.stopPropagation();
+    const key = getItemKey(item);
     setMemorized((prev) => {
-      const updated = { ...prev, [index]: !prev[index] };
+      const updated = { ...prev, [key]: !prev[key] };
       localStorage.setItem('nature_golden_memorized', JSON.stringify(updated));
       return updated;
     });
@@ -40,7 +43,10 @@ export default function GoldenNumbersView({ onSelectRule }) {
     });
   }, [activeCategory, searchQuery]);
 
-  const memorizedCount = Object.values(memorized).filter(Boolean).length;
+  const memorizedCount = useMemo(() => {
+    return goldenNumbersData.filter((g) => memorized[getItemKey(g)]).length;
+  }, [memorized]);
+
   const progressPercent = Math.round((memorizedCount / goldenNumbersData.length) * 100);
 
   return (
@@ -100,11 +106,12 @@ export default function GoldenNumbersView({ onSelectRule }) {
       {/* Clean Cards List */}
       <div className="clean-golden-list">
         {filteredData.map((item, idx) => {
-          const isDone = !!memorized[idx];
+          const itemKey = getItemKey(item);
+          const isDone = !!memorized[itemKey];
 
           return (
             <div
-              key={idx}
+              key={itemKey}
               className={`clean-golden-card ${isDone ? 'done' : ''}`}
             >
               <div className="cgc-top-row">
@@ -112,7 +119,7 @@ export default function GoldenNumbersView({ onSelectRule }) {
                 <span className="cgc-name">{item.name}</span>
                 <button
                   className={`cgc-check-btn ${isDone ? 'checked' : ''}`}
-                  onClick={(e) => toggleMemorized(idx, e)}
+                  onClick={(e) => toggleMemorized(item, e)}
                   title={isDone ? '암기 확인 취소' : '암기 완료 체크'}
                 >
                   <Check size={14} />

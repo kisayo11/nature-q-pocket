@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CHAPTERS, getChapterIdByCode } from '../data/chaptersData';
+import { isRuleMatchingDept } from '../utils/deptUtils';
 import {
   Search, X, Star, Bookmark, Filter, ChevronRight, Check,
-  Sparkles, CheckCircle2, AlertTriangle, Layers, BookOpen
+  Sparkles, CheckCircle2, AlertTriangle, Layers, BookOpen, ShieldAlert
 } from 'lucide-react';
 
 // Choseong Helper
@@ -40,7 +41,24 @@ export default function HandbookBrowser({
   const [bookmarkOnly, setBookmarkOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const departments = ['전체', '간호부', '진료부', '원무과', '영양팀', '시설팀', '약제과'];
+  useEffect(() => {
+    if (initialMustPassOnly) {
+      setMustPassOnly(true);
+      setSelectedChapter(null);
+    }
+  }, [initialMustPassOnly]);
+
+  useEffect(() => {
+    if (initialChapter !== null) {
+      setSelectedChapter(initialChapter);
+      setMustPassOnly(false);
+    }
+  }, [initialChapter]);
+
+  const departments = [
+    '전체', '간호부', '진료부', 'QPS실', '감염관리실',
+    '원무과', '재활치료실', '방사선실', '약제과', '영양팀', '시설팀'
+  ];
 
   // Filter Rules
   const filteredRules = useMemo(() => {
@@ -57,12 +75,9 @@ export default function HandbookBrowser({
       // 3. Bookmark filter
       if (bookmarkOnly && !bookmarkedCodes[rule.code]) return false;
 
-      // 4. Department filter
+      // 4. Department filter (with Synonyms & Cross-Functional matching)
       if (selectedDept !== '전체') {
-        const hasDept = rule.department?.some(
-          (d) => d.includes(selectedDept) || d.includes('전 부서') || d.includes('전 직원')
-        );
-        if (!hasDept) return false;
+        if (!isRuleMatchingDept(rule, selectedDept)) return false;
       }
 
       // 5. Search Query
@@ -194,6 +209,52 @@ export default function HandbookBrowser({
             title="챕터 필터 해제"
           >
             <X size={15} />
+          </button>
+        </div>
+      )}
+
+      {/* P1: 🚨 Must-Pass Active Focus Banner */}
+      {mustPassOnly && (
+        <div style={{
+          margin: '10px 0 12px',
+          padding: '12px 14px',
+          background: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
+          border: '1.5px solid #fda4af',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 10,
+          boxShadow: '0 2px 6px rgba(225,29,72,0.06)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: '20px', flexShrink: 0 }}>🚨</span>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>10대 탈락방지 필수 규정 (Must-Pass) 집중 모드</span>
+                <span style={{ fontSize: '10px', background: '#e11d48', color: '#fff', padding: '1px 5px', borderRadius: '4px' }}>필수</span>
+              </div>
+              <div style={{ fontSize: '11px', color: '#881337', marginTop: 2 }}>
+                인증 불인증 직결 항목 · 전 직원 100% 암기 및 즉시 행동 지침
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => setMustPassOnly(false)}
+            style={{
+              padding: '5px 9px',
+              fontSize: '11px',
+              fontWeight: 700,
+              background: '#fff',
+              border: '1px solid #f43f5e',
+              color: '#e11d48',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0
+            }}
+          >
+            전체보기
           </button>
         </div>
       )}

@@ -21,8 +21,30 @@ export default function PocketCardReader({
 }) {
   const [activeTab, setActiveTab] = useState('summary'); // 'summary' (핵심 요약) | 'checklist' (실천 지침) | 'fulltext' (규정 전문)
   const [copied, setCopied] = useState(false);
-  const [checkedPoints, setCheckedPoints] = useState({});
   const [speaking, setSpeaking] = useState(false);
+
+  // Persistent Checkpoints per Rule Code
+  const [checkedPoints, setCheckedPoints] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nature_rule_checkpoints');
+      const all = saved ? JSON.parse(saved) : {};
+      return (rule && all[rule.code]) || {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Update checkpoints when rule changes
+  React.useEffect(() => {
+    if (!rule) return;
+    try {
+      const saved = localStorage.getItem('nature_rule_checkpoints');
+      const all = saved ? JSON.parse(saved) : {};
+      setCheckedPoints(all[rule.code] || {});
+    } catch {
+      setCheckedPoints({});
+    }
+  }, [rule?.code]);
 
   if (!rule) return null;
 
@@ -52,10 +74,21 @@ export default function PocketCardReader({
   };
 
   const togglePointCheck = (index) => {
-    setCheckedPoints((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
+    setCheckedPoints((prev) => {
+      const updated = {
+        ...prev,
+        [index]: !prev[index],
+      };
+      try {
+        const saved = localStorage.getItem('nature_rule_checkpoints');
+        const all = saved ? JSON.parse(saved) : {};
+        all[rule.code] = updated;
+        localStorage.setItem('nature_rule_checkpoints', JSON.stringify(all));
+      } catch (err) {
+        console.warn('Failed to save checkpoint', err);
+      }
+      return updated;
+    });
   };
 
   const relatedNumbers = goldenNumbers.filter(
@@ -271,19 +304,21 @@ export default function PocketCardReader({
                     {rule.keyPoints.map((pt, idx) => {
                       const isChecked = !!checkedPoints[idx];
                       return (
-                        <label
+                        <div
                           key={idx}
                           className={`clean-check-item ${isChecked ? 'checked' : ''}`}
                           onClick={() => togglePointCheck(idx)}
+                          style={{ cursor: 'pointer' }}
                         >
                           <input
                             type="checkbox"
                             checked={isChecked}
-                            onChange={() => { }}
+                            readOnly
+                            style={{ pointerEvents: 'none' }}
                             className="clean-checkbox-input"
                           />
                           <span className="clean-check-label">{pt}</span>
-                        </label>
+                        </div>
                       );
                     })}
                   </div>
@@ -346,6 +381,30 @@ export default function PocketCardReader({
               </div>
             </div>
           )}
+          {/* Bottom Floating/Clean Close Action */}
+          <div style={{ marginTop: 24, padding: '0 4px 12px' }}>
+            <button
+              onClick={onClose}
+              style={{
+                width: '100%',
+                padding: '13px',
+                borderRadius: '10px',
+                background: 'var(--surface-raised)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-main)',
+                fontWeight: 700,
+                fontSize: '14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6
+              }}
+            >
+              <X size={16} />
+              <span>규정 상세 닫기</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

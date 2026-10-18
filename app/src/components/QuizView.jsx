@@ -5,6 +5,8 @@ import {
   Filter, AlertTriangle
 } from 'lucide-react';
 import defaultQuizData from '../data/quizData.json';
+import defaultRulesData from '../data/rulesData.json';
+import { isRuleMatchingDept } from '../utils/deptUtils';
 
 // Fisher-Yates Random Shuffle
 function shuffleArray(arr) {
@@ -16,12 +18,12 @@ function shuffleArray(arr) {
   return copy;
 }
 
-export default function QuizView({ quizList = defaultQuizData, userProfile }) {
+export default function QuizView({ quizList = defaultQuizData, rules = defaultRulesData, userProfile }) {
   const rawList = quizList && quizList.length > 0 ? quizList : defaultQuizData;
 
   const [quizMode, setQuizMode] = useState('quiz'); // 'quiz' | 'flashcard'
-  const [filterMode, setFilterMode] = useState('all'); // 'all' | 'wrong' | 'must'
-  const [questionCount, setQuestionCount] = useState(30); // 10 | 30 | 45
+  const [filterMode, setFilterMode] = useState('all'); // 'all' | 'dept' | 'wrong' | 'must'
+  const [questionCount, setQuestionCount] = useState(30); // 10 | 30 | 60
   
   // Shuffled items state (랜덤 셔플된 문제 리스트)
   const [shuffledList, setShuffledList] = useState(() => shuffleArray(rawList));
@@ -39,24 +41,36 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
     return saved ? JSON.parse(saved) : {};
   });
 
+  // Quiz Finished state (결과 요약창)
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+
   // Re-shuffle when master quizList changes
   useEffect(() => {
     setShuffledList(shuffleArray(rawList));
     setCurrentIdx(0);
     setSelectedOption(null);
     setShowResult(false);
+    setIsQuizFinished(false);
   }, [quizList]);
 
   // Active Questions filtered by Mode & Count
   const activeQuestions = useMemo(() => {
     let list = shuffledList;
     if (filterMode === 'wrong') {
-      const filtered = shuffledList.filter((q) => wrongQuestionIds[q.id]);
-      return filtered.length > 0 ? filtered : shuffledList;
+      return shuffledList.filter((q) => wrongQuestionIds[q.id]);
     }
     if (filterMode === 'must') {
       const mustRules = ['1.1', '1.2', '1.3', '5.2', '5.6', '9.3', '9.4', '10.6', '3.2.1', '3.2.3'];
       const filtered = shuffledList.filter((q) => mustRules.includes(q.rule));
+      return filtered.length > 0 ? filtered : shuffledList;
+    }
+    if (filterMode === 'dept') {
+      const myDept = userProfile?.dept || '간호부';
+      const ruleMap = Object.fromEntries((rules || defaultRulesData).map((r) => [r.code, r]));
+      const filtered = shuffledList.filter((q) => {
+        const r = ruleMap[q.rule];
+        return r ? isRuleMatchingDept(r, myDept) : false;
+      });
       return filtered.length > 0 ? filtered : shuffledList;
     }
     // Standard 'all' mode: limit to questionCount (e.g. 30 questions)
@@ -64,17 +78,20 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
       return list.slice(0, questionCount);
     }
     return list;
-  }, [shuffledList, filterMode, wrongQuestionIds, questionCount]);
+  }, [shuffledList, filterMode, wrongQuestionIds, questionCount, userProfile?.dept, rules]);
 
   const currentQ = activeQuestions[currentIdx] || activeQuestions[0] || rawList[0];
 
-  // Manual Re-shuffle
+  // Manual Re-shuffle & Restart
   const handleShuffle = () => {
     setShuffledList(shuffleArray(rawList));
     setCurrentIdx(0);
     setSelectedOption(null);
     setShowResult(false);
     setIsFlipped(false);
+    setIsQuizFinished(false);
+    setScore(0);
+    setSolvedCount(0);
   };
 
   const handleSelectOption = (idx) => {
@@ -112,7 +129,8 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
     if (currentIdx < activeQuestions.length - 1) {
       setCurrentIdx(currentIdx + 1);
     } else {
-      setCurrentIdx(0);
+      // All questions in this set completed -> Show Results Summary!
+      setIsQuizFinished(true);
     }
   };
 
@@ -176,12 +194,15 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
       </div>
 
       {/* 2. Practical Filter & Shuffle Bar (실무 필터 & 무작위 섞기) */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface-raised)', padding: '8px 12px', borderRadius: '8px', fontSize: '12px' }}>
-        <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface-raised)', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', flexWrap: 'wrap', gap: 6 }}>
+        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
           <button
             onClick={() => {
               setFilterMode('all');
               setCurrentIdx(0);
+              setSelectedOption(null);
+              setShowResult(false);
+              setIsQuizFinished(false);
             }}
             style={{
               padding: '4px 8px',
@@ -197,8 +218,34 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
           </button>
           <button
             onClick={() => {
+              setFilterMode('dept');
+              setCurrentIdx(0);
+              setSelectedOption(null);
+              setShowResult(false);
+              setIsQuizFinished(false);
+            }}
+            style={{
+              padding: '4px 8px',
+              borderRadius: '6px',
+              border: 'none',
+              fontWeight: filterMode === 'dept' ? 800 : 600,
+              background: filterMode === 'dept' ? 'var(--primary)' : 'var(--surface)',
+              color: filterMode === 'dept' ? '#fff' : 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 3
+            }}
+          >
+            <span>🏢 {userProfile?.dept || '내 부서'} 전용</span>
+          </button>
+          <button
+            onClick={() => {
               setFilterMode('wrong');
               setCurrentIdx(0);
+              setSelectedOption(null);
+              setShowResult(false);
+              setIsQuizFinished(false);
             }}
             style={{
               padding: '4px 8px',
@@ -220,6 +267,9 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
             onClick={() => {
               setFilterMode('must');
               setCurrentIdx(0);
+              setSelectedOption(null);
+              setShowResult(false);
+              setIsQuizFinished(false);
             }}
             style={{
               padding: '4px 8px',
@@ -257,8 +307,8 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
         </button>
       </div>
 
-      {/* 2-1. Question Count Selector (30문항 실전모의 / 45문항 전체 / 10문항 스피드) */}
-      {filterMode === 'all' && (
+      {/* 2-1. Question Count Selector (30문항 실전모의 / 60문항 전체 / 10문항 스피드) */}
+      {(filterMode === 'all' || filterMode === 'dept') && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 4px', fontSize: '11.5px', color: 'var(--text-sub)' }}>
           <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
             <span>출제 범위:</span>
@@ -267,7 +317,7 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
           <div style={{ display: 'flex', gap: 5 }}>
             {[
               { count: 30, label: '30문항 (실전모의)' },
-              { count: 45, label: '45문항 (전체)' },
+              { count: 60, label: '60문항 (전체)' },
               { count: 10, label: '10문항 (스피드)' }
             ].map(({ count, label }) => (
               <button
@@ -300,93 +350,131 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
 
       {/* MODE 1: 실전 모의 퀴즈 */}
       {quizMode === 'quiz' && (
-        <div className="calc-card">
-          {/* Quiz Header Bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--primary)', background: 'var(--primary-light)', padding: '4px 10px', borderRadius: '6px' }}>
-              {currentQ.category} • 기준 {currentQ.rule}
-            </span>
-            <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)' }}>
-              문제 <strong>{currentIdx + 1}</strong> / {activeQuestions.length}
-            </span>
-          </div>
+        <>
+          {/* A. Empty State for Wrong Notes */}
+          {filterMode === 'wrong' && activeQuestions.length === 0 ? (
+            <div className="calc-card" style={{ textAlign: 'center', padding: '36px 20px' }}>
+              <div style={{ fontSize: '42px', marginBottom: 12 }}>🎉</div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--primary)', marginBottom: 8 }}>
+                오답노트가 비어 있습니다!
+              </h3>
+              <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20 }}>
+                현재 틀린 문제 없이 완벽하게 학습 중이십니다.<br />
+                실전 모의고사를 풀다가 틀린 문제가 생기면 이곳에 자동으로 보관됩니다.
+              </p>
+              <button
+                onClick={() => {
+                  setFilterMode('all');
+                  setCurrentIdx(0);
+                  setIsQuizFinished(false);
+                }}
+                style={{
+                  padding: '12px 24px',
+                  borderRadius: '10px',
+                  background: 'var(--primary)',
+                  color: '#fff',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                전체 모의고사 풀러 가기
+              </button>
+            </div>
+          ) : isQuizFinished ? (
+            /* B. Quiz Completed Score Summary Screen */
+            <div className="calc-card" style={{ textAlign: 'center', padding: '30px 20px' }}>
+              <div style={{ fontSize: '46px', marginBottom: 10 }}>
+                {Math.round((score / activeQuestions.length) * 100) >= 80 ? '🏆' : '📚'}
+              </div>
+              <span style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                borderRadius: '14px',
+                fontSize: '12px',
+                fontWeight: 800,
+                background: Math.round((score / activeQuestions.length) * 100) >= 80 ? 'var(--primary-light)' : 'var(--warning-light)',
+                color: Math.round((score / activeQuestions.length) * 100) >= 80 ? 'var(--primary)' : 'var(--warning)',
+                marginBottom: 10
+              }}>
+                {Math.round((score / activeQuestions.length) * 100) >= 80 ? '인증 실사 합격선 도달' : '취약 항목 보충 권장'}
+              </span>
 
-          {/* Question Text */}
-          <div style={{ fontSize: '16px', fontWeight: 800, lineHeight: 1.55, marginBottom: 18, color: 'var(--text-main)' }}>
-            {currentQ.question}
-          </div>
+              <h2 style={{ fontSize: '22px', fontWeight: 900, color: 'var(--text-main)', marginBottom: 6 }}>
+                모의평가 완료!
+              </h2>
+              <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: 20 }}>
+                총 {activeQuestions.length}문항 중 <strong>{score}문항 정답</strong> (정답률 {Math.round((score / activeQuestions.length) * 100)}%)
+              </p>
 
-          {/* Options */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {currentQ.options.map((opt, idx) => {
-              let optBg = 'var(--surface-raised)';
-              let optBorder = 'var(--border)';
-              let optColor = 'var(--text-main)';
+              {/* Score Metric Card */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: 8,
+                background: 'var(--surface-raised)',
+                padding: '14px 10px',
+                borderRadius: '12px',
+                marginBottom: 20
+              }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>총 문항</div>
+                  <strong style={{ fontSize: '16px', color: 'var(--text-main)' }}>{activeQuestions.length}</strong>
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--success)' }}>정답</div>
+                  <strong style={{ fontSize: '16px', color: 'var(--success)' }}>{score}</strong>
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--danger)' }}>오답</div>
+                  <strong style={{ fontSize: '16px', color: 'var(--danger)' }}>{activeQuestions.length - score}</strong>
+                </div>
+              </div>
 
-              if (showResult) {
-                if (idx === currentQ.answer) {
-                  optBg = 'var(--primary-light)';
-                  optBorder = 'var(--primary)';
-                  optColor = 'var(--primary)';
-                } else if (idx === selectedOption) {
-                  optBg = 'var(--danger-light)';
-                  optBorder = 'var(--danger)';
-                  optColor = 'var(--danger)';
-                }
-              }
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {wrongCount > 0 && (
+                  <button
+                    onClick={() => {
+                      setFilterMode('wrong');
+                      setCurrentIdx(0);
+                      setSelectedOption(null);
+                      setShowResult(false);
+                      setIsQuizFinished(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '13px',
+                      borderRadius: '10px',
+                      background: 'var(--danger)',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6
+                    }}
+                  >
+                    <span>오답노트 {wrongCount}문제 집중 복습하기</span>
+                    <ArrowRight size={16} />
+                  </button>
+                )}
 
-              return (
                 <button
-                  key={idx}
-                  onClick={() => handleSelectOption(idx)}
-                  disabled={showResult}
+                  onClick={handleShuffle}
                   style={{
-                    padding: '14px 16px',
+                    width: '100%',
+                    padding: '13px',
                     borderRadius: '10px',
-                    border: `1.5px solid ${optBorder}`,
-                    background: optBg,
-                    color: optColor,
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    textAlign: 'left',
-                    cursor: showResult ? 'default' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <span>{opt}</span>
-                  {showResult && idx === currentQ.answer && <CheckCircle2 size={18} color="var(--primary)" />}
-                  {showResult && idx === selectedOption && idx !== currentQ.answer && <XCircle size={18} color="var(--danger)" />}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Result Feedback & Explanation */}
-          {showResult && (
-            <div style={{ marginTop: 18, padding: '14px 16px', borderRadius: '10px', background: 'var(--surface-raised)', borderLeft: `4px solid ${selectedOption === currentQ.answer ? 'var(--primary)' : 'var(--danger)'}` }}>
-              <div style={{ fontWeight: 800, fontSize: '14px', color: selectedOption === currentQ.answer ? 'var(--primary)' : 'var(--danger)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                {selectedOption === currentQ.answer ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
-                <span>{selectedOption === currentQ.answer ? '정답입니다! 완벽하게 숙지하셨습니다.' : '오답입니다. 오답노트에 자동 저장되었습니다.'}</span>
-              </div>
-              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-main)' }}>
-                <strong>해설 및 실무 팁:</strong> {currentQ.explanation}
-              </div>
-
-              <div style={{ marginTop: 14, display: 'flex', gap: 8 }}>
-                <button
-                  onClick={handleNext}
-                  style={{
-                    flex: 1,
                     background: 'var(--primary)',
                     color: '#fff',
-                    border: 'none',
-                    padding: '12px 14px',
-                    borderRadius: '8px',
                     fontWeight: 800,
                     fontSize: '14px',
+                    border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -394,34 +482,159 @@ export default function QuizView({ quizList = defaultQuizData, userProfile }) {
                     gap: 6
                   }}
                 >
-                  <span>다음 문제 풀기</span>
-                  <ArrowRight size={16} />
+                  <RotateCcw size={16} />
+                  <span>새로운 문제로 다시 풀기</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setQuizMode('flashcard');
+                    setIsQuizFinished(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: 'var(--surface-raised)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-main)',
+                    fontWeight: 700,
+                    fontSize: '13.5px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  💡 암기카드로 핵심 요점 빠르게 훑기
                 </button>
               </div>
             </div>
-          )}
+          ) : (
+            /* C. Standard Active Question Screen */
+            <div className="calc-card">
+              {/* Quiz Header Bar */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--primary)', background: 'var(--primary-light)', padding: '4px 10px', borderRadius: '6px' }}>
+                  {currentQ.category} • 기준 {currentQ.rule}
+                </span>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)' }}>
+                  문제 <strong>{currentIdx + 1}</strong> / {activeQuestions.length}
+                </span>
+              </div>
 
-          {/* Bottom Score & Navigation Bar */}
-          <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              누적 점수: <strong>{score}</strong> / {solvedCount} (정답률 {solvedCount > 0 ? Math.round((score / solvedCount) * 100) : 0}%)
-            </span>
-            <div style={{ display: 'flex', gap: 6 }}>
-              <button
-                onClick={handlePrev}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
-              >
-                <ArrowLeft size={13} /> 이전
-              </button>
-              <button
-                onClick={handleNext}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
-              >
-                다음 <ArrowRight size={13} />
-              </button>
+              {/* Question Text */}
+              <div style={{ fontSize: '16px', fontWeight: 800, lineHeight: 1.55, marginBottom: 18, color: 'var(--text-main)' }}>
+                {currentQ.question}
+              </div>
+
+              {/* Options */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {currentQ.options.map((opt, idx) => {
+                  let optBg = 'var(--surface-raised)';
+                  let optBorder = 'var(--border)';
+                  let optColor = 'var(--text-main)';
+
+                  if (showResult) {
+                    if (idx === currentQ.answer) {
+                      optBg = 'var(--primary-light)';
+                      optBorder = 'var(--primary)';
+                      optColor = 'var(--primary)';
+                    } else if (idx === selectedOption) {
+                      optBg = 'var(--danger-light)';
+                      optBorder = 'var(--danger)';
+                      optColor = 'var(--danger)';
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleSelectOption(idx)}
+                      disabled={showResult}
+                      style={{
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        border: `1.5px solid ${optBorder}`,
+                        background: optBg,
+                        color: optColor,
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        textAlign: 'left',
+                        cursor: showResult ? 'default' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <span>{opt}</span>
+                      {showResult && idx === currentQ.answer && <CheckCircle2 size={18} color="var(--primary)" />}
+                      {showResult && idx === selectedOption && idx !== currentQ.answer && <XCircle size={18} color="var(--danger)" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Result Feedback & Explanation */}
+              {showResult && (
+                <div style={{ marginTop: 18, padding: '14px 16px', borderRadius: '10px', background: 'var(--surface-raised)', borderLeft: `4px solid ${selectedOption === currentQ.answer ? 'var(--primary)' : 'var(--danger)'}` }}>
+                  <div style={{ fontWeight: 800, fontSize: '14px', color: selectedOption === currentQ.answer ? 'var(--primary)' : 'var(--danger)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {selectedOption === currentQ.answer ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    <span>{selectedOption === currentQ.answer ? '정답입니다! 완벽하게 숙지하셨습니다.' : '오답입니다. 오답노트에 자동 저장되었습니다.'}</span>
+                  </div>
+                  <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-main)' }}>
+                    <strong>해설 및 실무 팁:</strong> {currentQ.explanation}
+                  </div>
+
+                  <div style={{ marginTop: 14, display: 'flex', gap: 8 }}>
+                    <button
+                      onClick={handleNext}
+                      style={{
+                        flex: 1,
+                        background: 'var(--primary)',
+                        color: '#fff',
+                        border: 'none',
+                        padding: '12px 14px',
+                        borderRadius: '8px',
+                        fontWeight: 800,
+                        fontSize: '14px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <span>{currentIdx === activeQuestions.length - 1 ? '최종 결과 확인하기' : '다음 문제 풀기'}</span>
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Bottom Score & Navigation Bar (결과 확인 전 이전/다음 이동) */}
+              {!showResult && (
+                <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                    진행: <strong>{currentIdx + 1}</strong> / {activeQuestions.length}
+                  </span>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button
+                      onClick={handlePrev}
+                      style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
+                    >
+                      <ArrowLeft size={13} /> 이전
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
+                    >
+                      건너뛰기 <ArrowRight size={13} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
 
       {/* MODE 2: 핵심 플래시 암기카드 (무작위 셔플) */}

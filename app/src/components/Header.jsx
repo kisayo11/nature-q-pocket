@@ -1,9 +1,11 @@
 import React from 'react';
-import { Award, ShieldAlert } from 'lucide-react';
+import { Award, ShieldAlert, Settings } from 'lucide-react';
 
 export default function Header({
   onOpenEmergency,
-  syncStatus
+  onOpenSettings,
+  syncStatus,
+  activeTab
 }) {
   const dDay = Math.ceil((new Date('2026-11-25') - new Date()) / (1000 * 60 * 60 * 24));
 
@@ -26,7 +28,7 @@ export default function Header({
           </div>
         </div>
 
-        {/* Right Actions: D-Day & Emergency Call */}
+        {/* Right Actions: D-Day, Emergency Call, Settings */}
         <div className="header-actions-clean">
           <div className="dday-pill-clean">
             <span>D-{dDay > 0 ? dDay : 'DAY'}</span>
@@ -34,11 +36,30 @@ export default function Header({
 
           <button
             className="emer-quick-btn"
-            onClick={() => onOpenEmergency('fire')}
-            title="원내 비상대응 연락망"
+            onClick={() => onOpenEmergency('menu')}
+            title="원내 비상대응 연락망 (화재/CPR/유출/보안)"
           >
             <ShieldAlert size={14} />
             <span>비상</span>
+          </button>
+
+          <button
+            className={`header-settings-btn ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={onOpenSettings}
+            title="환경 설정"
+            style={{
+              padding: '6px',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              background: activeTab === 'settings' ? 'var(--primary-light)' : 'var(--surface-raised)',
+              color: activeTab === 'settings' ? 'var(--primary)' : 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <Settings size={16} />
           </button>
         </div>
       </div>
