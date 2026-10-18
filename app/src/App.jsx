@@ -293,13 +293,15 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Bottom Navigation Bar (황금 5대 네비게이션) */}
+      {/* 3. Bottom Navigation Bar (황금 5대 프리미엄 독) */}
       <nav className="bottom-nav">
         <button
           className={`nav-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
           onClick={() => setActiveTab('home')}
         >
-          <Home size={19} />
+          <div className="nav-icon-wrapper">
+            <Home size={20} strokeWidth={activeTab === 'home' ? 2.5 : 1.9} />
+          </div>
           <span className="nav-tab-label">홈</span>
         </button>
 
@@ -311,7 +313,9 @@ export default function App() {
             setActiveTab('handbook');
           }}
         >
-          <BookOpen size={19} />
+          <div className="nav-icon-wrapper">
+            <BookOpen size={20} strokeWidth={activeTab === 'handbook' ? 2.5 : 1.9} />
+          </div>
           <span className="nav-tab-label">규정집</span>
         </button>
 
@@ -319,7 +323,9 @@ export default function App() {
           className={`nav-tab-btn ${activeTab === 'inspection' || activeTab === 'tracer' ? 'active' : ''}`}
           onClick={() => setActiveTab('inspection')}
         >
-          <ShieldCheck size={19} />
+          <div className="nav-icon-wrapper">
+            <ShieldCheck size={20} strokeWidth={activeTab === 'inspection' || activeTab === 'tracer' ? 2.6 : 2} />
+          </div>
           <span className="nav-tab-label">조사대응</span>
         </button>
 
@@ -327,7 +333,9 @@ export default function App() {
           className={`nav-tab-btn ${activeTab === 'golden' || activeTab === 'calc' ? 'active' : ''}`}
           onClick={() => setActiveTab('golden')}
         >
-          <Clock size={19} />
+          <div className="nav-icon-wrapper">
+            <Clock size={20} strokeWidth={activeTab === 'golden' || activeTab === 'calc' ? 2.5 : 1.9} />
+          </div>
           <span className="nav-tab-label">기준수치</span>
         </button>
 
@@ -336,7 +344,9 @@ export default function App() {
             className={`nav-tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
             onClick={() => setActiveTab('quiz')}
           >
-            <HelpCircle size={19} />
+            <div className="nav-icon-wrapper">
+              <HelpCircle size={20} strokeWidth={activeTab === 'quiz' ? 2.5 : 1.9} />
+            </div>
             <span className="nav-tab-label">모의퀴즈</span>
           </button>
         )}
