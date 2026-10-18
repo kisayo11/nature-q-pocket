@@ -84,11 +84,19 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
         const merged = currentRules.map((cr) => {
           const update = rowMap[cr.code];
           if (!update) return cr;
+          const isBoilerplateQa = update.quickAnswer && (
+            update.quickAnswer.includes('규정에 따라 정해진 절차를 준수') ||
+            update.quickAnswer.length < 5
+          );
+          const isBoilerplateFaq = update.faq && (
+            update.faq.includes('관련 업무 수행 기준과 서식 관리 방법') ||
+            update.faq.length < 5
+          );
           return {
             ...cr,
             title: update.title || cr.title,
-            quickAnswer: update.quickAnswer || cr.quickAnswer,
-            faq: update.faq || cr.faq,
+            quickAnswer: (!isBoilerplateQa && update.quickAnswer) ? update.quickAnswer : cr.quickAnswer,
+            faq: (!isBoilerplateFaq && update.faq) ? update.faq : cr.faq,
             pdfUrl: update.customPdfUrl || cr.pdfUrl || `/regulations/${cr.code}.pdf`,
           };
         });
