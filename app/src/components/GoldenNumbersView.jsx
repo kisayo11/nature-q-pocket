@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import goldenNumbersData from '../data/goldenNumbers.json';
+import Calculators from './Calculators';
 import {
   Clock, Thermometer, Repeat, Hash, Search,
-  Check, ArrowRight, ShieldCheck
+  Check, ArrowRight, ShieldCheck, Calculator
 } from 'lucide-react';
 
 export default function GoldenNumbersView({ onSelectRule }) {
+  const [activeViewMode, setActiveViewMode] = useState('numbers'); // 'numbers' | 'calc'
   const [activeCategory, setActiveCategory] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
   const [memorized, setMemorized] = useState(() => {
@@ -51,7 +53,71 @@ export default function GoldenNumbersView({ onSelectRule }) {
 
   return (
     <div className="golden-clean-wrap">
-      {/* Top Simple Banner */}
+      {/* Top 2-Way Segmented Switcher (기준 수치 vs 실무 계산기) */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '6px',
+        background: 'var(--surface-raised)',
+        padding: '4px',
+        borderRadius: '12px',
+        border: '1px solid var(--border)',
+        marginBottom: '12px'
+      }}>
+        <button
+          onClick={() => setActiveViewMode('numbers')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            padding: '9px 12px',
+            borderRadius: '9px',
+            border: 'none',
+            background: activeViewMode === 'numbers' ? 'var(--surface)' : 'transparent',
+            color: activeViewMode === 'numbers' ? 'var(--primary)' : 'var(--text-muted)',
+            fontSize: '13px',
+            fontWeight: activeViewMode === 'numbers' ? 800 : 600,
+            cursor: 'pointer',
+            boxShadow: activeViewMode === 'numbers' ? 'var(--shadow-sm)' : 'none',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <Clock size={16} />
+          <span>기준 수치표 (30선)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveViewMode('calc')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            padding: '9px 12px',
+            borderRadius: '9px',
+            border: 'none',
+            background: activeViewMode === 'calc' ? 'var(--surface)' : 'transparent',
+            color: activeViewMode === 'calc' ? 'var(--primary)' : 'var(--text-muted)',
+            fontSize: '13px',
+            fontWeight: activeViewMode === 'calc' ? 800 : 600,
+            cursor: 'pointer',
+            boxShadow: activeViewMode === 'calc' ? 'var(--shadow-sm)' : 'none',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          <Calculator size={16} />
+          <span>실무 계산기 (낙상·욕창·수액)</span>
+        </button>
+      </div>
+
+      {/* VIEW MODE 1: 실무 계산기 탭 */}
+      {activeViewMode === 'calc' && <Calculators />}
+
+      {/* VIEW MODE 2: 기준 수치표 (30선) */}
+      {activeViewMode === 'numbers' && (
+        <>
+          {/* Top Simple Banner */}
       <div className="golden-clean-head">
         <div className="head-top-row">
           <span className="clean-badge">
@@ -159,6 +225,8 @@ export default function GoldenNumbersView({ onSelectRule }) {
           );
         })}
       </div>
+      </>
+      )}
     </div>
   );
 }

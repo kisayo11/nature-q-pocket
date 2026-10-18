@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Award, ShieldAlert, Settings, Home, BookOpen, Clock, Calculator, HelpCircle, Zap
+  Award, ShieldAlert, Settings, Home, BookOpen, Clock, Calculator, HelpCircle, ShieldCheck, Zap
 } from 'lucide-react';
 
 export default function Header({
@@ -52,25 +52,18 @@ export default function Header({
             <span>규정집</span>
           </button>
           <button
-            className={`hd-nav-link ${activeTab === 'tracer' ? 'active' : ''}`}
-            onClick={() => onNavigateTab && onNavigateTab('tracer')}
+            className={`hd-nav-link ${activeTab === 'inspection' || activeTab === 'tracer' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('inspection')}
           >
-            <Zap size={15} />
-            <span>추적조사</span>
+            <ShieldCheck size={15} />
+            <span>조사대응</span>
           </button>
           <button
-            className={`hd-nav-link ${activeTab === 'golden' ? 'active' : ''}`}
+            className={`hd-nav-link ${activeTab === 'golden' || activeTab === 'calc' ? 'active' : ''}`}
             onClick={() => onNavigateTab && onNavigateTab('golden')}
           >
             <Clock size={15} />
             <span>기준수치</span>
-          </button>
-          <button
-            className={`hd-nav-link ${activeTab === 'calc' ? 'active' : ''}`}
-            onClick={() => onNavigateTab && onNavigateTab('calc')}
-          >
-            <Calculator size={15} />
-            <span>계산기</span>
           </button>
           <button
             className={`hd-nav-link ${activeTab === 'quiz' ? 'active' : ''}`}

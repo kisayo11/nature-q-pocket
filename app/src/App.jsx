@@ -8,7 +8,7 @@ import EmergencyModal from './components/EmergencyModal';
 import Calculators from './components/Calculators';
 import QuizView from './components/QuizView';
 import SettingsView from './components/SettingsView';
-import TracerScenariosView from './components/TracerScenariosView';
+import InspectionDefenseView from './components/InspectionDefenseView';
 
 import initialRules from './data/rulesData.json';
 import initialGoldenNumbers from './data/goldenNumbers.json';
@@ -16,14 +16,14 @@ import initialQuizList from './data/quizData.json';
 import { autoSyncWithGoogleSheets } from './utils/googleSheetsSync';
 
 import {
-  Home, BookOpen, Clock, Calculator, Settings, HelpCircle, Zap
+  Home, BookOpen, Clock, Calculator, Settings, HelpCircle, ShieldCheck, Zap
 } from 'lucide-react';
 
 export default function App() {
   const [rules, setRules] = useState(initialRules);
   const [goldenNumbers, setGoldenNumbers] = useState(initialGoldenNumbers);
   const [quizList, setQuizList] = useState(initialQuizList);
-  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'handbook' | 'tracer' | 'golden' | 'calc' | 'quiz' | 'settings'
+  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'handbook' | 'inspection' | 'golden' | 'quiz' | 'settings'
 
   // Selected Department (기본값: 간호부)
   const [selectedDept, setSelectedDept] = useState(() => {
@@ -248,13 +248,17 @@ export default function App() {
           />
         )}
 
-        {/* TAB 3: 현장실사 추적조사 (Tracer) */}
-        {activeTab === 'tracer' && (
-          <TracerScenariosView onOpenRule={handleOpenRule} />
+        {/* TAB 3: 현장실사 조사대응 (3초 구두답변 + 6대 돌발 Tracer) */}
+        {(activeTab === 'inspection' || activeTab === 'tracer') && (
+          <InspectionDefenseView
+            selectedDept={selectedDept}
+            onOpenRule={handleOpenRule}
+            initialSubTab={activeTab === 'tracer' ? 'tracer' : 'quick'}
+          />
         )}
 
-        {/* TAB 4: 기준 수치 (시간·온도·주기) */}
-        {activeTab === 'golden' && (
+        {/* TAB 4: 기준 수치 및 실무 계산기 (통합) */}
+        {(activeTab === 'golden' || activeTab === 'calc') && (
           <GoldenNumbersView
             onSelectRule={(ruleCode) => {
               setActiveRuleCode(ruleCode);
@@ -262,10 +266,7 @@ export default function App() {
           />
         )}
 
-        {/* TAB 5: 실무 계산기 */}
-        {activeTab === 'calc' && <Calculators />}
-
-        {/* TAB 6: 퀴즈 */}
+        {/* TAB 5: 모의퀴즈 */}
         {activeTab === 'quiz' && (
           <QuizView
             quizList={quizList}
@@ -274,7 +275,7 @@ export default function App() {
           />
         )}
 
-        {/* TAB 7: 설정 */}
+        {/* TAB 6: 설정 */}
         {activeTab === 'settings' && (
           <SettingsView
             selectedDept={selectedDept}
@@ -292,13 +293,13 @@ export default function App() {
         )}
       </main>
 
-      {/* 3. Bottom Navigation Bar */}
+      {/* 3. Bottom Navigation Bar (황금 5대 네비게이션) */}
       <nav className="bottom-nav">
         <button
           className={`nav-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
           onClick={() => setActiveTab('home')}
         >
-          <Home size={18} />
+          <Home size={19} />
           <span className="nav-tab-label">홈</span>
         </button>
 
@@ -310,32 +311,24 @@ export default function App() {
             setActiveTab('handbook');
           }}
         >
-          <BookOpen size={18} />
+          <BookOpen size={19} />
           <span className="nav-tab-label">규정집</span>
         </button>
 
         <button
-          className={`nav-tab-btn ${activeTab === 'tracer' ? 'active' : ''}`}
-          onClick={() => setActiveTab('tracer')}
+          className={`nav-tab-btn ${activeTab === 'inspection' || activeTab === 'tracer' ? 'active' : ''}`}
+          onClick={() => setActiveTab('inspection')}
         >
-          <Zap size={18} />
-          <span className="nav-tab-label">추적조사</span>
+          <ShieldCheck size={19} />
+          <span className="nav-tab-label">조사대응</span>
         </button>
 
         <button
-          className={`nav-tab-btn ${activeTab === 'golden' ? 'active' : ''}`}
+          className={`nav-tab-btn ${activeTab === 'golden' || activeTab === 'calc' ? 'active' : ''}`}
           onClick={() => setActiveTab('golden')}
         >
-          <Clock size={18} />
+          <Clock size={19} />
           <span className="nav-tab-label">기준수치</span>
-        </button>
-
-        <button
-          className={`nav-tab-btn ${activeTab === 'calc' ? 'active' : ''}`}
-          onClick={() => setActiveTab('calc')}
-        >
-          <Calculator size={18} />
-          <span className="nav-tab-label">계산기</span>
         </button>
 
         {!inspectMode && (
@@ -343,7 +336,7 @@ export default function App() {
             className={`nav-tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
             onClick={() => setActiveTab('quiz')}
           >
-            <HelpCircle size={18} />
+            <HelpCircle size={19} />
             <span className="nav-tab-label">모의퀴즈</span>
           </button>
         )}

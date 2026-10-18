@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-  BookOpen, ArrowRight, CheckCircle2, ChevronRight,
-  ShieldCheck, Stethoscope, Zap, Clock, Award
+  BookOpen, ChevronRight, ShieldCheck, Stethoscope,
+  ShieldAlert, Zap, Clock, Award, Calculator
 } from 'lucide-react';
 import {
   DEPARTMENTS,
-  DEPARTMENT_QUICK_ANSWERS,
   getRulesByDept
 } from '../utils/deptUtils';
 
@@ -23,19 +22,8 @@ export default function HomeHub({
   const mustPassCheckedCount = mustPassRules.filter((r) => checkedMustPass[r.code]).length;
   const masteryRate = Math.round((mustPassCheckedCount / mustPassTotal) * 100);
 
-  // Active Department for 3-Second Quick Answers (기본값: 내 소속 부서)
-  const [activeAnswerDept, setActiveAnswerDept] = useState(selectedDept || '간호부');
-
-  useEffect(() => {
-    if (selectedDept) {
-      setActiveAnswerDept(selectedDept);
-    }
-  }, [selectedDept]);
-
-  const currentQuickAnswers = DEPARTMENT_QUICK_ANSWERS[activeAnswerDept] || DEPARTMENT_QUICK_ANSWERS['간호부'];
-
   return (
-    <div className="home-hub-clean-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="home-hub-clean-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '880px', margin: '0 auto', width: '100%' }}>
       {/* 1. Integrated Hero Card (소속 부서 + 10대 필수 달성도 + 인쇄본 링크) */}
       <section className="hub-hero-card">
         <div className="hero-top-row">
@@ -136,140 +124,66 @@ export default function HomeHub({
         </a>
       </section>
 
-      {/* 2. 4-Grid Core Action Shortcuts (핵심 바로가기) */}
-      <section className="hub-core-actions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))', gap: '10px' }}>
+      {/* 2. 4-Grid Core Action Shortcuts (핵심 4대 기능 런처) */}
+      <section className="hub-core-actions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px' }}>
         <div
           className="hub-core-card"
-          onClick={() => onNavigateTab('tracer')}
-          style={{ cursor: 'pointer' }}
+          onClick={() => onNavigateTab('inspection')}
+          style={{ cursor: 'pointer', padding: '13px 14px' }}
         >
-          <div className="hcc-icon" style={{ background: '#ecfdf5', color: '#059669' }}>
-            <Zap size={20} />
+          <div className="hcc-icon" style={{ background: '#ecfdf5', color: '#059669', width: '38px', height: '38px' }}>
+            <Zap size={22} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title">실사 추적조사</strong>
-            <span className="hcc-sub">6대 돌발 Tracer</span>
+            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>실사 조사대응</strong>
+            <span className="hcc-sub" style={{ fontSize: '11px' }}>3초 구두답변 & Tracer</span>
           </div>
         </div>
 
         <div
           className="hub-core-card"
           onClick={() => onNavigateTab('golden')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', padding: '13px 14px' }}
         >
-          <div className="hcc-icon" style={{ background: '#eff6ff', color: '#2563eb' }}>
-            <Clock size={20} />
+          <div className="hcc-icon" style={{ background: '#eff6ff', color: '#2563eb', width: '38px', height: '38px' }}>
+            <Clock size={22} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title">기준 수치표</strong>
-            <span className="hcc-sub">시간·온도·주기 30선</span>
+            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>기준수치·계산기</strong>
+            <span className="hcc-sub" style={{ fontSize: '11px' }}>골든넘버 & 낙상·욕창</span>
           </div>
         </div>
 
         <div
           className="hub-core-card"
           onClick={() => onNavigateTab('quiz')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', padding: '13px 14px' }}
         >
-          <div className="hcc-icon" style={{ background: '#fffbeb', color: '#d97706' }}>
-            <Award size={20} />
+          <div className="hcc-icon" style={{ background: '#fffbeb', color: '#d97706', width: '38px', height: '38px' }}>
+            <Award size={22} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title">실전 모의퀴즈</strong>
-            <span className="hcc-sub">60문항 암기카드</span>
+            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>실전 모의퀴즈</strong>
+            <span className="hcc-sub" style={{ fontSize: '11px' }}>60문항 암기카드 & 복습</span>
           </div>
         </div>
 
         <div
           className="hub-core-card"
           onClick={() => onNavigateTab('handbook')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', padding: '13px 14px' }}
         >
-          <div className="hcc-icon" style={{ background: '#fdf4ff', color: '#9333ea' }}>
-            <BookOpen size={20} />
+          <div className="hcc-icon" style={{ background: '#fdf4ff', color: '#9333ea', width: '38px', height: '38px' }}>
+            <BookOpen size={22} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title">규정집 전체</strong>
-            <span className="hcc-sub">12개 챕터 58규정</span>
+            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>규정집 전체</strong>
+            <span className="hcc-sub" style={{ fontSize: '11px' }}>12개 챕터 58규정 원문</span>
           </div>
         </div>
       </section>
 
-      {/* 3. Essential 3-Second Oral Answers (내 부서 맞춤 3초 구두답변) */}
-      <section className="hub-section-block">
-        <div className="hub-sec-header" style={{ marginBottom: '10px' }}>
-          <div className="hub-sec-title">
-            <CheckCircle2 size={17} color="var(--primary)" />
-            <span>조사위원 질문 시 3초 구두 답변</span>
-          </div>
-          <button
-            className="hub-sec-link"
-            onClick={() => onNavigateTab('golden')}
-          >
-            기준 수치 <ChevronRight size={13} />
-          </button>
-        </div>
-
-        {/* Department tabs */}
-        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 10, scrollbarWidth: 'none' }}>
-          {DEPARTMENTS.map((dept) => {
-            const isActive = activeAnswerDept === dept.name;
-            return (
-              <button
-                key={dept.id}
-                onClick={() => setActiveAnswerDept(dept.name)}
-                style={{
-                  padding: '6px 11px',
-                  borderRadius: '16px',
-                  fontSize: '11.5px',
-                  fontWeight: isActive ? 800 : 600,
-                  background: isActive ? 'var(--primary)' : 'var(--surface-raised)',
-                  color: isActive ? '#fff' : 'var(--text-muted)',
-                  border: '1px solid',
-                  borderColor: isActive ? 'var(--primary)' : 'var(--border)',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <span>{dept.icon}</span>
-                <span>{dept.name}</span>
-                {selectedDept === dept.name && (
-                  <span style={{ fontSize: '9px', padding: '1px 4px', borderRadius: '4px', background: isActive ? 'rgba(255,255,255,0.25)' : 'var(--border)', color: isActive ? '#fff' : 'var(--text-muted)' }}>내부서</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Quick Answer Cards */}
-        <div className="quick-answers-scroll" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 10 }}>
-          {currentQuickAnswers.map((item, idx) => (
-            <div
-              key={idx}
-              className={`quick-answer-card border-${item.color}`}
-              onClick={() => onOpenRule(item.code)}
-              style={{ minWidth: 0, maxWidth: 'none' }}
-            >
-              <div className="qac-top">
-                <span className="qac-code">규정 {item.code}</span>
-                <span className="qac-tag">{activeAnswerDept} 답변</span>
-              </div>
-              <h3 className="qac-title">{item.title}</h3>
-              <p className="qac-text">"{item.answer}"</p>
-              <div className="qac-footer">
-                <span>상세 규정 열람</span>
-                <ArrowRight size={12} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. Department Filter Chips (부서별 주요 규정 바로가기) */}
+      {/* 3. Department Filter Chips (부서별 주요 규정 바로가기) */}
       <section className="hub-section-block">
         <div className="hub-sec-header" style={{ marginBottom: '10px' }}>
           <div className="hub-sec-title">
@@ -292,7 +206,7 @@ export default function HomeHub({
                   onSelectDept(dept.name);
                   onNavigateTab('handbook');
                 }}
-                style={{ padding: '10px 8px' }}
+                style={{ padding: '11px 8px' }}
               >
                 <span className="dcb-icon">{dept.icon}</span>
                 <span className="dcb-name">{dept.name}</span>
