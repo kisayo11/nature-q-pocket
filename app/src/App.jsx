@@ -8,6 +8,7 @@ import EmergencyModal from './components/EmergencyModal';
 import Calculators from './components/Calculators';
 import QuizView from './components/QuizView';
 import SettingsView from './components/SettingsView';
+import TracerScenariosView from './components/TracerScenariosView';
 
 import initialRules from './data/rulesData.json';
 import initialGoldenNumbers from './data/goldenNumbers.json';
@@ -15,14 +16,14 @@ import initialQuizList from './data/quizData.json';
 import { autoSyncWithGoogleSheets } from './utils/googleSheetsSync';
 
 import {
-  Home, BookOpen, Clock, Calculator, Settings, HelpCircle
+  Home, BookOpen, Clock, Calculator, Settings, HelpCircle, Zap
 } from 'lucide-react';
 
 export default function App() {
   const [rules, setRules] = useState(initialRules);
   const [goldenNumbers, setGoldenNumbers] = useState(initialGoldenNumbers);
   const [quizList, setQuizList] = useState(initialQuizList);
-  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'handbook' | 'golden' | 'calc' | 'quiz' | 'settings'
+  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'handbook' | 'tracer' | 'golden' | 'calc' | 'quiz' | 'settings'
 
   // Selected Department (기본값: 간호부)
   const [selectedDept, setSelectedDept] = useState(() => {
@@ -247,7 +248,12 @@ export default function App() {
           />
         )}
 
-        {/* TAB 3: 기준 수치 (시간·온도·주기) */}
+        {/* TAB 3: 현장실사 추적조사 (Tracer) */}
+        {activeTab === 'tracer' && (
+          <TracerScenariosView onOpenRule={handleOpenRule} />
+        )}
+
+        {/* TAB 4: 기준 수치 (시간·온도·주기) */}
         {activeTab === 'golden' && (
           <GoldenNumbersView
             onSelectRule={(ruleCode) => {
@@ -256,10 +262,10 @@ export default function App() {
           />
         )}
 
-        {/* TAB 4: 실무 계산기 */}
+        {/* TAB 5: 실무 계산기 */}
         {activeTab === 'calc' && <Calculators />}
 
-        {/* TAB 5: 퀴즈 */}
+        {/* TAB 6: 퀴즈 */}
         {activeTab === 'quiz' && (
           <QuizView
             quizList={quizList}
@@ -268,7 +274,7 @@ export default function App() {
           />
         )}
 
-        {/* TAB 6: 설정 */}
+        {/* TAB 7: 설정 */}
         {activeTab === 'settings' && (
           <SettingsView
             selectedDept={selectedDept}
@@ -292,7 +298,7 @@ export default function App() {
           className={`nav-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
           onClick={() => setActiveTab('home')}
         >
-          <Home size={20} />
+          <Home size={18} />
           <span className="nav-tab-label">홈</span>
         </button>
 
@@ -300,18 +306,27 @@ export default function App() {
           className={`nav-tab-btn ${activeTab === 'handbook' ? 'active' : ''}`}
           onClick={() => {
             setChapterFilter(null);
+            setMustPassFilter(false);
             setActiveTab('handbook');
           }}
         >
-          <BookOpen size={20} />
+          <BookOpen size={18} />
           <span className="nav-tab-label">규정집</span>
+        </button>
+
+        <button
+          className={`nav-tab-btn ${activeTab === 'tracer' ? 'active' : ''}`}
+          onClick={() => setActiveTab('tracer')}
+        >
+          <Zap size={18} />
+          <span className="nav-tab-label">추적조사</span>
         </button>
 
         <button
           className={`nav-tab-btn ${activeTab === 'golden' ? 'active' : ''}`}
           onClick={() => setActiveTab('golden')}
         >
-          <Clock size={20} />
+          <Clock size={18} />
           <span className="nav-tab-label">기준수치</span>
         </button>
 
@@ -319,7 +334,7 @@ export default function App() {
           className={`nav-tab-btn ${activeTab === 'calc' ? 'active' : ''}`}
           onClick={() => setActiveTab('calc')}
         >
-          <Calculator size={20} />
+          <Calculator size={18} />
           <span className="nav-tab-label">계산기</span>
         </button>
 
@@ -328,7 +343,7 @@ export default function App() {
             className={`nav-tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
             onClick={() => setActiveTab('quiz')}
           >
-            <HelpCircle size={20} />
+            <HelpCircle size={18} />
             <span className="nav-tab-label">모의퀴즈</span>
           </button>
         )}

@@ -2256,45 +2256,6 @@ input, select {
   gap: 2px;
 }
 
-/* HomeHub: Segmented Control Bar */
-.hub-segmented-bar {
-  display: flex;
-  gap: 6px;
-  background: var(--surface-raised);
-  padding: 4px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  margin-bottom: 12px;
-}
-
-.hsb-tab {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-sub);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.hsb-tab.active {
-  background: var(--surface);
-  color: var(--primary);
-  font-weight: 800;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.hub-tab-pane {
-  animation: fadeIn 0.2s ease;
-}
-
 /* ==========================================================================
    DESKTOP / TABLET MEDIA QUERIES (>= 768px)
    ========================================================================== */
@@ -2323,25 +2284,18 @@ input, select {
     display: none !important;
   }
 
-  /* HomeHub 2-Column Responsive Grid */
+  /* HomeHub Clean Centered Layout */
   .home-hub-clean-wrap {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 24px;
-    align-items: start;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
   }
 
-  .home-hub-col-left {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    position: sticky;
-    top: 76px;
-  }
-
-  .home-hub-col-right {
-    display: flex;
-    flex-direction: column;
+  /* Tracer Scenarios Dedicated View */
+  .tracer-view-wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    width: 100%;
   }
 
   /* Handbook 2/3 Column Grid */
@@ -2370,4 +2324,5 @@ input, select {
     max-height: 85vh;
   }
 }
+
 

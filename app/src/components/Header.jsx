@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Award, ShieldAlert, Settings, Home, BookOpen, Clock, Calculator, HelpCircle
+  Award, ShieldAlert, Settings, Home, BookOpen, Clock, Calculator, HelpCircle, Zap
 } from 'lucide-react';
 
 export default function Header({
@@ -50,6 +50,13 @@ export default function Header({
           >
             <BookOpen size={15} />
             <span>규정집</span>
+          </button>
+          <button
+            className={`hd-nav-link ${activeTab === 'tracer' ? 'active' : ''}`}
+            onClick={() => onNavigateTab && onNavigateTab('tracer')}
+          >
+            <Zap size={15} />
+            <span>추적조사</span>
           </button>
           <button
             className={`hd-nav-link ${activeTab === 'golden' ? 'active' : ''}`}
