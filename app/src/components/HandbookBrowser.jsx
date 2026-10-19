@@ -24,6 +24,33 @@ function getChoseong(str) {
   return result;
 }
 
+function normalizeSearchText(value = '') {
+  return String(value)
+    .toLowerCase()
+    .replace(/[\s._\-/()·]+/g, ' ')
+    .trim();
+}
+
+function buildRuleSearchText(rule) {
+  const values = [
+    rule.code,
+    rule.title,
+    rule.purpose,
+    rule.quickAnswer,
+    rule.faq,
+    rule.faqQuestion,
+    rule.faqAnswer,
+    rule.fullTextSnippet,
+    rule.searchKey,
+    ...(rule.searchAliases || []),
+    ...(rule.department || []),
+    ...(rule.keyPoints || []),
+    ...(rule.forms || []),
+  ];
+
+  return normalizeSearchText(values.filter(Boolean).join(' '));
+}
+
 export default function HandbookBrowser({
   rules = [],
   initialChapter = null,
@@ -82,19 +109,16 @@ export default function HandbookBrowser({
 
       // 5. Search Query
       if (searchQuery.trim()) {
-        const q = searchQuery.trim().toLowerCase();
+        const q = normalizeSearchText(searchQuery);
+        const compactQ = q.replace(/\s/g, '');
         const qChoseong = getChoseong(q);
-
-        const titleLower = rule.title.toLowerCase();
-        const codeMatch = rule.code.includes(q);
-        const titleMatch = titleLower.includes(q);
+        const searchText = buildRuleSearchText(rule);
+        const compactSearchText = searchText.replace(/\s/g, '');
         const choseongMatch =
           (rule.choseong && rule.choseong.includes(q)) ||
           (rule.choseong && rule.choseong.includes(qChoseong));
-        const quickAnswerMatch = (rule.quickAnswer || '').toLowerCase().includes(q);
-        const deptMatch = rule.department?.some((d) => d.toLowerCase().includes(q));
 
-        if (!codeMatch && !titleMatch && !choseongMatch && !quickAnswerMatch && !deptMatch) {
+        if (!searchText.includes(q) && !compactSearchText.includes(compactQ) && !choseongMatch) {
           return false;
         }
       }
@@ -124,12 +148,12 @@ export default function HandbookBrowser({
           <input
             type="text"
             className="search-input"
-            placeholder="초성(ㄴㅅ, ㅅㅇㅅ), 규정코드(1.1), 키워드 검색"
+            placeholder="규정코드·키워드 검색 (예: 10.3, 스필킷, spill kit)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           {searchQuery && (
-            <button className="clear-search-btn" onClick={() => setSearchQuery('')}>
+            <button className="clear-search-btn" onClick={() => setSearchQuery('')} aria-label="검색어 지우기">
               <X size={16} />
             </button>
           )}

@@ -13,6 +13,7 @@ import InspectionDefenseView from './components/InspectionDefenseView';
 import initialRules from './data/rulesData.json';
 import initialGoldenNumbers from './data/goldenNumbers.json';
 import initialQuizList from './data/quizData.json';
+import initialSpillKitData from './data/spillKitData';
 import { autoSyncWithGoogleSheets } from './utils/googleSheetsSync';
 
 import {
@@ -23,6 +24,7 @@ export default function App() {
   const [rules, setRules] = useState(initialRules);
   const [goldenNumbers, setGoldenNumbers] = useState(initialGoldenNumbers);
   const [quizList, setQuizList] = useState(initialQuizList);
+  const [spillKitData, setSpillKitData] = useState(initialSpillKitData);
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'handbook' | 'inspection' | 'golden' | 'quiz' | 'settings'
 
   // Selected Department (기본값: 간호부)
@@ -133,8 +135,11 @@ export default function App() {
           if (syncRes.updatedRules && syncRes.updatedRules.length > 0) {
             setRules(syncRes.updatedRules);
           }
+          if (syncRes.updatedSpillKit) setSpillKitData(syncRes.updatedSpillKit);
           const nowStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
           setSyncStatus({ synced: true, time: nowStr });
+        } else {
+          setSyncStatus({ synced: false, time: null, error: syncRes.error || '동기화에 실패했습니다.' });
         }
       } catch (err) {
         console.warn('Auto-sync notice:', err.message);
@@ -200,9 +205,14 @@ export default function App() {
       if (syncRes.updatedQuiz && syncRes.updatedQuiz.length > 0) {
         setQuizList(syncRes.updatedQuiz);
       }
+      if (syncRes.updatedRules && syncRes.updatedRules.length > 0) setRules(syncRes.updatedRules);
+      if (syncRes.updatedSpillKit) setSpillKitData(syncRes.updatedSpillKit);
       const nowStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
       setSyncStatus({ synced: true, time: nowStr });
+      return true;
     }
+    setSyncStatus({ synced: false, time: null, error: syncRes.error || '동기화에 실패했습니다.' });
+    return false;
   };
 
   return (
@@ -373,6 +383,7 @@ export default function App() {
       {emergencyModal && (
         <EmergencyModal
           type={emergencyModal}
+          spillKitData={spillKitData}
           onClose={() => setEmergencyModal(null)}
         />
       )}

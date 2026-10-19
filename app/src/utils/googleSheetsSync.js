@@ -1,14 +1,68 @@
 // Google Sheets Auto-Sync Utility
 import defaultQuizData from '../data/quizData.json';
+import defaultSpillKitData from '../data/spillKitData';
 
 const SPREADSHEET_ID = '1kHG6C2qzSdWtrJXv-yHrC5rSUyUq4199MS_KL0m4CGE';
 
 async function fetchSheetGViz(tabName) {
   const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
   const res = await fetch(url);
+  if (!res.ok) throw new Error(`${tabName} 응답 오류 (${res.status})`);
   const text = await res.text();
+  if (!text.includes('{') || !text.includes('}')) throw new Error(`${tabName} 응답 형식 오류`);
   const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
   return JSON.parse(jsonStr);
+}
+
+function parseSpillKitRows(rows) {
+  const parsed = JSON.parse(JSON.stringify(defaultSpillKitData));
+  const groups = { '혈액·체액': [], '유해화학물질': [] };
+
+  rows.forEach((row) => {
+    const c = row.c || [];
+    const type = String(c[0]?.v || '').trim();
+    const status = String(c[11]?.v || '').trim();
+    if (!groups[type] || status !== '게시') return;
+    groups[type].push({
+      departments: String(c[1]?.v || '').split(',').map((v) => v.trim()).filter(Boolean),
+      itemType: String(c[2]?.v || '').trim(),
+      order: Number(c[3]?.v || 0),
+      condition: String(c[4]?.v || '').trim(),
+      content: String(c[5]?.v || '').trim(),
+      ratio: String(c[6]?.v || '').trim(),
+      usageLimit: String(c[7]?.v || '').trim(),
+      cautions: String(c[8]?.v || '').trim(),
+      source: String(c[9]?.v || '').trim(),
+    });
+  });
+
+  const applyGroup = (sheetType, key, requiredSteps) => {
+    const items = groups[sheetType];
+    const steps = items.filter((item) => item.itemType === '단계' && item.content).sort((a, b) => a.order - b.order);
+    const composition = items.find((item) => item.itemType === '구성');
+    if (!composition || steps.length < requiredSteps) throw new Error(`${sheetType} Spill Kit 게시 데이터가 불완전합니다.`);
+
+    parsed[key].departments = composition.departments;
+    parsed[key].composition = composition.content;
+    parsed[key].steps = steps.map((item) => item.content);
+
+    if (key === 'blood') {
+      const dilutions = items.filter((item) => item.itemType === '희석' && item.condition && item.content);
+      if (dilutions.length !== 2) throw new Error('혈액·체액 Spill Kit 희석 기준은 2개여야 합니다.');
+      parsed[key].dilutions = dilutions.map((item) => ({
+        condition: item.condition,
+        formula: item.content,
+        ratio: item.ratio,
+      }));
+      parsed[key].usageLimit = dilutions[0].usageLimit || parsed[key].usageLimit;
+      parsed[key].cautions = dilutions[0].cautions || parsed[key].cautions;
+    }
+  };
+
+  applyGroup('혈액·체액', 'blood', 6);
+  applyGroup('유해화학물질', 'chemical', 8);
+  parsed.source = groups['혈액·체액'][0]?.source || defaultSpillKitData.source;
+  return parsed;
 }
 
 export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenNumbers = []) {
@@ -18,6 +72,7 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
     updatedEmergency: null,
     updatedGoldenNumbers: null,
     error: null,
+    errors: [],
   };
 
   try {
@@ -40,6 +95,7 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
       }
     } catch (e) {
       console.warn('Emergency sheet sync note:', e.message);
+      result.errors.push(`비상연락망: ${e.message}`);
     }
 
     // 2. Fetch Golden Numbers (04_골든넘버_임계치)
@@ -62,6 +118,7 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
       }
     } catch (e) {
       console.warn('Golden numbers sheet sync note:', e.message);
+      result.errors.push(`골든넘버: ${e.message}`);
     }
 
     // 2.5 Fetch Live Rules Master & PDF URLs (02_57개규정_마스터)
@@ -104,6 +161,7 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
       }
     } catch (e) {
       console.warn('Rules master sheet sync note:', e.message);
+      result.errors.push(`규정 마스터: ${e.message}`);
     }
 
     // 3. Fetch Quiz Database (05_일일퀴즈_암기카드)
@@ -183,9 +241,21 @@ export async function autoSyncWithGoogleSheets(currentRules = [], currentGoldenN
       }
     } catch (e) {
       console.warn('Quiz sheet sync note:', e.message);
+      result.errors.push(`퀴즈: ${e.message}`);
     }
 
-    result.success = true;
+    // 4. Fetch approved Spill Kit procedures (06_응급대응_SpillKit)
+    try {
+      const spillData = await fetchSheetGViz('06_응급대응_SpillKit');
+      if (!spillData?.table?.rows?.length) throw new Error('게시 데이터가 없습니다.');
+      result.updatedSpillKit = parseSpillKitRows(spillData.table.rows);
+    } catch (e) {
+      console.warn('Spill Kit sheet sync note:', e.message);
+      result.errors.push(`Spill Kit: ${e.message}`);
+    }
+
+    result.success = result.errors.length === 0;
+    result.error = result.errors.length ? result.errors.join(' / ') : null;
     return result;
   } catch (err) {
     result.error = err.message;

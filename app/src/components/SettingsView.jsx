@@ -21,15 +21,21 @@ export default function SettingsView({
 }) {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
+  const [syncFailed, setSyncFailed] = useState(false);
 
   const triggerSync = async () => {
     setSyncing(true);
     setSyncSuccess(false);
-    await onSyncSheets();
+    setSyncFailed(false);
+    const success = await onSyncSheets();
     setTimeout(() => {
       setSyncing(false);
-      setSyncSuccess(true);
-      setTimeout(() => setSyncSuccess(false), 2500);
+      setSyncSuccess(success);
+      setSyncFailed(!success);
+      setTimeout(() => {
+        setSyncSuccess(false);
+        setSyncFailed(false);
+      }, 3500);
     }, 800);
   };
 
@@ -211,6 +217,11 @@ export default function SettingsView({
           <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
             마지막 동기화: {syncStatus?.time || '최신 유지 중'}
           </div>
+          {syncStatus?.error && (
+            <div style={{ marginTop: 6, fontSize: '11px', color: 'var(--danger)', lineHeight: 1.4 }}>
+              동기화 오류: {syncStatus.error}
+            </div>
+          )}
         </div>
 
         <button
@@ -222,7 +233,7 @@ export default function SettingsView({
             padding: '11px',
             borderRadius: '8px',
             border: 'none',
-            background: syncSuccess ? 'var(--success)' : 'var(--primary)',
+            background: syncFailed ? 'var(--danger)' : syncSuccess ? 'var(--success)' : 'var(--primary)',
             color: '#fff',
             fontWeight: 800,
             fontSize: '13px',
@@ -235,7 +246,7 @@ export default function SettingsView({
           }}
         >
           <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
-          <span>{syncing ? '최신 데이터 동기화 중...' : syncSuccess ? '동기화 완료!' : '지금 즉시 최신 데이터 다시 가져오기'}</span>
+          <span>{syncing ? '최신 데이터 동기화 중...' : syncFailed ? '동기화 실패 · 다시 시도' : syncSuccess ? '동기화 완료!' : '지금 즉시 최신 데이터 다시 가져오기'}</span>
         </button>
       </div>
 

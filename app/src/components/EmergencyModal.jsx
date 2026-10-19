@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, HeartPulse, Droplets, ShieldAlert, X, PhoneCall, AlertTriangle, Clock } from 'lucide-react';
 
-export default function EmergencyModal({ type, onClose }) {
+export default function EmergencyModal({ type, onClose, spillKitData }) {
   const [currentType, setCurrentType] = useState(() => (type === 'menu' ? 'fire' : type));
 
   useEffect(() => {
@@ -191,29 +191,45 @@ export default function EmergencyModal({ type, onClose }) {
         {currentType === 'spill' && (
           <div>
             <div className="quick-answer-banner" style={{ background: 'hsl(270, 70%, 95%)', borderColor: 'hsl(270, 60%, 60%)' }}>
-              <div style={{ color: 'hsl(270, 60%, 45%)', fontWeight: 800, marginBottom: 4 }}>🧪 혈액 및 체액 Spill Kit 처리 5단계</div>
+              <div style={{ color: 'hsl(270, 60%, 45%)', fontWeight: 800, marginBottom: 4 }}>🧪 {spillKitData.blood.title}</div>
+              <div style={{ fontSize: '12px', marginBottom: 6 }}>적용 부서: {spillKitData.blood.departments.join(', ')}</div>
               <div style={{ fontSize: '14px', fontWeight: 700, lineHeight: 1.5 }}>
-                1. Spill Kit 비치 장소에서 가져오기 ➔ 2. 보호구(장갑, 마스크, 가운) 착용 ➔ 3. 종이타월 덮고 <strong>5,000 ppm 락스</strong> 붓기 ➔ 4. 주황색 의료폐기물 봉투 밀봉 폐기 ➔ 5. 손위생
+                {spillKitData.blood.steps.map((step, index) => (
+                  <div key={step}>{index + 1}. {step}</div>
+                ))}
               </div>
             </div>
 
             <div style={{ marginTop: 12 }}>
-              <div className="detail-subheading">소독액 희석 비율 (조사위원 단골 질문!)</div>
+              <div className="detail-subheading">소독제 희석방법 · 제품 원액 약 5% 기준</div>
               <div style={{ background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                <div style={{ marginBottom: 6 }}>
-                  <strong>• 혈액·체액 유출 (Spill Kit):</strong><br />
-                  <span style={{ color: 'var(--danger)', fontWeight: 800 }}>물 900ml + 락스 100ml = 5,000 ppm (1:10 희석, 당일 사용)</span>
-                </div>
-                <div>
-                  <strong>• 일상 환경·바닥 소독:</strong><br />
-                  <span style={{ color: 'var(--primary)', fontWeight: 800 }}>물 1L + 락스 10ml = 500 ppm (1:100 희석, 10분 침적)</span>
-                </div>
+                {spillKitData.blood.dilutions.map((item) => (
+                  <div key={item.condition} style={{ marginBottom: 8 }}>
+                    <strong>• {item.condition}</strong><br />
+                    <span style={{ color: 'var(--danger)', fontWeight: 800 }}>{item.formula} ({item.ratio})</span>
+                  </div>
+                ))}
+                <strong>사용기한: {spillKitData.blood.usageLimit}</strong>
               </div>
             </div>
 
             <div style={{ marginTop: 12, fontSize: '12px', color: 'var(--text-muted)' }}>
-              ⚠️ 주의: 분무 금지, 산성세제/암모니아와 혼합 금지, 반드시 환기 상태에서 시행.
+              ⚠️ 주의: {spillKitData.blood.cautions}
             </div>
+
+            <details style={{ marginTop: 14, background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: 8 }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 800 }}>{spillKitData.chemical.title} 전체 절차</summary>
+              <div style={{ fontSize: '12px', marginTop: 6, color: 'var(--text-muted)' }}>적용 부서: {spillKitData.chemical.departments.join(', ')}</div>
+              <ol style={{ paddingLeft: 20, fontSize: '13px', lineHeight: 1.55 }}>
+                {spillKitData.chemical.steps.map((step) => <li key={step}>{step}</li>)}
+              </ol>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>근거: {spillKitData.source}</div>
+            </details>
+            <details style={{ marginTop: 8, background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: 8 }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 700 }}>Spill Kit 구성품 보기</summary>
+              <p style={{ fontSize: '12px', lineHeight: 1.55 }}><strong>혈액·체액:</strong> {spillKitData.blood.composition}</p>
+              <p style={{ fontSize: '12px', lineHeight: 1.55 }}><strong>유해화학물질:</strong> {spillKitData.chemical.composition}</p>
+            </details>
           </div>
         )}
 
