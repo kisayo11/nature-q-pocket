@@ -3,7 +3,7 @@ import {
   X, Copy, Check, ChevronLeft, ChevronRight, Bookmark,
   AlertTriangle, HelpCircle, FileText, CheckCircle2,
   Volume2, Clock, ShieldCheck, BookOpen, Layers,
-  ExternalLink, Download
+  ExternalLink, Download, MessageSquarePlus
 } from 'lucide-react';
 
 export default function PocketCardReader({
@@ -17,7 +17,8 @@ export default function PocketCardReader({
   onToggleBookmark,
   isMustPassChecked,
   onToggleMustPassCheck,
-  goldenNumbers = []
+  goldenNumbers = [],
+  onOpenFeedback
 }) {
   const [activeTab, setActiveTab] = useState('summary'); // 'summary' (핵심 요약) | 'checklist' (실천 지침) | 'fulltext' (규정 전문)
   const [copied, setCopied] = useState(false);
@@ -381,8 +382,17 @@ export default function PocketCardReader({
               </div>
             </div>
           )}
-          {/* Bottom Floating/Clean Close Action */}
-          <div style={{ marginTop: 24, padding: '0 4px 12px' }}>
+          {/* Bottom Floating/Clean Close Action & Report Button */}
+          <div style={{ marginTop: 24, padding: '0 4px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <button
+              onClick={() => onOpenFeedback && onOpenFeedback(`[${rule.code}] ${rule.title}`)}
+              className="rule-report-action-btn"
+              title="이 규정에 오류나 수정사항이 있나요?"
+            >
+              <MessageSquarePlus size={15} />
+              <span>이 규정 내용 오류 / 실무 불일치 제보하기</span>
+            </button>
+
             <button
               onClick={onClose}
               style={{

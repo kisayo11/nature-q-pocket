@@ -6,6 +6,7 @@ import {
 export default function Header({
   onOpenEmergency,
   onOpenSettings,
+  onOpenFeedback,
   syncStatus,
   activeTab,
   onNavigateTab
@@ -74,11 +75,19 @@ export default function Header({
           </button>
         </nav>
 
-        {/* Right Actions: D-Day, Emergency Call, Settings */}
+        {/* Right Actions: D-Day, Report Bug, Emergency Call, Settings */}
         <div className="header-actions-clean">
           <div className="dday-pill-clean">
             <span>D-{dDay > 0 ? dDay : 'DAY'}</span>
           </div>
+
+          <button
+            className="report-quick-btn"
+            onClick={onOpenFeedback}
+            title="오류 신고 및 규정 수정 제보"
+          >
+            <span>🚨 제보</span>
+          </button>
 
           <button
             className="emer-quick-btn"

@@ -9,6 +9,7 @@ import Calculators from './components/Calculators';
 import QuizView from './components/QuizView';
 import SettingsView from './components/SettingsView';
 import InspectionDefenseView from './components/InspectionDefenseView';
+import FeedbackModal from './components/FeedbackModal';
 
 import initialRules from './data/rulesData.json';
 import initialGoldenNumbers from './data/goldenNumbers.json';
@@ -46,6 +47,15 @@ export default function App() {
 
   // Emergency Modal
   const [emergencyModal, setEmergencyModal] = useState(null);
+
+  // Feedback & Bug Report Modal
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [feedbackTargetRule, setFeedbackTargetRule] = useState('');
+
+  const handleOpenFeedback = (target = '') => {
+    setFeedbackTargetRule(target);
+    setIsFeedbackOpen(true);
+  };
 
   // System Settings with LocalStorage Persistence
   const [fontScale, setFontScale] = useState(() => {
@@ -221,6 +231,7 @@ export default function App() {
       <Header
         onOpenEmergency={setEmergencyModal}
         onOpenSettings={() => setActiveTab('settings')}
+        onOpenFeedback={() => handleOpenFeedback(activeRuleCode ? `[${activeRuleCode}]` : '')}
         syncStatus={syncStatus}
         activeTab={activeTab}
         onNavigateTab={setActiveTab}
@@ -299,6 +310,7 @@ export default function App() {
             inspectMode={inspectMode}
             setInspectMode={handleUpdateInspectMode}
             onResetAllData={handleResetAllData}
+            onOpenFeedback={handleOpenFeedback}
           />
         )}
       </main>
@@ -376,6 +388,7 @@ export default function App() {
           isMustPassChecked={!!checkedMustPass[currentRule.code]}
           onToggleMustPassCheck={handleToggleMustPassCheck}
           goldenNumbers={goldenNumbers}
+          onOpenFeedback={handleOpenFeedback}
         />
       )}
 
@@ -387,6 +400,14 @@ export default function App() {
           onClose={() => setEmergencyModal(null)}
         />
       )}
+
+      {/* 6. Feedback & Bug Report Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+        initialTargetRule={feedbackTargetRule}
+        userDept={selectedDept}
+      />
     </div>
   );
 }

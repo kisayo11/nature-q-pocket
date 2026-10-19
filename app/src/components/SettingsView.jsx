@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import {
   Settings, RefreshCw, ShieldCheck, Check,
   ExternalLink, Building2, Sun, Moon, Type, Eye,
-  Trash2, AlertTriangle
+  Trash2, AlertTriangle, MessageSquarePlus, Link
 } from 'lucide-react';
 import { DEPARTMENTS } from '../utils/deptUtils';
+import { DEFAULT_FEEDBACK_WEBHOOK_URL } from './FeedbackModal';
 
 export default function SettingsView({
   selectedDept,
@@ -17,11 +18,23 @@ export default function SettingsView({
   setFontScale = () => {},
   inspectMode = false,
   setInspectMode = () => {},
-  onResetAllData
+  onResetAllData,
+  onOpenFeedback
 }) {
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
   const [syncFailed, setSyncFailed] = useState(false);
+
+  const [webhookUrl, setWebhookUrl] = useState(() => {
+    return localStorage.getItem('nature_feedback_webhook_url') || DEFAULT_FEEDBACK_WEBHOOK_URL;
+  });
+  const [savedWebhook, setSavedWebhook] = useState(false);
+
+  const handleSaveWebhook = () => {
+    localStorage.setItem('nature_feedback_webhook_url', webhookUrl.trim());
+    setSavedWebhook(true);
+    setTimeout(() => setSavedWebhook(false), 2500);
+  };
 
   const triggerSync = async () => {
     setSyncing(true);
@@ -250,7 +263,85 @@ export default function SettingsView({
         </button>
       </div>
 
-      {/* 4. Reset Learning Data Card */}
+      {/* 4. Feedback & Error Report Settings Card */}
+      <div className="calc-card" style={{ borderColor: '#fecaca' }}>
+        <div className="calc-title" style={{ color: '#dc2626' }}>
+          <MessageSquarePlus size={18} color="#dc2626" /> 원내 오류 신고 및 수정 제보
+        </div>
+        <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: 12, lineHeight: 1.5 }}>
+          실제 부서 실무와 상이하거나 오탈자, 잘못된 지침이 있다면 즉시 제보해 주세요. 구글 스프레드시트에 실시간으로 기록됩니다.
+        </p>
+
+        <button
+          onClick={() => onOpenFeedback && onOpenFeedback('설정 메뉴에서 일반 제보')}
+          style={{
+            width: '100%',
+            padding: '11px',
+            borderRadius: '8px',
+            border: 'none',
+            background: '#dc2626',
+            color: '#fff',
+            fontWeight: 800,
+            fontSize: '13px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6,
+            marginBottom: 12
+          }}
+        >
+          <MessageSquarePlus size={15} />
+          <span>오류 신고 및 수정 제보 창 열기</span>
+        </button>
+
+        {/* Admin Apps Script Webhook URL setting */}
+        <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '12px', fontWeight: 700, color: 'var(--text-main)', marginBottom: 4 }}>
+            <Link size={13} color="var(--primary)" />
+            <span>[관리자용] Google Apps Script 웹 앱 연동 URL</span>
+          </div>
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: 8 }}>
+            Apps Script 배포 후 발급받은 URL을 등록하면 실시간 스프레드시트 저장이 활성화됩니다.
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <input
+              type="text"
+              value={webhookUrl}
+              onChange={(e) => setWebhookUrl(e.target.value)}
+              placeholder="https://script.google.com/macros/s/.../exec"
+              style={{
+                flex: 1,
+                padding: '8px 10px',
+                borderRadius: '6px',
+                border: '1px solid var(--border)',
+                background: 'var(--surface)',
+                color: 'var(--text-main)',
+                fontSize: '12px',
+                outline: 'none'
+              }}
+            />
+            <button
+              onClick={handleSaveWebhook}
+              style={{
+                padding: '8px 14px',
+                borderRadius: '6px',
+                border: 'none',
+                background: savedWebhook ? 'var(--success)' : 'var(--primary)',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {savedWebhook ? '저장됨!' : '저장'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Reset Learning Data Card */}
       <div className="calc-card" style={{ borderColor: 'var(--danger-light)' }}>
         <div className="calc-title" style={{ color: 'var(--danger)' }}>
           <Trash2 size={18} color="var(--danger)" /> 학습 및 체크 기록 초기화

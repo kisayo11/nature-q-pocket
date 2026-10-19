@@ -2380,6 +2380,102 @@ input, select {
     max-width: 720px;
     max-height: 85vh;
   }
+
+  .feedback-modal-overlay {
+    align-items: center !important;
+    padding: 24px !important;
+  }
+
+  .feedback-modal-sheet {
+    border-radius: var(--radius-xl) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* Feedback Modal Sheet Animation */
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Header Feedback Report Quick Button */
+.report-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.report-quick-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: translateY(-1px);
+}
+
+.report-quick-btn:active {
+  transform: translateY(0);
+}
+
+[data-theme="dark"] .report-quick-btn {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.35);
+  color: #f87171;
+}
+
+/* Inline Rule Detail Report Button */
+.rule-report-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff1f2;
+  border: 1.5px dashed #fecdd3;
+  color: #e11d48;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-top: 12px;
+}
+
+.rule-report-action-btn:hover {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .rule-report-action-btn {
+  background: rgba(225, 29, 72, 0.12);
+  border-color: rgba(225, 29, 72, 0.3);
+  color: #fb7185;
 }
 
 
