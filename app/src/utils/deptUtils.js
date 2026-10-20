@@ -270,7 +270,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "7.4",
       "title": "환경관리",
-      "answer": "병실과 복도는 매일 환경소독 기준에 따라 청소하고, 혈액·체액 유출 시에는 10.3 위험물질 관리의 Spill Kit 절차와 오염량별 희석방법을 적용합니다.",
+      "answer": "병실과 복도는 매일 환경소독제(락스 500ppm 희석)로 청소하고, 혈액·체액 쏟아짐(Spill) 시 5,000ppm 고농도로 즉시 소독 처리합니다.",
       "color": "purple"
     },
     {
@@ -388,7 +388,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "7.4",
       "title": "환경관리",
-      "answer": "병실과 복도는 매일 환경소독 기준에 따라 청소하고, 혈액·체액 유출 시에는 10.3 위험물질 관리의 Spill Kit 절차와 오염량별 희석방법을 적용합니다.",
+      "answer": "병실과 복도는 매일 환경소독제(락스 500ppm 희석)로 청소하고, 혈액·체액 쏟아짐(Spill) 시 5,000ppm 고농도로 즉시 소독 처리합니다.",
       "color": "purple"
     },
     {
@@ -504,7 +504,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "10.2",
       "title": "설비시스템 관리",
-      "answer": "정전 시 10초 이내에 비상발전기가 자동 가동되며, 주 1회 무부하, 월 1회 부하 시험을 실시하여 비상 전원 공급을 상시 보장합니다.",
+      "answer": "정전 시 10초 이내에 비상발전기가 자동 가동되며, 월 1회 무부하 시운전을 실시하여 비상 전원 공급을 상시 보장합니다.",
       "color": "amber"
     },
     {
