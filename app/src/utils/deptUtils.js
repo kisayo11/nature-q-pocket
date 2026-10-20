@@ -202,7 +202,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "6.1",
       "title": "질 향상 및 환자안전 운영체계",
-      "answer": "병원장 직속 QPS 전담자를 배치하고 분기별 1회 이상 환자안전위원회를 개최하여 질 향상 및 안전사건 예방 활동을 총괄합니다.",
+      "answer": "병원장 직속 QPS 전담자를 배치하고 분기별 1회 이상 QPS위원회를 개최하여 질 향상 및 안전사건 예방 활동을 총괄합니다.",
       "color": "emerald"
     },
     {

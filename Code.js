@@ -65,6 +65,34 @@ function doPost(e) {
           .setMimeType(ContentService.MimeType.JSON);
       }
     }
+
+    // [기능 B] 02_57개규정_마스터 시트의 특정 규정(code) 행 실시간 업데이트
+    if (data.action === "updateMasterRule") {
+      var masterSheet = ss.getSheetByName("02_57개규정_마스터");
+      if (!masterSheet) {
+        return ContentService.createTextOutput(JSON.stringify({ result: "master_sheet_not_found" }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+      var lastMasterRow = masterSheet.getLastRow();
+      var codes = masterSheet.getRange(2, 1, lastMasterRow - 1, 1).getValues();
+      var targetMasterRow = null;
+      for (var j = 0; j < codes.length; j++) {
+        if (String(codes[j][0]).trim() === String(data.code).trim()) {
+          targetMasterRow = j + 2;
+          break;
+        }
+      }
+      if (targetMasterRow) {
+        if (data.quickAnswer) masterSheet.getRange(targetMasterRow, 5).setValue(data.quickAnswer); // E열: 3초핵심모범답변
+        if (data.guidelines) masterSheet.getRange(targetMasterRow, 6).setValue(data.guidelines);   // F열: 상세실무지침
+        if (data.faq) masterSheet.getRange(targetMasterRow, 7).setValue(data.faq);                 // G열: FAQ
+        return ContentService.createTextOutput(JSON.stringify({ result: "success", updatedRow: targetMasterRow, code: data.code }))
+          .setMimeType(ContentService.MimeType.JSON);
+      } else {
+        return ContentService.createTextOutput(JSON.stringify({ result: "rule_not_found" }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
     
     // [기능 B] 일반 신규 제보 접수 (기본 동작)
     var timestamp = Utilities.formatDate(new Date(), "Asia/Seoul", "yyyy-MM-dd HH:mm:ss");
