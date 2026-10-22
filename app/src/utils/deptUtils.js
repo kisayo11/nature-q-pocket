@@ -164,7 +164,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "3.1.3",
       "title": "통증관리",
-      "answer": "입원 시 통증을 초기 사정(NRS/FPS)하고, 중재 후 효과를 재평가(정맥주사 30분, 경구약 1시간 후)하여 EMR에 기록합니다.",
+      "answer": "입원 시 통증을 초기 사정(NRS/FPS)하고, 중재 후 효과를 재평가(정맥주사 30분, 경구약 1시간, 마약성 패치 2시간 후)하여 EMR에 기록합니다.",
       "color": "blue"
     },
     {
@@ -376,7 +376,7 @@ export const DEPARTMENT_QUICK_ANSWERS = {
     {
       "code": "3.1.3",
       "title": "통증관리",
-      "answer": "입원 시 통증을 초기 사정(NRS/FPS)하고, 중재 후 효과를 재평가(정맥주사 30분, 경구약 1시간 후)하여 EMR에 기록합니다.",
+      "answer": "입원 시 통증을 초기 사정(NRS/FPS)하고, 중재 후 효과를 재평가(정맥주사 30분, 경구약 1시간, 마약성 패치 2시간 후)하여 EMR에 기록합니다.",
       "color": "teal"
     },
     {
