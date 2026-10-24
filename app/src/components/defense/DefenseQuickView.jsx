@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, ArrowRight } from 'lucide-react';
+import { MessageSquare, ArrowRight, Zap } from 'lucide-react';
 import {
   DEPARTMENTS,
   DEPARTMENT_QUICK_ANSWERS
@@ -11,14 +11,14 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
   const currentQuickAnswers = DEPARTMENT_QUICK_ANSWERS[activeDept] || DEPARTMENT_QUICK_ANSWERS['간호부'];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {/* Department switcher chips */}
       <div
         style={{
           display: 'flex',
-          gap: 6,
+          gap: 5,
           overflowX: 'auto',
-          padding: '2px 0 6px',
+          padding: '2px 0 4px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
         }}
@@ -30,9 +30,9 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
               key={dept.id}
               onClick={() => setActiveDept(dept.name)}
               style={{
-                padding: '7px 12px',
-                borderRadius: '18px',
-                fontSize: '12px',
+                padding: '6px 11px',
+                borderRadius: '16px',
+                fontSize: '11.5px',
                 fontWeight: isActive ? 800 : 600,
                 background: isActive ? 'var(--primary)' : 'var(--surface)',
                 color: isActive ? '#fff' : 'var(--text-sub)',
@@ -42,7 +42,7 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
                 whiteSpace: 'nowrap',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 5,
+                gap: 4,
                 boxShadow: isActive ? 'var(--shadow-xs)' : 'none',
                 transition: 'all 0.15s ease'
               }}
@@ -52,8 +52,8 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
               {selectedDept === dept.name && (
                 <span style={{
                   fontSize: '9px',
-                  padding: '1px 5px',
-                  borderRadius: '4px',
+                  padding: '1px 4px',
+                  borderRadius: '3px',
                   background: isActive ? 'rgba(255,255,255,0.25)' : 'var(--border)',
                   color: isActive ? '#fff' : 'var(--text-muted)'
                 }}>
@@ -69,8 +69,8 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
-          gap: '12px'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '10px'
         }}
       >
         {currentQuickAnswers.map((item, idx) => (
@@ -83,7 +83,7 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
               maxWidth: 'none',
               background: 'var(--surface)',
               borderRadius: 'var(--radius-md)',
-              padding: '14px',
+              padding: '12px 14px',
               border: '1px solid var(--border)',
               boxShadow: 'var(--shadow-xs)',
               display: 'flex',
@@ -92,32 +92,36 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
               transition: 'all 0.15s ease'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--primary)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--primary)' }}>
                 규정 {item.code}
               </span>
-              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: 600 }}>
-                {activeDept} 즉답
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600 }}>
+                {activeDept} 즉답 #{idx + 1}
               </span>
             </div>
-            <h3 style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-main)', margin: '0 0 6px' }}>
-              {item.title}
+
+            <h3 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main)', margin: '0 0 6px', lineHeight: 1.35 }}>
+              Q. {item.title}
             </h3>
+
             <div style={{
-              background: 'var(--surface-raised)',
-              padding: '10px 12px',
-              borderRadius: 'var(--radius-sm)',
+              background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+              border: '1px solid #a7f3d0',
+              padding: '9px 11px',
+              borderRadius: '8px',
               fontSize: '12.5px',
-              color: 'var(--text-main)',
-              fontWeight: 600,
+              color: '#064e3b',
+              fontWeight: 700,
               lineHeight: 1.5,
-              marginBottom: '10px'
+              marginBottom: '8px'
             }}>
               "{item.answer}"
             </div>
-            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px', fontWeight: 700, color: 'var(--primary)' }}>
-              <span>상세 규정 전문 열람</span>
-              <ArrowRight size={13} />
+
+            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '3px', fontSize: '10.5px', fontWeight: 700, color: 'var(--primary)' }}>
+              <span>규정 전문 보기</span>
+              <ArrowRight size={11} />
             </div>
           </div>
         ))}
