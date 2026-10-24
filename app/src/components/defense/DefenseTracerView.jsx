@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Zap, CheckCircle2, AlertTriangle, Droplets, HeartPulse,
-  Flame, ShieldCheck, Stethoscope, Users, BookOpen, ArrowRight
+  Flame, ShieldCheck, Stethoscope, Clock, BookOpen, ArrowRight, UserCheck
 } from 'lucide-react';
 import tracerScenarios from '../../data/tracerScenarios.json';
 
@@ -14,15 +14,25 @@ const ICON_MAP = {
   Stethoscope
 };
 
+const COLOR_MAP = {
+  amber: { bg: '#fffbeb', border: '#fde68a', text: '#b45309', badge: '#d97706' },
+  blue: { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8', badge: '#2563eb' },
+  rose: { bg: '#fff1f2', border: '#fecdd3', text: '#be123c', badge: '#e11d48' },
+  red: { bg: '#fef2f2', border: '#fecaca', text: '#b91c1c', badge: '#dc2626' },
+  teal: { bg: '#f0fdfa', border: '#99f6e4', text: '#0f766e', badge: '#0d9488' },
+  indigo: { bg: '#eef2ff', border: '#c7d2fe', text: '#4338ca', badge: '#4f46e5' }
+};
+
 export default function DefenseTracerView({ onOpenRule }) {
   const [activeScenarioId, setActiveScenarioId] = useState('fall');
 
   const activeScenario = tracerScenarios.find((s) => s.id === activeScenarioId) || tracerScenarios[0];
   const IconComponent = ICON_MAP[activeScenario.icon] || AlertTriangle;
+  const theme = COLOR_MAP[activeScenario.color] || COLOR_MAP.amber;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      {/* Scenario Selector Tabs */}
+      {/* 1. Scenario Selector Chips */}
       <div
         style={{
           display: 'flex',
@@ -44,7 +54,7 @@ export default function DefenseTracerView({ onOpenRule }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '7px 12px',
+                padding: '8px 13px',
                 borderRadius: '20px',
                 border: '1px solid',
                 borderColor: isActive ? 'var(--primary)' : 'var(--border)',
@@ -65,245 +75,215 @@ export default function DefenseTracerView({ onOpenRule }) {
         })}
       </div>
 
-      {/* Active Scenario Detail Grid */}
+      {/* 2. Top Scenario Overview Card */}
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-          gap: '14px',
-          alignItems: 'start'
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '16px',
+          boxShadow: 'var(--shadow-xs)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
         }}
       >
-        {/* Left: Banner & Timeline Steps */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div
             style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--shadow-xs)'
+              width: '42px',
+              height: '42px',
+              borderRadius: '10px',
+              background: theme.bg,
+              border: `1px solid ${theme.border}`,
+              color: theme.text,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <IconComponent size={22} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+              <span
+                style={{
+                  fontSize: '10.5px',
+                  fontWeight: 900,
+                  color: '#fff',
+                  background: theme.badge,
+                  padding: '2px 7px',
+                  borderRadius: '4px'
+                }}
+              >
+                {activeScenario.badge}
+              </span>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700 }}>
+                규정 {activeScenario.relatedRule} 연계
+              </span>
+            </div>
+            <h2 style={{ fontSize: '16px', fontWeight: 900, color: 'var(--text-main)', margin: 0 }}>
+              {activeScenario.title}
+            </h2>
+          </div>
+        </div>
+
+        {/* Surveyor Sudden Question Box */}
+        {activeScenario.surveyorQuestion && (
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%)',
+              border: '1px solid #fecdd3',
+              borderRadius: '10px',
+              padding: '12px 14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px'
+            }}
+          >
+            <div style={{ fontSize: '11px', fontWeight: 900, color: '#be123c', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <AlertTriangle size={13} color="#e11d48" />
+              <span>조사위원 돌발 현장 질문 (상황 부여)</span>
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#881337', lineHeight: 1.5 }}>
+              "{activeScenario.surveyorQuestion}"
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 3. Action Steps Timeline Card */}
+      <div
+        style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '16px',
+          boxShadow: 'var(--shadow-xs)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}
+      >
+        <div
+          style={{
+            fontSize: '13.5px',
+            fontWeight: 800,
+            color: 'var(--text-main)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <CheckCircle2 size={16} color="var(--primary)" />
+          <span>실사 행동 단계별 타임라인 (Action Steps)</span>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {activeScenario.steps && activeScenario.steps.map((st, idx) => (
+            <div
+              key={idx}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px',
+                padding: '11px 13px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--surface-raised)',
+                border: '1px solid var(--border-light)'
+              }}
+            >
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  background: 'var(--primary-light)',
-                  color: 'var(--primary)',
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  background: 'var(--primary)',
+                  color: '#fff',
+                  fontSize: '11px',
+                  fontWeight: 900,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  marginTop: '1px'
                 }}
               >
-                <IconComponent size={22} />
+                {idx + 1}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                  <span
-                    style={{
-                      fontSize: '10.5px',
-                      fontWeight: 800,
-                      color: '#fff',
-                      background: 'var(--primary)',
-                      padding: '1px 6px',
-                      borderRadius: '4px'
-                    }}
-                  >
-                    {activeScenario.badge}
-                  </span>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    규정 {activeScenario.relatedRule} 연계
-                  </span>
-                </div>
-                <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
-                  {activeScenario.title}
-                </h2>
-              </div>
-            </div>
-          </div>
 
-          {/* Action Steps Timeline */}
-          <div
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--shadow-xs)'
-            }}
-          >
-            <div
-              style={{
-                fontSize: '13px',
-                fontWeight: 800,
-                color: 'var(--text-main)',
-                marginBottom: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <CheckCircle2 size={16} color="var(--primary)" />
-              <span>실사 행동 단계별 타임라인 (Action Steps)</span>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {activeScenario.steps.map((st, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '10px',
-                    padding: '10px 12px',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--surface-raised)',
-                    border: '1px solid var(--border-light)'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: '50%',
-                      background: 'var(--primary)',
-                      color: '#fff',
-                      fontSize: '11px',
-                      fontWeight: 900,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '1px'
-                    }}
-                  >
-                    {st.step}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ fontSize: '11.5px', fontWeight: 900, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Clock size={12} />
+                    <span>{st.time}</span>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '2px' }}>
-                      {st.action}
-                    </div>
-                    <div style={{ fontSize: '11.5px', color: 'var(--text-sub)', lineHeight: 1.45 }}>
-                      {st.detail}
-                    </div>
+                  <div style={{ fontSize: '11px', fontWeight: 800, background: 'var(--surface)', padding: '2px 7px', borderRadius: '4px', border: '1px solid var(--border)', color: 'var(--text-main)' }}>
+                    담당: {st.actor}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
 
-        {/* Right: Department Roles & Surveyor Traps */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--shadow-xs)'
-            }}
-          >
-            <div
-              style={{
-                fontSize: '13px',
-                fontWeight: 800,
-                color: 'var(--text-main)',
-                marginBottom: '10px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <Users size={16} color="var(--primary)" />
-              <span>부서별 즉각 행동 분담 (누가 무엇을 하는가)</span>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {Object.entries(activeScenario.deptRoles).map(([deptKey, roleText], idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    padding: '8px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    background: 'var(--surface-raised)',
-                    border: '1px solid var(--border-light)',
-                    fontSize: '12px'
-                  }}
-                >
-                  <strong style={{ color: 'var(--primary)', marginRight: '6px' }}>
-                    [{deptKey}]
-                  </strong>
-                  <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
-                    {roleText}
-                  </span>
+                <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.5, marginTop: '2px' }}>
+                  {st.action}
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-
-          {/* Surveyor Traps */}
-          <div
-            style={{
-              background: '#fff1f2',
-              border: '1px solid #fecdd3',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--shadow-xs)'
-            }}
-          >
-            <div
-              style={{
-                fontSize: '13px',
-                fontWeight: 800,
-                color: '#9f1239',
-                marginBottom: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <AlertTriangle size={16} color="#e11d48" />
-              <span>조사위원 감점 함정 & 금기 행동</span>
-            </div>
-
-            <div style={{ fontSize: '12px', color: '#881337', lineHeight: 1.55, fontWeight: 600 }}>
-              {activeScenario.surveyorTraps}
-            </div>
-          </div>
-
-          {/* Related Rule Button */}
-          {activeScenario.relatedRule && (
-            <button
-              onClick={() => onOpenRule && onOpenRule(activeScenario.relatedRule)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                padding: '11px 16px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                color: 'var(--primary)',
-                fontSize: '12.5px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-xs)',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <BookOpen size={15} />
-              <span>관련 규정 [{activeScenario.relatedRule}] 전문 열람하기</span>
-              <ArrowRight size={14} />
-            </button>
-          )}
+          ))}
         </div>
       </div>
+
+      {/* 4. Golden Key Tip Card */}
+      {activeScenario.keyTip && (
+        <div
+          style={{
+            background: '#fffbeb',
+            border: '1px solid #fde68a',
+            borderRadius: 'var(--radius-lg)',
+            padding: '14px 16px',
+            boxShadow: 'var(--shadow-xs)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}
+        >
+          <div style={{ fontSize: '12.5px', fontWeight: 900, color: '#92400e', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Zap size={14} color="#d97706" />
+            <span>조사위원 감점 방지 꿀팁 (합격 포인트)</span>
+          </div>
+          <div style={{ fontSize: '12.5px', color: '#78350f', lineHeight: 1.55, fontWeight: 700 }}>
+            {activeScenario.keyTip}
+          </div>
+        </div>
+      )}
+
+      {/* 5. Related Rule Link */}
+      {activeScenario.relatedRule && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={() => onOpenRule && onOpenRule(activeScenario.relatedRule)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '10px 14px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              color: 'var(--primary)',
+              fontSize: '12px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: 'var(--shadow-xs)',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <BookOpen size={14} />
+            <span>관련 규정 [{activeScenario.relatedRule}] 전문 열람하기</span>
+            <ArrowRight size={13} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
