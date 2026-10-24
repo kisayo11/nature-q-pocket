@@ -106,6 +106,67 @@ export default function HomeHub({
           </div>
         </button>
 
+        {/* Essential Shortcuts Grid (전직원 공통 15대 + 자위소방대) */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <button
+            onClick={() => onNavigateTab('common')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 12px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+              border: '1.5px solid #a7f3d0',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '16px' }}>⭐</span>
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 900, color: '#047857' }}>
+                  전직원 15대 필수 수칙
+                </div>
+                <div style={{ fontSize: '10px', color: '#065f46', marginTop: '1px' }}>
+                  조사관 질문 1초 즉답
+                </div>
+              </div>
+            </div>
+            <ChevronRight size={13} color="#047857" />
+          </button>
+
+          <button
+            onClick={() => onNavigateTab('brigade')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 12px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)',
+              border: '1.5px solid #fed7aa',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '16px' }}>🚒</span>
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 900, color: '#c2410c' }}>
+                  내 자위소방대 역할
+                </div>
+                <div style={{ fontSize: '10px', color: '#9a3412', marginTop: '1px' }}>
+                  주간 5대팀 & 야간 2대축
+                </div>
+              </div>
+            </div>
+            <ChevronRight size={13} color="#c2410c" />
+          </button>
+        </div>
+
         {/* Integrated Printed Handbook Link Button */}
         <a
           href="/nature_handbook_print.pdf"

@@ -269,12 +269,16 @@ export default function App() {
           />
         )}
 
-        {/* TAB 3: 현장실사 조사대응 (3초 구두답변 + 6대 돌발 Tracer) */}
-        {(activeTab === 'inspection' || activeTab === 'tracer') && (
+        {/* TAB 3: 현장실사 조사대응 (전직원 공통 15대 + 자위소방대 + 3초 구두답변 + 6대 돌발 Tracer) */}
+        {(activeTab === 'inspection' || activeTab === 'tracer' || activeTab === 'common' || activeTab === 'brigade') && (
           <InspectionDefenseView
             selectedDept={selectedDept}
             onOpenRule={handleOpenRule}
-            initialSubTab={activeTab === 'tracer' ? 'tracer' : 'quick'}
+            initialSubTab={
+              activeTab === 'tracer' ? 'tracer' :
+              activeTab === 'brigade' ? 'brigade' :
+              activeTab === 'quick' ? 'quick' : 'common'
+            }
           />
         )}
 
