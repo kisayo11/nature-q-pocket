@@ -127,10 +127,10 @@ export default function HomeHub({
               <span style={{ fontSize: '16px' }}>⭐</span>
               <div>
                 <div style={{ fontSize: '12px', fontWeight: 900, color: '#047857' }}>
-                  전직원 15대 필수 수칙
+                  전직원 17대 마스터 수칙
                 </div>
                 <div style={{ fontSize: '10px', color: '#065f46', marginTop: '1px' }}>
-                  조사관 질문 1초 즉답
+                  신체보호대·화재·욕창 등
                 </div>
               </div>
             </div>
