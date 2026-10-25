@@ -23,7 +23,7 @@ export const CHAPTERS = [
   {
     id: 3,
     title: '제3장 진료지원 및 특수치료',
-    subtitle: '치료계획, CPR, 수혈, 신체보호대, 욕창',
+    subtitle: '치료계획, CPR, 수혈, 신체보호대, 욕창, 한방서비스',
     badge: '3장',
     range: '3.1 ~ 3.2',
     iconName: 'HeartPulse',
