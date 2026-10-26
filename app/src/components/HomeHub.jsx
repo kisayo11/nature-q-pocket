@@ -177,7 +177,7 @@ export default function HomeHub({
           <div className="hhl-left">
             <BookOpen size={16} className="hhl-icon" />
             <div className="hhl-text">
-              <span className="hhl-title">인쇄용 요약 핸드북 소책자 (74P)</span>
+              <span className="hhl-title">핸드북 소책자 PDF (68P)</span>
               <span className="hhl-sub">원내 실물 배포본 전자책 전체 페이지 열람</span>
             </div>
           </div>
