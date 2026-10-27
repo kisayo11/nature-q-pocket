@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:data": "node ../scripts/sync_all_data.cjs",
+    "audit": "node ../scripts/audit_rules.cjs"
   },
   "dependencies": {
     "ascii85": "^1.0.2",

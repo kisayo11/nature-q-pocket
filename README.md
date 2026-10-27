@@ -66,10 +66,11 @@ handbook/
 │   └── public/              # PWA manifest.json, sw.js, icon.svg
 ├── google_sheets/           # 구글 드라이브 마스터 DB용 CSV 5종
 ├── [NATURE]*.pdf            # 병원 인증 58개 공식 규정집 원본
-├── REGULATION_MAINTENANCE_GUIDE.md        # 규정집 갱신 및 유지보수 표준 워크플로우 (신규)
-├── GOOGLE_SHEETS_FEEDBACK_SETUP.md        # 원내 오류 신고/수정 제보 구글 시트 연동 매뉴얼
-├── EXPERT_AUDIT_AND_DEFENSE_ANALYSIS.md   # 전문 수검 방어 감사 리포트
-├── HOSPITAL_DATA_INPUT_GUIDE.md           # 병원 데이터 매핑 가이드
+├── MAINTENANCE_MANUAL.md             # [필독] 통합 시스템 운영 및 유지보수 표준 매뉴얼
+├── REGULATION_MAINTENANCE_GUIDE.md   # 규정집 갱신 및 유지보수 워크플로우
+├── GOOGLE_SHEETS_FEEDBACK_SETUP.md   # 원내 오류 신고/수정 제보 구글 시트 연동 매뉴얼
+├── EXPERT_AUDIT_AND_DEFENSE_ANALYSIS.md # 전문 수검 방어 감사 리포트
+├── HOSPITAL_DATA_INPUT_GUIDE.md      # 병원 데이터 매핑 가이드
 └── NATURE_HOSPITAL_ACCREDITATION_APP_MASTERPLAN.md # 프로젝트 마스터플랜
 ```
 

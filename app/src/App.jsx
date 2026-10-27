@@ -1,15 +1,26 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import Header from './components/Header';
 import HomeHub from './components/HomeHub';
-import HandbookBrowser from './components/HandbookBrowser';
-import PocketCardReader from './components/PocketCardReader';
-import GoldenNumbersView from './components/GoldenNumbersView';
-import EmergencyModal from './components/EmergencyModal';
-import Calculators from './components/Calculators';
-import QuizView from './components/QuizView';
-import SettingsView from './components/SettingsView';
-import InspectionDefenseView from './components/InspectionDefenseView';
-import FeedbackModal from './components/FeedbackModal';
+
+// Code Splitting with React.lazy for instant initial page loads
+const HandbookBrowser = lazy(() => import('./components/HandbookBrowser'));
+const PocketCardReader = lazy(() => import('./components/PocketCardReader'));
+const GoldenNumbersView = lazy(() => import('./components/GoldenNumbersView'));
+const EmergencyModal = lazy(() => import('./components/EmergencyModal'));
+const QuizView = lazy(() => import('./components/QuizView'));
+const SettingsView = lazy(() => import('./components/SettingsView'));
+const InspectionDefenseView = lazy(() => import('./components/InspectionDefenseView'));
+const FeedbackModal = lazy(() => import('./components/FeedbackModal'));
+
+// Loading Fallback Component
+function TabLoadingFallback() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', color: 'var(--text-muted)', gap: 12 }}>
+      <div style={{ width: 28, height: 28, border: '3px solid var(--border)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <span style={{ fontSize: '13px', fontWeight: 600 }}>화면 로딩 중...</span>
+    </div>
+  );
+}
 
 import initialRules from './data/rulesData.json';
 import initialGoldenNumbers from './data/goldenNumbers.json';
@@ -237,89 +248,91 @@ export default function App() {
         onNavigateTab={setActiveTab}
       />
 
-      {/* 2. Main Body Content */}
+      {/* 2. Main Body Content (Code Splitting with Suspense) */}
       <main className="main-content">
-        {/* TAB 1: 홈 */}
-        {activeTab === 'home' && (
-          <HomeHub
-            rules={rules}
-            checkedMustPass={checkedMustPass}
-            selectedDept={selectedDept}
-            onSelectDept={handleSelectDept}
-            onNavigateTab={setActiveTab}
-            onOpenRule={handleOpenRule}
-            onOpenChapter={handleOpenChapter}
-            onOpenEmergency={setEmergencyModal}
-            onOpenMustPass={handleOpenMustPass}
-          />
-        )}
+        <Suspense fallback={<TabLoadingFallback />}>
+          {/* TAB 1: 홈 */}
+          {activeTab === 'home' && (
+            <HomeHub
+              rules={rules}
+              checkedMustPass={checkedMustPass}
+              selectedDept={selectedDept}
+              onSelectDept={handleSelectDept}
+              onNavigateTab={setActiveTab}
+              onOpenRule={handleOpenRule}
+              onOpenChapter={handleOpenChapter}
+              onOpenEmergency={setEmergencyModal}
+              onOpenMustPass={handleOpenMustPass}
+            />
+          )}
 
-        {/* TAB 2: 규정집 */}
-        {activeTab === 'handbook' && (
-          <HandbookBrowser
-            rules={rules}
-            initialChapter={chapterFilter}
-            initialDept={selectedDept}
-            initialMustPassOnly={mustPassFilter}
-            bookmarkedCodes={bookmarkedCodes}
-            onToggleBookmark={handleToggleBookmark}
-            checkedMustPass={checkedMustPass}
-            onToggleMustPassCheck={handleToggleMustPassCheck}
-            onSelectRule={handleOpenRule}
-          />
-        )}
+          {/* TAB 2: 규정집 */}
+          {activeTab === 'handbook' && (
+            <HandbookBrowser
+              rules={rules}
+              initialChapter={chapterFilter}
+              initialDept={selectedDept}
+              initialMustPassOnly={mustPassFilter}
+              bookmarkedCodes={bookmarkedCodes}
+              onToggleBookmark={handleToggleBookmark}
+              checkedMustPass={checkedMustPass}
+              onToggleMustPassCheck={handleToggleMustPassCheck}
+              onSelectRule={handleOpenRule}
+            />
+          )}
 
-        {/* TAB 3: 현장실사 조사대응 (전직원 공통 15대 + 자위소방대 + 3초 구두답변 + 6대 돌발 Tracer) */}
-        {(activeTab === 'inspection' || activeTab === 'tracer' || activeTab === 'common' || activeTab === 'brigade') && (
-          <InspectionDefenseView
-            selectedDept={selectedDept}
-            onOpenRule={handleOpenRule}
-            initialSubTab={
-              activeTab === 'tracer' ? 'tracer' :
-              activeTab === 'brigade' ? 'brigade' :
-              activeTab === 'quick' ? 'quick' : 'common'
-            }
-          />
-        )}
+          {/* TAB 3: 현장실사 조사대응 */}
+          {(activeTab === 'inspection' || activeTab === 'tracer' || activeTab === 'common' || activeTab === 'brigade') && (
+            <InspectionDefenseView
+              selectedDept={selectedDept}
+              onOpenRule={handleOpenRule}
+              initialSubTab={
+                activeTab === 'tracer' ? 'tracer' :
+                activeTab === 'brigade' ? 'brigade' :
+                activeTab === 'quick' ? 'quick' : 'common'
+              }
+            />
+          )}
 
-        {/* TAB 4: 기준 수치 및 실무 계산기 (통합) */}
-        {(activeTab === 'golden' || activeTab === 'calc') && (
-          <GoldenNumbersView
-            onSelectRule={(ruleCode) => {
-              setActiveRuleCode(ruleCode);
-            }}
-          />
-        )}
+          {/* TAB 4: 기준 수치 및 실무 계산기 */}
+          {(activeTab === 'golden' || activeTab === 'calc') && (
+            <GoldenNumbersView
+              onSelectRule={(ruleCode) => {
+                setActiveRuleCode(ruleCode);
+              }}
+            />
+          )}
 
-        {/* TAB 5: 모의퀴즈 */}
-        {activeTab === 'quiz' && (
-          <QuizView
-            quizList={quizList}
-            rules={rules}
-            userProfile={{ dept: selectedDept }}
-          />
-        )}
+          {/* TAB 5: 모의퀴즈 */}
+          {activeTab === 'quiz' && (
+            <QuizView
+              quizList={quizList}
+              rules={rules}
+              userProfile={{ dept: selectedDept }}
+            />
+          )}
 
-        {/* TAB 6: 설정 */}
-        {activeTab === 'settings' && (
-          <SettingsView
-            selectedDept={selectedDept}
-            onSelectDept={handleSelectDept}
-            onSyncSheets={handleManualSync}
-            syncStatus={syncStatus}
-            theme={theme}
-            setTheme={handleUpdateTheme}
-            fontScale={fontScale}
-            setFontScale={handleUpdateFontScale}
-            inspectMode={inspectMode}
-            setInspectMode={handleUpdateInspectMode}
-            onResetAllData={handleResetAllData}
-            onOpenFeedback={handleOpenFeedback}
-          />
-        )}
+          {/* TAB 6: 설정 */}
+          {activeTab === 'settings' && (
+            <SettingsView
+              selectedDept={selectedDept}
+              onSelectDept={handleSelectDept}
+              onSyncSheets={handleManualSync}
+              syncStatus={syncStatus}
+              theme={theme}
+              setTheme={handleUpdateTheme}
+              fontScale={fontScale}
+              setFontScale={handleUpdateFontScale}
+              inspectMode={inspectMode}
+              setInspectMode={handleUpdateInspectMode}
+              onResetAllData={handleResetAllData}
+              onOpenFeedback={handleOpenFeedback}
+            />
+          )}
+        </Suspense>
       </main>
 
-      {/* 3. Bottom Navigation Bar (황금 5대 프리미엄 독) */}
+      {/* 3. Bottom Navigation Bar */}
       <nav className="bottom-nav">
         <button
           className={`nav-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
@@ -378,40 +391,43 @@ export default function App() {
         )}
       </nav>
 
-      {/* 4. Single Rule Pocket Reader (3분할 탭 모달) */}
-      {currentRule && (
-        <PocketCardReader
-          rule={currentRule}
-          onClose={() => setActiveRuleCode(null)}
-          onPrev={handlePrevRule}
-          onNext={handleNextRule}
-          hasPrev={currentRuleIndex > 0}
-          hasNext={currentRuleIndex < rules.length - 1}
-          isBookmarked={!!bookmarkedCodes[currentRule.code]}
-          onToggleBookmark={handleToggleBookmark}
-          isMustPassChecked={!!checkedMustPass[currentRule.code]}
-          onToggleMustPassCheck={handleToggleMustPassCheck}
-          goldenNumbers={goldenNumbers}
-          onOpenFeedback={handleOpenFeedback}
-        />
-      )}
+      {/* Lazy-Loaded Modals wrapped in Suspense */}
+      <Suspense fallback={null}>
+        {/* 4. Single Rule Pocket Reader */}
+        {currentRule && (
+          <PocketCardReader
+            rule={currentRule}
+            onClose={() => setActiveRuleCode(null)}
+            onPrev={handlePrevRule}
+            onNext={handleNextRule}
+            hasPrev={currentRuleIndex > 0}
+            hasNext={currentRuleIndex < rules.length - 1}
+            isBookmarked={!!bookmarkedCodes[currentRule.code]}
+            onToggleBookmark={handleToggleBookmark}
+            isMustPassChecked={!!checkedMustPass[currentRule.code]}
+            onToggleMustPassCheck={handleToggleMustPassCheck}
+            goldenNumbers={goldenNumbers}
+            onOpenFeedback={handleOpenFeedback}
+          />
+        )}
 
-      {/* 5. Emergency Action Popups */}
-      {emergencyModal && (
-        <EmergencyModal
-          type={emergencyModal}
-          spillKitData={spillKitData}
-          onClose={() => setEmergencyModal(null)}
-        />
-      )}
+        {/* 5. Emergency Action Popups */}
+        {emergencyModal && (
+          <EmergencyModal
+            type={emergencyModal}
+            spillKitData={spillKitData}
+            onClose={() => setEmergencyModal(null)}
+          />
+        )}
 
-      {/* 6. Feedback & Bug Report Modal */}
-      <FeedbackModal
-        isOpen={isFeedbackOpen}
-        onClose={() => setIsFeedbackOpen(false)}
-        initialTargetRule={feedbackTargetRule}
-        userDept={selectedDept}
-      />
+        {/* 6. Feedback & Bug Report Modal */}
+        <FeedbackModal
+          isOpen={isFeedbackOpen}
+          onClose={() => setIsFeedbackOpen(false)}
+          initialTargetRule={feedbackTargetRule}
+          userDept={selectedDept}
+        />
+      </Suspense>
     </div>
   );
 }

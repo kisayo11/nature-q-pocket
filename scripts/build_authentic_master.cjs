@@ -2,8 +2,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const hwpExtracted = require('../app/src/data/hwp_extracted.json');
-
 const AUTHENTIC_RULES_DATA = [
   {
     code: '1.1',
