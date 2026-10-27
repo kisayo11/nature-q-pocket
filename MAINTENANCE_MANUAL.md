@@ -117,11 +117,15 @@ Nature Q-Pocket은 네이처요양병원(223병상) 전 직원이 인증평가 �
    git push origin main
    ```
 
-### 3.2 신규 규정 원문 PDF 교체 (예: 3.1.8.pdf 신규 추가 시)
+### 3.2 개별 규정 HWPX 수정 및 PDF 교체 (예: 4.1, 4.2 수정 시)
 
-1. 새 PDF 파일을 `app/public/regulations/{규정코드}.pdf` 형식으로 저장합니다.
-   *(주의: 한글 이름이나 띄어쓰기 금지. 예: `3.1.8.pdf`)*
-2. 웹앱에서 `[전문 보기]` 탭을 눌러 브라우저 내에서 PDF가 정상 렌더링되는지 확인합니다.
+1. `hwp_source/[NATURE]4.1 의약품 선정 및 확보.hwpx` 파일을 한글(한컴오피스)에서 직접 편집 후 저장합니다.
+2. 아래 원클릭 변환 스크립트를 실행하여 웹앱 및 원본 보관소에 동시 갱신합니다:
+   ```bash
+   python scripts/convert_single.py "hwp_source/[NATURE]4.1 의약품 선정 및 확보.hwpx" "app/public/regulations/4.1.pdf" "pdf_source/[NATURE]4.1 의약품 선정 및 확보.pdf"
+   ```
+   *(자동으로 백그라운드 한컴오피스를 호출하고 완료 후 안전하게 프로세스를 정리하여 PDF를 생성·복사합니다.)*
+3. 웹앱에서 `[전문 보기]` 탭을 눌러 브라우저 내에서 PDF가 정상 렌더링되는지 확인합니다.
 
 ---
 
@@ -149,9 +153,12 @@ Nature Q-Pocket은 네이처요양병원(223병상) 전 직원이 인증평가 �
 * **웹앱 제공용 인쇄 PDF**: `app/public/nature_handbook_print.pdf` (앱 내 [소책자 다운로드] 링크 연동)
 
 ### 소책자 내용 수정 시 절차:
-1. XML 수준의 정밀 패치가 필요한 경우: `scripts/patch_handbook_xml.py` 실행
-2. 한글 오토메이션을 통한 PDF 생성: `python scripts/export_handbook_pdf.py` 실행
-3. 생성된 PDF를 `app/public/nature_handbook_print.pdf`에 복사하고 깃 커밋
+1. `hwp_source/4주기 요양병원인증 교육 핸드북(네이처요양병원)_완료.hwpx` 한글 파일 내용 수정 및 저장
+2. 소책자 PDF 원클릭 갱신 명령 실행:
+   ```bash
+   python scripts/convert_single.py "hwp_source/4주기 요양병원인증 교육 핸드북(네이처요양병원)_완료.hwpx" "app/public/nature_handbook_print.pdf"
+   ```
+3. 생성된 소책자 PDF 페이지수 및 주요 키워드 자동 검증 완료 확인 후 깃 커밋
 
 ---
 
