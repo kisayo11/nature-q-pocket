@@ -4,7 +4,7 @@ import pymupdf
 from pyhwpx import Hwp
 
 def export_pdf():
-    hwpx_path = r'c:\Users\ksang\Documents\handbook\hwp_source\4주기 요양병원인증 교육 핸드북(네이처요양병원)_pretendard_수정완료.hwpx'
+    hwpx_path = r'c:\Users\ksang\Documents\handbook\hwp_source\4주기 요양병원인증 교육 핸드북(네이처요양병원)_완료.hwpx'
     out_pdf = r'c:\Users\ksang\Documents\handbook\app\public\nature_handbook_print.pdf'
     backup_pdf = r'c:\Users\ksang\Documents\handbook\app\public\nature_handbook_print_backup.pdf'
     
