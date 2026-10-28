@@ -31,3 +31,6 @@ desktop.ini
 
 # Scratch & temporary analysis files
 scratch/
+
+# Office temporary lock files
+~$*

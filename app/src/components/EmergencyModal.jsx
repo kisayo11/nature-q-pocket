@@ -91,10 +91,16 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
           <div>
             <div className="quick-answer-banner" style={{ background: 'var(--danger-light)', borderColor: 'var(--danger)' }}>
               <div style={{ color: 'var(--danger)', fontWeight: 800, marginBottom: 4 }}>🚨 화재 발견 시 즉시 통보 번호</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '18px', fontWeight: 900 }}>원무과 상황실: 내선 900번</span>
-                <a href="tel:900" style={{ background: 'var(--danger)', color: '#fff', padding: '6px 12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '13px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <PhoneCall size={14} /> 즉시 통보
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span style={{ fontSize: '15px', fontWeight: 900 }}>주간 원무과: 내선 900번</span>
+                <a href="tel:900" style={{ background: 'var(--danger)', color: '#fff', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <PhoneCall size={13} /> 주간 900번
+                </a>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px dashed rgba(220, 38, 38, 0.3)' }}>
+                <span style={{ fontSize: '14px', fontWeight: 800, color: '#991b1b' }}>야간/휴일: 당직실 010-4297-2770</span>
+                <a href="tel:01042972770" style={{ background: '#991b1b', color: '#fff', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <PhoneCall size={13} /> 당직실 연결
                 </a>
               </div>
             </div>
@@ -138,8 +144,16 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
           <div>
             <div className="quick-answer-banner" style={{ background: 'hsl(45, 100%, 94%)', borderColor: 'hsl(40, 95%, 50%)' }}>
               <div style={{ color: 'hsl(30, 95%, 40%)', fontWeight: 800, marginBottom: 4 }}>⚡ CPR 비상방송 요청</div>
-              <div style={{ fontSize: '15px', fontWeight: 800, lineHeight: 1.5 }}>
-                내선 <strong>900번</strong> 통보 ➔ <strong>"CPR + 발생장소"</strong> 순서로 2회 원내 방송 요청
+              <div style={{ fontSize: '14.5px', fontWeight: 800, lineHeight: 1.5 }}>
+                내선 <strong>900번</strong> (야간/휴일: <strong>당직실 010-4297-2770</strong>) ➔ <strong>"CPR + 발생장소"</strong> 2회 방송 요청
+              </div>
+              <div style={{ marginTop: 6, display: 'flex', gap: 8 }}>
+                <a href="tel:900" style={{ background: 'hsl(30, 95%, 45%)', color: '#fff', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <PhoneCall size={13} /> 주간 900번
+                </a>
+                <a href="tel:01042972770" style={{ background: '#92400e', color: '#fff', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <PhoneCall size={13} /> 당직실 연결
+                </a>
               </div>
             </div>
 
