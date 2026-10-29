@@ -124,7 +124,7 @@ Nature Q-Pocket은 네이처요양병원(223병상) 전 직원이 인증평가 �
    ```bash
    python scripts/convert_single.py "hwp_source/[NATURE]4.1 의약품 선정 및 확보.hwpx" "app/public/regulations/4.1.pdf" "pdf_source/[NATURE]4.1 의약품 선정 및 확보.pdf"
    ```
-   *(자동으로 백그라운드 한컴오피스를 호출하고 완료 후 안전하게 프로세스를 정리하여 PDF를 생성·복사합니다.)*
+   *(Rust 기반 rhwp 초고속 무인 렌더러를 탑재하여 한컴오피스 프로그램 팝업 없이 10초 만에 PDF를 생성·동기화합니다.)*
 3. 웹앱에서 `[전문 보기]` 탭을 눌러 브라우저 내에서 PDF가 정상 렌더링되는지 확인합니다.
 
 ---
