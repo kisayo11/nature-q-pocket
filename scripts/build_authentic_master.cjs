@@ -1,4 +1,4 @@
-// Script to generate authentic master dataset from HWP source for Nature Geriatric Hospital
+﻿// Script to generate authentic master dataset from HWP source for Nature Geriatric Hospital
 const fs = require('fs');
 const path = require('path');
 
@@ -429,7 +429,7 @@ const AUTHENTIC_RULES_DATA = [
       '고위험 약물(고농도 KCL, 염화나트륨 등): 다른 의약품과 분리 보관 및 ‘고위험 의약품’ 라벨 부착',
       '개봉 의약품 유효기간: 안약 28일, 인슐린 28일(상온), 헤파린(1회 사용 후 잔량 즉시 폐기), 시럽 1개월(소분), 연고 1개월'
     ],
-    forms: ['의약품 냉장고 온도점검표', '마약류 관리대장 및 실사 점검표', '고위험의약품 보관 점검표 및 목록', '향정신성 의약품 및 마약목록', '차광 보관 의약품 목록', '냉장 보관 의약품 목록', '고위험 의약품 라벨링 양식', '응급카트 봉인지 관리대장']
+    forms: ['의약품 냉장고 온도점검표', '마약류 관리대장 및 실사 점검표', '고위험의약품 보관 점검표 및 목록', '마약류 관리보조자 서약서', '마약류관리보조자 지정 및 임시마약류비치서(병동용)', '원내 마약류 목록', '차광 보관 의약품 목록', '냉장 보관 의약품 목록', '고위험 의약품 라벨링 양식', '응급카트 봉인지 관리대장']
   },
   {
     code: '4.3',
@@ -462,9 +462,10 @@ const AUTHENTIC_RULES_DATA = [
       '투약 5대 원칙(5 Right): 정확한 환자, 정확한 약물, 정확한 용량, 정확한 투여경로, 정확한 시간',
       '환자 확인: 개방형 질문과 환자인식밴드 등록번호 대조 (침상 곁 Bedside 투약 원칙)',
       '투약 오류 발생 시: 환자 활력징후 즉시 확인 ➔ 처방의 보고 ➔ 환자안전 전산 보고서 접수',
-      '약물유해반응(ADR) 모니터링: 부작용 발생 시 의약품 안전관리원 및 원내 약제과 보고'
+      '지참약 관리: 입원 시 지참약은 「지참약 식별 의뢰서」로 약제과에 의뢰·식별 후 복용 안내문 교부',
+      '약물유해반응(ADR) 및 부작용 발생 시: 즉시 처방의 보고 후 「의약품 부작용 발생 보고서」 작성(원내 약국 내선 921번 및 한국의약품안전관리원 보고)'
     ],
-    forms: ['투약기록지', '약물유해반응(ADR) 보고서', '투약 오류 환자안전사건 보고서']
+    forms: ['투약기록지', '환자용 복약 안내문', '잔여 마약류 반납대장', '지참약 식별 의뢰서', '지참약 복용 안내문', '의약품 부작용 발생 보고서', '투약 오류 환자안전사건 보고서']
   },
   {
     code: '5.1',
@@ -1040,3 +1041,4 @@ const csvRows = AUTHENTIC_RULES_DATA.map(r => {
 const fullCsv = csvHeader + csvRows;
 fs.writeFileSync(path.resolve(__dirname, '../google_sheets/02_57개규정_마스터.csv'), '\ufeff' + fullCsv, 'utf8');
 console.log('Successfully updated google_sheets/02_57개규정_마스터.csv with UTF-8 BOM.');
+
