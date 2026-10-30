@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "sync:data": "node ../scripts/sync_all_data.cjs",
-    "audit": "node ../scripts/audit_rules.cjs"
+    "audit": "node ../scripts/audit_rules.cjs",
+    "update:rule": "python ../scripts/fast_rule_updater.py"
   },
   "dependencies": {
     "ascii85": "^1.0.2",

@@ -93,42 +93,35 @@ Nature Q-Pocket은 네이처요양병원(223병상) 전 직원이 인증평가 �
 
 ## 3. 규정 갱신 및 데이터 동기화 표준 워크플로우
 
-원내 규정이 개정되거나 부서별 실무 지침이 변경되었을 때의 표준 절차입니다.
+> 💡 **단일 원천 안내**: 개별 HWPX 한글 원본을 갱신했을 때의 세부 4단계 워크플로우와 비교표 보고 양식은 전담 실무 매뉴얼인 **[REGULATION_MAINTENANCE_GUIDE.md](file:///c:/Users/ksang/Documents/handbook/REGULATION_MAINTENANCE_GUIDE.md)**를 단일 진실 원천(Single Source of Truth)으로 참조합니다.
 
-### 3.1 규정 텍스트/답변 갱신 (예: 10.6 소방 규정 수칙 변경 시)
+### 3.1 초고속 원클릭 파이프라인 (`fast_rule_updater.py`)
+`hwp_source/`에 HWPX 파일을 덮어쓴 후 아래 명령어 단 한 줄로 **Diff 분석 ➔ rhwp PDF 자동 변환 ➔ 마스터 동기화 ➔ Git Push**까지 15초 만에 완료됩니다:
+```bash
+# 단일 규정 15초 원스톱 배포 (예: 1.1)
+python scripts/fast_rule_updater.py 1.1 --push
 
-1. **마스터 정의 수정**:
-   `scripts/build_authentic_master.cjs`에서 해당 규정 코드(예: `10.6`) 객체의 `quickAnswer`, `keyPoints`, `faqAnswer` 등을 최신 내용으로 수정합니다.
-2. **원클릭 통합 동기화 실행 (⭐ 추천)**:
-   ```bash
-   cd app
-   npm run sync:data
-   ```
-   *이 단 한 줄의 명령어로 아래 5단계가 순차적·자동으로 완료됩니다:*
-   - ① `build_authentic_master.cjs` (규정 원천 생성 + 구글 시트 02번 CSV 갱신)
-   - ② `merge_to_rules_data.cjs` (웹앱 `rulesData.json` 통합 병합)
-   - ③ `generate_tsv.cjs` (구글 시트 TSV 갱신)
-   - ④ `update_dept_utils.cjs` (11개 부서 매핑 유틸 갱신)
-   - ⑤ `audit_rules.cjs` (전 규정 무결성 & 골든넘버 검증)
-3. **웹앱 프로덕션 빌드 및 배포**:
-   ```bash
-   npm run build
-   git commit -am "feat: update regulation 10.6"
-   git push origin main
-   ```
+# 복수 규정 일괄 배포 (예: 1.1 및 10.3)
+python scripts/fast_rule_updater.py 1.1 10.3 --push
 
-### 3.2 개별 규정 HWPX 수정 및 PDF 교체 (예: 4.1, 4.2 수정 시)
+# 변경점만 미리보기
+python scripts/fast_rule_updater.py 1.1 --diff-only
+```
 
-1. `hwp_source/[NATURE]4.1 의약품 선정 및 확보.hwpx` 파일을 한글(한컴오피스)에서 직접 편집 후 저장합니다.
-2. 아래 원클릭 변환 스크립트를 실행하여 웹앱 및 원본 보관소에 동시 갱신합니다:
-   ```bash
-   python scripts/convert_single.py "hwp_source/[NATURE]4.1 의약품 선정 및 확보.hwpx" "app/public/regulations/4.1.pdf" "pdf_source/[NATURE]4.1 의약품 선정 및 확보.pdf"
-   ```
-   *(Rust 기반 rhwp 초고속 무인 렌더러를 탑재하여 한컴오피스 프로그램 팝업 없이 10초 만에 PDF를 생성·동기화합니다.)*
-3. 웹앱에서 `[전문 보기]` 탭을 눌러 브라우저 내에서 PDF가 정상 렌더링되는지 확인합니다.
+### 3.2 개발자용 전체 데이터 수동 동기화 (`sync_all_data.cjs`)
+마스터 정의(`scripts/build_authentic_master.cjs`)를 수동 수정한 경우 아래 명령어로 전체 파이프라인을 일괄 동기화합니다:
+```bash
+cd app
+npm run sync:data
+```
+*실행 시 순차 수행 내역:*
+1. `build_authentic_master.cjs` (규정 원천 생성 + 구글 시트 02번 CSV 갱신)
+2. `merge_to_rules_data.cjs` (웹앱 `rulesData.json` 통합 병합)
+3. `generate_tsv.cjs` (구글 시트 TSV 갱신)
+4. `update_dept_utils.cjs` (11개 부서 매핑 유틸 최신화)
+5. `audit_rules.cjs` (59개 전 규정 무결성 & 골든넘버 ZERO DEFECT 감사)
 
 ---
-
 ## 4. Google Sheets 마스터 DB & 오류 피드백 운영
 
 ### 4.1 마스터 DB 실시간 조회 (`googleSheetsSync.js`)
