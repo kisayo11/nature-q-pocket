@@ -17,7 +17,7 @@ function TabLoadingFallback() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', color: 'var(--text-muted)', gap: 12 }}>
       <div style={{ width: 28, height: 28, border: '3px solid var(--border)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-      <span style={{ fontSize: '13px', fontWeight: 600 }}>화면 로딩 중...</span>
+      <span style={{ fontSize: '13px', fontWeight: 600 }}>화면 로딩 중…</span>
     </div>
   );
 }
@@ -172,7 +172,7 @@ export default function App() {
   // Theme & Font Scale to Body
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.style.setProperty('--font-scale', fontScale);
+    document.documentElement.style.setProperty('--app-font-scale', fontScale);
   }, [theme, fontScale]);
 
   // Navigate to Handbook with Chapter

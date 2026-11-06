@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  X, Copy, Check, ChevronLeft, ChevronRight, Bookmark,
-  AlertTriangle, HelpCircle, FileText, CheckCircle2,
-  Volume2, Clock, ShieldCheck, BookOpen, Layers,
-  ExternalLink, Download, MessageSquarePlus
-} from 'lucide-react';
+import { X, Copy, Check, ChevronLeft, ChevronRight, Bookmark, AlertTriangle, HelpCircle, FileText, CheckCircle2, Volume2, Clock, ShieldCheck, BookOpen, Layers, ExternalLink, Download, MessageSquarePlus, Lightbulb } from 'lucide-react';
 
 export default function PocketCardReader({
   rule,
@@ -222,7 +217,7 @@ export default function PocketCardReader({
               {/* 3-Second Spoken Answer (Hero Card) */}
               <div className="clean-hero-answer">
                 <div className="hero-answer-head">
-                  <span className="hero-answer-tag">💡 3초 구두 모범 답변</span>
+                  <span className="hero-answer-tag"><Lightbulb size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />3초 구두 모범 답변</span>
                   <div className="hero-answer-actions">
                     <button
                       className={`hero-action-btn ${speaking ? 'active' : ''}`}
@@ -242,7 +237,7 @@ export default function PocketCardReader({
                     </button>
                   </div>
                 </div>
-                <p className="hero-answer-text">"{rule.quickAnswer}"</p>
+                <p className="hero-answer-text">“{rule.quickAnswer}”</p>
               </div>
 
               {/* Related Golden Numbers */}
@@ -377,7 +372,7 @@ export default function PocketCardReader({
                   className="pdf-embed-frame"
                 />
                 <div className="pdf-fallback-hint">
-                  <span>💡 스마트폰에서 확대·축소나 인쇄가 필요하시면 상단 <strong>[새 창 열기]</strong>를 터치하세요.</span>
+                  <span><Lightbulb size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />스마트폰에서 확대·축소나 인쇄가 필요하시면 상단 <strong>[새 창 열기]</strong>를 터치하세요.</span>
                 </div>
               </div>
             </div>

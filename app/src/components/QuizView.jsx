@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  Award, CheckCircle2, XCircle, RotateCcw, Sparkles,
-  HelpCircle, ArrowRight, ArrowLeft, Shuffle, BookMarked,
-  Filter, AlertTriangle
-} from 'lucide-react';
+import { Award, CheckCircle2, XCircle, RotateCcw, Sparkles, HelpCircle, ArrowRight, ArrowLeft, Shuffle, BookMarked, Filter, AlertTriangle, Edit3, Lightbulb, Building2, Trophy, ChevronRight } from 'lucide-react';
 import defaultQuizData from '../data/quizData.json';
 import defaultRulesData from '../data/rulesData.json';
 import { isRuleMatchingDept } from '../utils/deptUtils';
@@ -164,12 +160,12 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
             fontWeight: 800,
             cursor: 'pointer',
             background: quizMode === 'quiz' ? 'var(--primary)' : 'var(--surface-raised)',
-            color: quizMode === 'quiz' ? '#fff' : 'var(--text-muted)',
-            boxShadow: quizMode === 'quiz' ? '0 2px 8px rgba(15, 118, 110, 0.25)' : 'none',
+            color: quizMode === 'quiz' ? 'var(--color-white)' : 'var(--text-muted)',
+            boxShadow: quizMode === 'quiz' ? '0 2px 8px var(--primary-glow)' : 'none',
             transition: 'all 0.15s ease'
           }}
         >
-          ✍️ 실전 모의 퀴즈 ({activeQuestions.length}문항)
+          <Edit3 size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />실전 모의 퀴즈 ({activeQuestions.length}문항)
         </button>
         <button
           onClick={() => {
@@ -184,12 +180,12 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
             fontWeight: 800,
             cursor: 'pointer',
             background: quizMode === 'flashcard' ? 'var(--primary)' : 'var(--surface-raised)',
-            color: quizMode === 'flashcard' ? '#fff' : 'var(--text-muted)',
-            boxShadow: quizMode === 'flashcard' ? '0 2px 8px rgba(15, 118, 110, 0.25)' : 'none',
+            color: quizMode === 'flashcard' ? 'var(--color-white)' : 'var(--text-muted)',
+            boxShadow: quizMode === 'flashcard' ? '0 2px 8px var(--primary-glow)' : 'none',
             transition: 'all 0.15s ease'
           }}
         >
-          💡 핵심 플래시 암기카드
+          <Lightbulb size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />핵심 플래시 암기카드
         </button>
       </div>
 
@@ -210,7 +206,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               border: 'none',
               fontWeight: filterMode === 'all' ? 800 : 600,
               background: filterMode === 'all' ? 'var(--primary)' : 'var(--surface)',
-              color: filterMode === 'all' ? '#fff' : 'var(--text-muted)',
+              color: filterMode === 'all' ? 'var(--color-white)' : 'var(--text-muted)',
               cursor: 'pointer'
             }}
           >
@@ -230,14 +226,14 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               border: 'none',
               fontWeight: filterMode === 'dept' ? 800 : 600,
               background: filterMode === 'dept' ? 'var(--primary)' : 'var(--surface)',
-              color: filterMode === 'dept' ? '#fff' : 'var(--text-muted)',
+              color: filterMode === 'dept' ? 'var(--color-white)' : 'var(--text-muted)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: 3
             }}
           >
-            <span>🏢 {userProfile?.dept || '내 부서'} 전용</span>
+            <span><Building2 size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />{userProfile?.dept || '내 부서'} 전용</span>
           </button>
           <button
             onClick={() => {
@@ -253,7 +249,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               border: 'none',
               fontWeight: filterMode === 'wrong' ? 800 : 600,
               background: filterMode === 'wrong' ? 'var(--danger)' : 'var(--surface)',
-              color: filterMode === 'wrong' ? '#fff' : 'var(--text-muted)',
+              color: filterMode === 'wrong' ? 'var(--color-white)' : 'var(--text-muted)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -261,7 +257,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
             }}
           >
             <span>오답노트</span>
-            {wrongCount > 0 && <span style={{ background: '#fff', color: 'var(--danger)', borderRadius: '10px', padding: '0 5px', fontSize: '10px', fontWeight: 900 }}>{wrongCount}</span>}
+            {wrongCount > 0 && <span style={{ background: 'var(--color-white)', color: 'var(--danger)', borderRadius: '10px', padding: '0 5px', fontSize: '10px', fontWeight: 900 }}>{wrongCount}</span>}
           </button>
           <button
             onClick={() => {
@@ -276,8 +272,8 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               borderRadius: '6px',
               border: 'none',
               fontWeight: filterMode === 'must' ? 800 : 600,
-              background: filterMode === 'must' ? 'hsl(45, 100%, 40%)' : 'var(--surface)',
-              color: filterMode === 'must' ? '#fff' : 'var(--text-muted)',
+              background: filterMode === 'must' ? 'var(--warning)' : 'var(--surface)',
+              color: filterMode === 'must' ? 'var(--color-white)' : 'var(--text-muted)',
               cursor: 'pointer'
             }}
           >
@@ -354,7 +350,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
           {/* A. Empty State for Wrong Notes */}
           {filterMode === 'wrong' && activeQuestions.length === 0 ? (
             <div className="calc-card" style={{ textAlign: 'center', padding: '36px 20px' }}>
-              <div style={{ fontSize: '42px', marginBottom: 12 }}>🎉</div>
+              <div style={{ marginBottom: 12 }}><Sparkles size={42} color="var(--primary)" /></div>
               <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--primary)', marginBottom: 8 }}>
                 오답노트가 비어 있습니다!
               </h3>
@@ -372,7 +368,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                   padding: '12px 24px',
                   borderRadius: '10px',
                   background: 'var(--primary)',
-                  color: '#fff',
+                  color: 'var(--color-white)',
                   fontWeight: 800,
                   fontSize: '14px',
                   border: 'none',
@@ -386,7 +382,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
             /* B. Quiz Completed Score Summary Screen */
             <div className="calc-card" style={{ textAlign: 'center', padding: '30px 20px' }}>
               <div style={{ fontSize: '46px', marginBottom: 10 }}>
-                {Math.round((score / activeQuestions.length) * 100) >= 80 ? '🏆' : '📚'}
+                {Math.round((score / activeQuestions.length) * 100) >= 80 ? <Trophy size={48} color="var(--primary)" /> : <BookOpen size={48} color="var(--primary)" />}
               </div>
               <span style={{
                 display: 'inline-block',
@@ -448,7 +444,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                       padding: '13px',
                       borderRadius: '10px',
                       background: 'var(--danger)',
-                      color: '#fff',
+                      color: 'var(--color-white)',
                       fontWeight: 800,
                       fontSize: '14px',
                       border: 'none',
@@ -471,7 +467,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                     padding: '13px',
                     borderRadius: '10px',
                     background: 'var(--primary)',
-                    color: '#fff',
+                    color: 'var(--color-white)',
                     fontWeight: 800,
                     fontSize: '14px',
                     border: 'none',
@@ -503,7 +499,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                     cursor: 'pointer'
                   }}
                 >
-                  💡 암기카드로 핵심 요점 빠르게 훑기
+                  <Lightbulb size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />암기카드로 핵심 요점 빠르게 훑기
                 </button>
               </div>
             </div>
@@ -590,7 +586,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                       style={{
                         flex: 1,
                         background: 'var(--primary)',
-                        color: '#fff',
+                        color: 'var(--color-white)',
                         border: 'none',
                         padding: '12px 14px',
                         borderRadius: '8px',
@@ -665,7 +661,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               textAlign: 'center',
               cursor: 'pointer',
               transition: 'all 0.25s ease',
-              boxShadow: isFlipped ? '0 4px 14px rgba(15, 118, 110, 0.15)' : 'none'
+              boxShadow: isFlipped ? '0 4px 14px var(--primary-glow)' : 'none'
             }}
           >
             {!isFlipped ? (
@@ -677,7 +673,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
                   {currentQ.question}
                 </div>
                 <div style={{ marginTop: 16, fontSize: '11px', color: 'var(--primary)', fontWeight: 700 }}>
-                  👉 탭하여 해설과 모범 답안 보기
+                  <ChevronRight size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />탭하여 해설과 모범 답안 보기
                 </div>
               </>
             ) : (
@@ -746,7 +742,7 @@ export default function QuizView({ quizList = defaultQuizData, rules = defaultRu
               style={{
                 flex: 1,
                 background: 'var(--primary)',
-                color: '#fff',
+                color: 'var(--color-white)',
                 border: 'none',
                 padding: '12px',
                 borderRadius: '8px',

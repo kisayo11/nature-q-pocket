@@ -2,10 +2,28 @@ import React, { useState } from 'react';
 import {
   Settings, RefreshCw, ShieldCheck, Check,
   ExternalLink, Building2, Sun, Moon, Type, Eye,
-  Trash2, AlertTriangle, MessageSquarePlus, Link
+  Trash2, AlertTriangle, MessageSquarePlus, Link,
+  Stethoscope, UserCheck, Target, ShieldAlert,
+  ClipboardList, Accessibility, Scan, Pill, UtensilsCrossed, Wrench
 } from 'lucide-react';
 import { DEPARTMENTS } from '../utils/deptUtils';
 import { DEFAULT_FEEDBACK_WEBHOOK_URL } from './FeedbackModal';
+
+function getDeptIcon(name) {
+  switch (name) {
+    case '간호부': return <Stethoscope size={15} />;
+    case '진료부': return <UserCheck size={15} />;
+    case 'QPS실': return <Target size={15} />;
+    case '감염관리실': return <ShieldAlert size={15} />;
+    case '원무과': return <ClipboardList size={15} />;
+    case '재활치료실': return <Accessibility size={15} />;
+    case '방사선실': return <Scan size={15} />;
+    case '약제과': return <Pill size={15} />;
+    case '영양팀': return <UtensilsCrossed size={15} />;
+    case '시설팀': return <Wrench size={15} />;
+    default: return <Stethoscope size={15} />;
+  }
+}
 
 export default function SettingsView({
   selectedDept,
@@ -83,11 +101,11 @@ export default function SettingsView({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  transition: 'all 0.15s ease'
+                  transition: 'color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span>{dept.icon}</span>
+                  {getDeptIcon(dept.name)}
                   <span>{dept.name}</span>
                 </div>
                 {isSelected && <Check size={14} color="var(--primary)" />}
@@ -193,7 +211,7 @@ export default function SettingsView({
                 border: '1px solid',
                 borderColor: inspectMode ? 'var(--primary)' : 'var(--border)',
                 background: inspectMode ? 'var(--primary)' : 'var(--surface-raised)',
-                color: inspectMode ? '#fff' : 'var(--text-sub)',
+                color: inspectMode ? 'var(--color-white)' : 'var(--text-sub)',
                 fontSize: '12px',
                 fontWeight: 800,
                 cursor: 'pointer'
@@ -247,7 +265,7 @@ export default function SettingsView({
             borderRadius: '8px',
             border: 'none',
             background: syncFailed ? 'var(--danger)' : syncSuccess ? 'var(--success)' : 'var(--primary)',
-            color: '#fff',
+            color: 'var(--color-white)',
             fontWeight: 800,
             fontSize: '13px',
             cursor: 'pointer',
@@ -255,7 +273,7 @@ export default function SettingsView({
             alignItems: 'center',
             justifyContent: 'center',
             gap: 6,
-            transition: 'background 0.2s ease'
+            transition: 'background-color 0.2s ease'
           }}
         >
           <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
@@ -264,9 +282,9 @@ export default function SettingsView({
       </div>
 
       {/* 4. Feedback & Error Report Settings Card */}
-      <div className="calc-card" style={{ borderColor: '#fecaca' }}>
-        <div className="calc-title" style={{ color: '#dc2626' }}>
-          <MessageSquarePlus size={18} color="#dc2626" /> 원내 오류 신고 및 수정 제보
+      <div className="calc-card" style={{ borderColor: 'var(--color-report-border)' }}>
+        <div className="calc-title" style={{ color: 'var(--danger)' }}>
+          <MessageSquarePlus size={18} color="var(--danger)" /> 원내 오류 신고 및 수정 제보
         </div>
         <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: 12, lineHeight: 1.5 }}>
           실제 부서 실무와 상이하거나 오탈자, 잘못된 지침이 있다면 즉시 제보해 주세요. 구글 스프레드시트에 실시간으로 기록됩니다.
@@ -279,8 +297,8 @@ export default function SettingsView({
             padding: '11px',
             borderRadius: '8px',
             border: 'none',
-            background: '#dc2626',
-            color: '#fff',
+            background: 'var(--danger)',
+            color: 'var(--color-white)',
             fontWeight: 800,
             fontSize: '13px',
             cursor: 'pointer',
@@ -328,7 +346,7 @@ export default function SettingsView({
                 borderRadius: '6px',
                 border: 'none',
                 background: savedWebhook ? 'var(--success)' : 'var(--primary)',
-                color: '#fff',
+                color: 'var(--color-white)',
                 fontSize: '12px',
                 fontWeight: 700,
                 cursor: 'pointer',

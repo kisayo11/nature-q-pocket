@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator } from 'lucide-react';
+import { Calculator, Lightbulb } from 'lucide-react';
 
 export default function FluidRateCalculator() {
   const [fluidVolume, setFluidVolume] = useState('500'); // mL
@@ -149,7 +149,7 @@ export default function FluidRateCalculator() {
         </div>
 
         <div style={{ background: 'var(--primary-light)', padding: '10px 12px', borderRadius: '8px', fontSize: '13px', color: 'var(--primary)', lineHeight: 1.5 }}>
-          💡 <strong>병동 라운딩 조절 팁:</strong><br />
+          <Lightbulb size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} /><strong>병동 라운딩 조절 팁:</strong><br />
           {secondsPerDrop > 0 ? (
             <>약 <strong>{secondsPerDrop}초에 1방울씩</strong> 떨어지도록 챔버 유속을 조절하세요.</>
           ) : (

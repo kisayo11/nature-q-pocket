@@ -35,7 +35,7 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
                 fontSize: '11.5px',
                 fontWeight: isActive ? 800 : 600,
                 background: isActive ? 'var(--primary)' : 'var(--surface)',
-                color: isActive ? '#fff' : 'var(--text-sub)',
+                color: isActive ? 'var(--color-white)' : 'var(--text-sub)',
                 border: '1px solid',
                 borderColor: isActive ? 'var(--primary)' : 'var(--border)',
                 cursor: 'pointer',
@@ -54,8 +54,8 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
                   fontSize: '9px',
                   padding: '1px 4px',
                   borderRadius: '3px',
-                  background: isActive ? 'rgba(255,255,255,0.25)' : 'var(--border)',
-                  color: isActive ? '#fff' : 'var(--text-muted)'
+                  background: isActive ? 'var(--primary-glow)' : 'var(--border)',
+                  color: isActive ? 'var(--color-white)' : 'var(--text-muted)'
                 }}>
                   내부서
                 </span>
@@ -106,12 +106,12 @@ export default function DefenseQuickView({ selectedDept = '간호부', onOpenRul
             </h3>
 
             <div style={{
-              background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
-              border: '1px solid #a7f3d0',
+              background: 'var(--primary-light)',
+              border: '1px solid var(--primary)',
               padding: '9px 11px',
               borderRadius: '8px',
               fontSize: '12.5px',
-              color: '#064e3b',
+              color: 'var(--primary)',
               fontWeight: 700,
               lineHeight: 1.5,
               marginBottom: '8px'

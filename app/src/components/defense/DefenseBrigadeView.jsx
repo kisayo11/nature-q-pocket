@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Flame, Users, Bell, PhoneCall, ShieldAlert, ArrowRight,
-  CheckCircle2, AlertTriangle, ShieldCheck, HeartPulse, ChevronDown, ChevronUp
-} from 'lucide-react';
+import { Flame, Users, Bell, PhoneCall, ShieldAlert, ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, HeartPulse, ChevronDown, ChevronUp, Zap, Sun, Moon, Building2, ClipboardList } from 'lucide-react';
 import fireBrigadeData from '../../data/fireBrigadeData.json';
 
 export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenRule }) {
@@ -19,8 +16,8 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
       {/* 1. Emergency Core Rule Ribbon */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
-          border: '1.5px solid #fecdd3',
+          background: 'var(--color-rule-report-bg)',
+          border: '1.5px solid var(--color-rule-report-border)',
           borderRadius: 'var(--radius-lg)',
           padding: '12px 14px',
           display: 'flex',
@@ -30,23 +27,23 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '20px' }}>🚨</span>
+            <ShieldAlert size={20} color="var(--danger)" />
             <div>
-              <h2 style={{ fontSize: '15px', fontWeight: 900, color: '#9f1239', margin: 0 }}>
+              <h2 style={{ fontSize: '15px', fontWeight: 900, color: 'var(--danger)', margin: 0 }}>
                 자위소방대 비상방송 & 1초 골든룰
               </h2>
-              <div style={{ fontSize: '12px', color: '#be123c', marginTop: '2px', fontWeight: 700 }}>
+              <div style={{ fontSize: '12px', color: 'var(--danger)', marginTop: '2px', fontWeight: 700 }}>
                 방송 요청: 내선 900번에 <strong>"코드레드(Code Red) O병동 O호실 2회"</strong>
               </div>
             </div>
           </div>
-          <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#9f1239', background: '#fff', padding: '3px 9px', borderRadius: '12px', border: '1px solid #fda4af' }}>
+          <div style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--danger)', background: 'var(--color-white)', padding: '3px 9px', borderRadius: '12px', border: '1px solid var(--color-rule-report-border)' }}>
             대장: 병원장 | 부대장(소방관리자): 시설팀장
           </div>
         </div>
 
-        <div style={{ background: '#fff', padding: '6px 10px', borderRadius: '6px', border: '1px solid #fecdd3', fontSize: '11px', color: '#881337', fontWeight: 700 }}>
-          ⚡ <strong>임무자 황금수칙(부록 3 ◈①):</strong> 통보연락 후 즉시 방화문을 닫고 피난유도팀에 합류할 것!
+        <div style={{ background: 'var(--color-white)', padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--color-rule-report-border)', fontSize: '11px', color: 'var(--danger)', fontWeight: 700 }}>
+          <Zap size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} /><strong>임무자 황금수칙(부록 3 ◈①):</strong> 통보연락 후 즉시 방화문을 닫고 피난유도팀에 합류할 것!
         </div>
       </div>
 
@@ -84,10 +81,10 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
                   borderRadius: '16px',
                   fontSize: '11.5px',
                   fontWeight: isSelected ? 900 : 600,
-                  background: isSelected ? '#e11d48' : 'var(--surface-raised)',
-                  color: isSelected ? '#fff' : 'var(--text-main)',
+                  background: isSelected ? 'var(--danger)' : 'var(--surface-raised)',
+                  color: isSelected ? 'var(--color-white)' : 'var(--text-main)',
                   border: '1px solid',
-                  borderColor: isSelected ? '#e11d48' : 'var(--border)',
+                  borderColor: isSelected ? 'var(--danger)' : 'var(--border)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                   transition: 'all 0.15s ease'
@@ -126,7 +123,7 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
             </div>
           </div>
 
-          <div style={{ fontSize: '10.5px', fontWeight: 800, background: '#fef2f2', color: '#dc2626', padding: '3px 8px', borderRadius: '6px', border: '1px solid #fecaca' }}>
+          <div style={{ fontSize: '10.5px', fontWeight: 800, background: 'var(--danger-light)', color: 'var(--danger)', padding: '3px 8px', borderRadius: '6px', border: '1px solid var(--color-report-border)' }}>
             1초 즉답 마스터
           </div>
         </div>
@@ -134,7 +131,7 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
         {/* Daytime Duty */}
         <div style={{ background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--border)' }}>
           <div style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-main)', marginBottom: '3px' }}>
-            ☀️ [주간] {brigadeDept} 핵심 임무:
+            <Sun size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />[주간] {brigadeDept} 핵심 임무:
           </div>
           <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.5 }}>
             {activeBrigadeInfo.keyRole}
@@ -147,11 +144,11 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
         </div>
 
         {/* Nighttime Duty */}
-        <div style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)', color: '#fff', padding: '10px 12px', borderRadius: '8px' }}>
-          <div style={{ fontSize: '11.5px', fontWeight: 900, color: '#a5b4fc', marginBottom: '2px' }}>
-            🌙 [야간 및 휴일] 소수 인원 비상 전환 시 내 역할:
+        <div style={{ background: 'var(--color-overlay-dark)', color: 'var(--color-white)', padding: '10px 12px', borderRadius: '8px' }}>
+          <div style={{ fontSize: '11.5px', fontWeight: 900, color: 'var(--text-sub)', marginBottom: '2px' }}>
+            <Moon size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />[야간 및 휴일] 소수 인원 비상 전환 시 내 역할:
           </div>
-          <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#f8fafc', lineHeight: 1.5 }}>
+          <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--color-white)', lineHeight: 1.5 }}>
             {activeBrigadeInfo.nightRole}
           </div>
         </div>
@@ -159,8 +156,7 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
 
       {/* 4. Progressive Disclosure: 원내 소방시설 & 피난 핵심수칙 (Collapsible) */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-        <button
-          onClick={() => setShowFacilities((prev) => !prev)}
+        <button className="nowrap" onClick={() => setShowFacilities((prev) => !prev)}
           style={{
             width: '100%',
             padding: '11px 14px',
@@ -172,12 +168,13 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
             border: 'none',
             fontSize: '12.5px',
             fontWeight: 800,
-            color: 'var(--text-main)'
+            color: 'var(--text-main)',
+            whiteSpace: 'nowrap'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <ShieldAlert size={15} color="var(--primary)" />
-            <span>🏥 원내 소방시설 & 대피공간 핵심 위치 (공기호흡기, 산소밸브 등)</span>
+            <span><Building2 size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />원내 소방시설 & 대피공간 핵심 위치 (공기호흡기, 산소밸브 등)</span>
           </div>
           {showFacilities ? <ChevronUp size={15} color="var(--text-muted)" /> : <ChevronDown size={15} color="var(--text-muted)" />}
         </button>
@@ -189,15 +186,15 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
               <div style={{ color: 'var(--text-sub)', marginTop: '2px' }}>{fireBrigadeData.buildingSafetyFacilities.lifesavingGear}</div>
             </div>
             <div style={{ background: 'var(--surface-raised)', padding: '9px 11px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-              <strong style={{ color: '#dc2626' }}>• 병동 산소차단밸브(Oxygen):</strong>
+              <strong style={{ color: 'var(--danger)' }}>• 병동 산소차단밸브(Oxygen):</strong>
               <div style={{ color: 'var(--text-sub)', marginTop: '2px' }}>{fireBrigadeData.buildingSafetyFacilities.oxygenValve}</div>
             </div>
             <div style={{ background: 'var(--surface-raised)', padding: '9px 11px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-              <strong style={{ color: '#d97706' }}>• 층별 대피공간(휴게공간):</strong>
+              <strong style={{ color: 'var(--warning)' }}>• 층별 대피공간(휴게공간):</strong>
               <div style={{ color: 'var(--text-sub)', marginTop: '2px' }}>{fireBrigadeData.buildingSafetyFacilities.tempRefuge}</div>
             </div>
             <div style={{ background: 'var(--surface-raised)', padding: '9px 11px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-              <strong style={{ color: '#2563eb' }}>• 9층 옥상 비상문 관리:</strong>
+              <strong style={{ color: 'var(--color-hub-quick-border)' }}>• 9층 옥상 비상문 관리:</strong>
               <div style={{ color: 'var(--text-sub)', marginTop: '2px' }}>{fireBrigadeData.buildingSafetyFacilities.rooftopDoor}</div>
             </div>
           </div>
@@ -206,8 +203,7 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
 
       {/* 5. Progressive Disclosure: 자위소방대 전체 5개 팀 편성표 (Collapsible) */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-        <button
-          onClick={() => setShowAllTeams((prev) => !prev)}
+        <button className="nowrap" onClick={() => setShowAllTeams((prev) => !prev)}
           style={{
             width: '100%',
             padding: '11px 14px',
@@ -219,12 +215,13 @@ export default function DefenseBrigadeView({ selectedDept = '간호부', onOpenR
             border: 'none',
             fontSize: '12.5px',
             fontWeight: 800,
-            color: 'var(--text-main)'
+            color: 'var(--text-main)',
+            whiteSpace: 'nowrap'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Users size={15} color="var(--primary)" />
-            <span>📋 자위소방대 5개 팀 전체 편성표 (규정 10.6 부록 3)</span>
+            <span><ClipboardList size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />자위소방대 5개 팀 전체 편성표 (규정 10.6 부록 3)</span>
           </div>
           {showAllTeams ? <ChevronUp size={15} color="var(--text-muted)" /> : <ChevronDown size={15} color="var(--text-muted)" />}
         </button>

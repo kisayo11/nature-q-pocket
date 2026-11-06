@@ -108,8 +108,7 @@ export default function FeedbackModal({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
-        backdropFilter: 'blur(4px)',
+        backgroundColor: 'var(--color-overlay-dark)',
         zIndex: 9999,
         display: 'flex',
         alignItems: 'flex-end', // Mobile bottom sheet default
@@ -123,12 +122,12 @@ export default function FeedbackModal({
         style={{
           width: '100%',
           maxWidth: '560px',
-          background: 'var(--surface, #ffffff)',
+          background: 'var(--surface)',
           borderTopLeftRadius: '20px',
           borderTopRightRadius: '20px',
           borderBottomLeftRadius: '0px',
           borderBottomRightRadius: '0px',
-          boxShadow: '0 -10px 30px rgba(0,0,0,0.2)',
+          boxShadow: '0 -10px 30px var(--color-shadow-dark)',
           display: 'flex',
           flexDirection: 'column',
           maxHeight: '90vh',
@@ -140,11 +139,11 @@ export default function FeedbackModal({
         <div
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid var(--border, #e2e8f0)',
+            borderBottom: '1px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'var(--surface-raised, #f8fafc)'
+            background: 'var(--surface-raised)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -153,8 +152,8 @@ export default function FeedbackModal({
                 width: 32,
                 height: 32,
                 borderRadius: '8px',
-                background: '#fee2e2',
-                color: '#dc2626',
+                background: 'var(--danger-light)',
+                color: 'var(--danger)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -163,10 +162,10 @@ export default function FeedbackModal({
               <MessageSquarePlus size={18} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--text-main, #0f172a)' }}>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--text-main)' }}>
                 오류 신고 및 수정 제보
               </h3>
-              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted, #64748b)' }}>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-muted)' }}>
                 현업 실무와 다르거나 오탈자가 있는 부분을 알려주세요
               </p>
             </div>
@@ -180,7 +179,7 @@ export default function FeedbackModal({
               borderRadius: '8px',
               border: 'none',
               background: 'transparent',
-              color: 'var(--text-muted, #64748b)',
+              color: 'var(--text-muted)',
               cursor: 'pointer'
             }}
           >
@@ -215,8 +214,8 @@ export default function FeedbackModal({
                   width: 56,
                   height: 56,
                   borderRadius: '50%',
-                  background: '#dcfce7',
-                  color: '#16a34a',
+                  background: 'var(--success-light)',
+                  color: 'var(--success)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -225,10 +224,10 @@ export default function FeedbackModal({
               >
                 <CheckCircle2 size={32} />
               </div>
-              <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: 'var(--text-main, #0f172a)' }}>
+              <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: 'var(--text-main)' }}>
                 제보가 정상 접수되었습니다!
               </h4>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted, #64748b)' }}>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-muted)' }}>
                 구글 스프레드시트에 안전하게 등록되었습니다.<br />
                 빠르게 검토하여 규정에 반영하겠습니다. 감사합니다.
               </p>
@@ -245,12 +244,12 @@ export default function FeedbackModal({
                       gap: 4,
                       fontSize: '12px',
                       fontWeight: 700,
-                      color: 'var(--text-main, #0f172a)',
+                      color: 'var(--text-main)',
                       marginBottom: 6
                     }}
                   >
-                    <Building2 size={13} color="var(--primary, #059669)" />
-                    소속 부서 <span style={{ color: '#dc2626' }}>*</span>
+                    <Building2 size={13} color="var(--primary)" />
+                    소속 부서 <span style={{ color: 'var(--danger)' }}>*</span>
                   </label>
                   <select
                     value={department}
@@ -259,9 +258,9 @@ export default function FeedbackModal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '8px',
-                      border: '1.5px solid var(--border, #cbd5e1)',
-                      background: 'var(--surface-raised, #f8fafc)',
-                      color: 'var(--text-main, #0f172a)',
+                      border: '1.5px solid var(--border)',
+                      background: 'var(--surface-raised)',
+                      color: 'var(--text-main)',
                       fontSize: '13px',
                       fontWeight: 600,
                       outline: 'none'
@@ -269,7 +268,7 @@ export default function FeedbackModal({
                   >
                     {DEPARTMENTS.map((dept) => (
                       <option key={dept.id} value={dept.name}>
-                        {dept.icon} {dept.name}
+                        {dept.name}
                       </option>
                     ))}
                     <option value="기타">기타 / 부서 외</option>
@@ -284,11 +283,11 @@ export default function FeedbackModal({
                       gap: 4,
                       fontSize: '12px',
                       fontWeight: 700,
-                      color: 'var(--text-main, #0f172a)',
+                      color: 'var(--text-main)',
                       marginBottom: 6
                     }}
                   >
-                    <User size={13} color="var(--primary, #059669)" />
+                    <User size={13} color="var(--primary)" />
                     작성자/직급 (선택)
                   </label>
                   <input
@@ -300,9 +299,9 @@ export default function FeedbackModal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '8px',
-                      border: '1.5px solid var(--border, #cbd5e1)',
-                      background: 'var(--surface-raised, #f8fafc)',
-                      color: 'var(--text-main, #0f172a)',
+                      border: '1.5px solid var(--border)',
+                      background: 'var(--surface-raised)',
+                      color: 'var(--text-main)',
                       fontSize: '13px',
                       outline: 'none',
                       boxSizing: 'border-box'
@@ -320,11 +319,11 @@ export default function FeedbackModal({
                     gap: 4,
                     fontSize: '12px',
                     fontWeight: 700,
-                    color: 'var(--text-main, #0f172a)',
+                    color: 'var(--text-main)',
                     marginBottom: 6
                   }}
                 >
-                  <FileText size={13} color="var(--primary, #059669)" />
+                  <FileText size={13} color="var(--primary)" />
                   대상 규정 / 메뉴
                 </label>
                 <input
@@ -336,9 +335,9 @@ export default function FeedbackModal({
                     width: '100%',
                     padding: '10px 12px',
                     borderRadius: '8px',
-                    border: '1.5px solid var(--border, #cbd5e1)',
-                    background: 'var(--surface-raised, #f8fafc)',
-                    color: 'var(--text-main, #0f172a)',
+                    border: '1.5px solid var(--border)',
+                    background: 'var(--surface-raised)',
+                    color: 'var(--text-main)',
                     fontSize: '13px',
                     fontWeight: 600,
                     outline: 'none',
@@ -356,12 +355,12 @@ export default function FeedbackModal({
                     gap: 4,
                     fontSize: '12px',
                     fontWeight: 700,
-                    color: 'var(--text-main, #0f172a)',
+                    color: 'var(--text-main)',
                     marginBottom: 6
                   }}
                 >
-                  <Sparkles size={13} color="#dc2626" />
-                  오류 및 수정 요청 내용 <span style={{ color: '#dc2626' }}>*</span>
+                  <Sparkles size={13} color="var(--danger)" />
+                  오류 및 수정 요청 내용 <span style={{ color: 'var(--danger)' }}>*</span>
                 </label>
                 <textarea
                   value={content}
@@ -372,9 +371,9 @@ export default function FeedbackModal({
                     width: '100%',
                     padding: '10px 12px',
                     borderRadius: '8px',
-                    border: '1.5px solid var(--border, #cbd5e1)',
-                    background: 'var(--surface-raised, #f8fafc)',
-                    color: 'var(--text-main, #0f172a)',
+                    border: '1.5px solid var(--border)',
+                    background: 'var(--surface-raised)',
+                    color: 'var(--text-main)',
                     fontSize: '13px',
                     lineHeight: '1.5',
                     outline: 'none',
@@ -392,8 +391,8 @@ export default function FeedbackModal({
                     gap: 6,
                     padding: '8px 12px',
                     borderRadius: '6px',
-                    background: '#fef2f2',
-                    color: '#b91c1c',
+                    background: 'var(--danger-light)',
+                    color: 'var(--danger)',
                     fontSize: '12px',
                     fontWeight: 600
                   }}
@@ -412,9 +411,9 @@ export default function FeedbackModal({
                     flex: 1,
                     padding: '12px',
                     borderRadius: '10px',
-                    border: '1px solid var(--border, #cbd5e1)',
-                    background: 'var(--surface-raised, #f8fafc)',
-                    color: 'var(--text-muted, #64748b)',
+                    border: '1px solid var(--border)',
+                    background: 'var(--surface-raised)',
+                    color: 'var(--text-muted)',
                     fontSize: '13px',
                     fontWeight: 700,
                     cursor: 'pointer'
@@ -430,8 +429,8 @@ export default function FeedbackModal({
                     padding: '12px',
                     borderRadius: '10px',
                     border: 'none',
-                    background: '#dc2626',
-                    color: '#ffffff',
+                    background: 'var(--danger)',
+                    color: 'var(--color-white)',
                     fontSize: '14px',
                     fontWeight: 800,
                     cursor: submitting ? 'wait' : 'pointer',
@@ -440,7 +439,7 @@ export default function FeedbackModal({
                     justifyContent: 'center',
                     gap: 6,
                     opacity: submitting ? 0.7 : 1,
-                    boxShadow: '0 4px 12px rgba(220, 38, 38, 0.25)'
+                    boxShadow: '0 4px 12px var(--color-emer-btn-glow)'
                   }}
                 >
                   <Send size={15} />

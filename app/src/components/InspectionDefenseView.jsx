@@ -65,7 +65,7 @@ export default function InspectionDefenseView({
             color: 'var(--primary)',
             padding: '3px 10px',
             borderRadius: '16px',
-            border: '1px solid hsla(168, 80%, 28%, 0.15)'
+            border: '1px solid var(--primary-glow)'
           }}>
             실사 방어 전용 허브
           </span>
@@ -88,9 +88,9 @@ export default function InspectionDefenseView({
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
             <span style={{ fontWeight: 800, color: 'var(--text-main)' }}>내 부서: <strong>[{userDept}]</strong></span>
             <span style={{ color: 'var(--border)' }}>|</span>
-            <span style={{ color: '#dc2626', fontWeight: 800 }}>🚒 소방: {brigadeInfo.teamName}</span>
+            <span style={{ color: 'var(--danger)', fontWeight: 800 }}><Flame size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '3px' }} />소방: {brigadeInfo.teamName}</span>
             <span style={{ color: 'var(--border)' }}>|</span>
-            <span style={{ color: 'var(--primary)', fontWeight: 800 }}>💬 3초 즉답: {quickCount}개</span>
+            <span style={{ color: 'var(--primary)', fontWeight: 800 }}><MessageSquare size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '3px' }} />3초 즉답: {quickCount}개</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -99,9 +99,9 @@ export default function InspectionDefenseView({
               style={{
                 fontSize: '11px',
                 fontWeight: 800,
-                color: '#dc2626',
-                background: '#fff',
-                border: '1px solid #fca5a5',
+                color: 'var(--danger)',
+                background: 'var(--color-white)',
+                border: '1px solid var(--color-report-border)',
                 padding: '3px 8px',
                 borderRadius: '6px',
                 cursor: 'pointer'
@@ -115,7 +115,7 @@ export default function InspectionDefenseView({
                 fontSize: '11px',
                 fontWeight: 800,
                 color: 'var(--primary)',
-                background: '#fff',
+                background: 'var(--color-white)',
                 border: '1px solid var(--primary-light)',
                 padding: '3px 8px',
                 borderRadius: '6px',
@@ -173,7 +173,7 @@ export default function InspectionDefenseView({
               borderRadius: '9px',
               border: 'none',
               background: activeSubTab === 'brigade' ? 'var(--surface)' : 'transparent',
-              color: activeSubTab === 'brigade' ? '#e11d48' : 'var(--text-muted)',
+              color: activeSubTab === 'brigade' ? 'var(--danger)' : 'var(--text-muted)',
               fontSize: '12.5px',
               fontWeight: activeSubTab === 'brigade' ? 900 : 600,
               cursor: 'pointer',

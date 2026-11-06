@@ -1,8 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  Sparkles, Check, ChevronDown, ChevronUp, ArrowRight,
-  Zap, Search, Eye, EyeOff, Layers, BookOpen, HelpCircle
-} from 'lucide-react';
+import { Sparkles, Check, ChevronDown, ChevronUp, ArrowRight, Zap, Search, Eye, EyeOff, Layers, BookOpen, HelpCircle, Star, Lightbulb } from 'lucide-react';
 import allStaffChecklist from '../../data/allStaffChecklist.json';
 
 const DOMAIN_FILTERS = [
@@ -38,8 +35,8 @@ function renderHighlightedAnswer(text) {
         <span
           key={i}
           style={{
-            background: '#fef08a',
-            color: '#854d0e',
+            background: 'var(--warning-light)',
+            color: 'var(--warning)',
             padding: '1px 4px',
             borderRadius: '4px',
             fontWeight: 900
@@ -129,7 +126,7 @@ export default function DefenseCommonView({ onOpenRule }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <div>
             <h2 style={{ fontSize: '15.5px', fontWeight: 900, color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>⭐</span>
+              <Star size={16} color="var(--primary)" />
               <span>전직원 17대 필수 질문 (1초 즉답 훈련)</span>
             </h2>
             <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '2px 0 0' }}>
@@ -167,7 +164,7 @@ export default function DefenseCommonView({ onOpenRule }) {
               }}
             >
               <Zap size={12} />
-              <span>⚡ 1초 벼락치기 (요약)</span>
+              <><Zap size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} /><span>1초 벼락치기 (요약)</span></>
             </button>
             <button
               onClick={() => setViewMode('detailed')}
@@ -185,7 +182,7 @@ export default function DefenseCommonView({ onOpenRule }) {
               }}
             >
               <Layers size={12} />
-              <span>📖 전체 상세 보기</span>
+              <><BookOpen size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} /><span>전체 상세 보기</span></>
             </button>
           </div>
 
@@ -202,9 +199,9 @@ export default function DefenseCommonView({ onOpenRule }) {
               fontWeight: 800,
               cursor: 'pointer',
               border: '1px solid',
-              borderColor: isBlindMode ? '#8b5cf6' : 'var(--border)',
-              background: isBlindMode ? '#f5f3ff' : 'var(--surface-raised)',
-              color: isBlindMode ? '#7c3aed' : 'var(--text-sub)',
+              borderColor: isBlindMode ? 'var(--color-hub-dept-border)' : 'var(--border)',
+              background: isBlindMode ? 'var(--color-hub-dept-bg)' : 'var(--surface-raised)',
+              color: isBlindMode ? 'var(--color-hub-dept-border)' : 'var(--text-sub)',
               transition: 'all 0.15s ease'
             }}
           >
@@ -269,7 +266,7 @@ export default function DefenseCommonView({ onOpenRule }) {
                   fontSize: '11px',
                   fontWeight: isSelected ? 800 : 600,
                   background: isSelected ? 'var(--primary)' : 'var(--surface-raised)',
-                  color: isSelected ? '#fff' : 'var(--text-sub)',
+                  color: isSelected ? 'var(--color-white)' : 'var(--text-sub)',
                   border: '1px solid',
                   borderColor: isSelected ? 'var(--primary)' : 'var(--border)',
                   cursor: 'pointer',
@@ -319,8 +316,8 @@ export default function DefenseCommonView({ onOpenRule }) {
                     <span style={{
                       fontSize: '9.5px',
                       fontWeight: 900,
-                      background: item.isMustPass ? '#e11d48' : '#059669',
-                      color: '#fff',
+                      background: item.isMustPass ? 'var(--danger)' : 'var(--primary)',
+                      color: 'var(--color-white)',
                       padding: '2px 5px',
                       borderRadius: '4px'
                     }}>
@@ -374,8 +371,8 @@ export default function DefenseCommonView({ onOpenRule }) {
                 <div
                   onClick={(e) => isBlindMode && toggleReveal(item.id, e)}
                   style={{
-                    background: isAnswerHidden ? '#f8fafc' : 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
-                    border: `1px solid ${isAnswerHidden ? 'var(--border)' : '#a7f3d0'}`,
+                    background: isAnswerHidden ? 'var(--surface-raised)' : 'var(--primary-light)',
+                    border: `1px solid ${isAnswerHidden ? 'var(--border)' : 'var(--primary)'}`,
                     borderRadius: '8px',
                     padding: '9px 11px',
                     display: 'flex',
@@ -385,13 +382,13 @@ export default function DefenseCommonView({ onOpenRule }) {
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '10.5px', fontWeight: 900, color: isAnswerHidden ? 'var(--text-muted)' : '#047857', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '10.5px', fontWeight: 900, color: isAnswerHidden ? 'var(--text-muted)' : 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Zap size={12} color={isAnswerHidden ? 'var(--text-muted)' : '#059669'} />
+                      <Zap size={12} color={isAnswerHidden ? 'var(--text-muted)' : 'var(--primary)'} />
                       <span>1초 구두 답변 (입으로 소리내어 말하기)</span>
                     </div>
                     {isBlindMode && (
-                      <span style={{ fontSize: '10px', color: '#7c3aed', fontWeight: 800 }}>
+                      <span style={{ fontSize: '10px', color: 'var(--color-hub-dept-border)', fontWeight: 800 }}>
                         {isAnswerHidden ? '👉 탭하여 답변 확인' : '👁️ 가리기'}
                       </span>
                     )}
@@ -402,7 +399,7 @@ export default function DefenseCommonView({ onOpenRule }) {
                       답변이 가려져 있습니다. 속으로 먼저 답을 말해본 뒤 클릭하세요!
                     </div>
                   ) : (
-                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#064e3b', lineHeight: 1.5 }}>
+                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--primary)', lineHeight: 1.5 }}>
                       "{renderHighlightedAnswer(item.quickAnswer)}"
                     </div>
                   )}
@@ -449,8 +446,8 @@ export default function DefenseCommonView({ onOpenRule }) {
                       {item.keyAction}
                     </div>
 
-                    <div style={{ color: '#92400e', background: '#fffbeb', padding: '6px 9px', borderRadius: '6px', border: '1px solid #fde68a' }}>
-                      <strong>💡 조사관 대응 꿀팁: </strong>
+                    <div style={{ color: 'var(--warning)', background: 'var(--warning-light)', padding: '6px 9px', borderRadius: '6px', border: '1px solid var(--warning)' }}>
+                      <Lightbulb size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} /><strong>조사관 대응 꿀팁: </strong>
                       {item.goldenTip}
                     </div>
 

@@ -32,7 +32,7 @@ export default function Calculators() {
               fontWeight: 800,
               cursor: 'pointer',
               background: activeCalc === tab.id ? 'var(--primary)' : 'var(--surface-raised)',
-              color: activeCalc === tab.id ? '#fff' : 'var(--text-muted)',
+              color: activeCalc === tab.id ? 'var(--color-white)' : 'var(--text-muted)',
               transition: 'all 0.15s ease'
             }}
           >

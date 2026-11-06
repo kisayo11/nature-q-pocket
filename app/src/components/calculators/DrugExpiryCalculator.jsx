@@ -89,7 +89,7 @@ export default function DrugExpiryCalculator() {
             borderRadius: '8px',
             border: 'none',
             background: copied ? 'var(--success)' : 'var(--primary)',
-            color: '#fff',
+            color: 'var(--color-white)',
             fontWeight: 700,
             cursor: 'pointer',
             display: 'flex',

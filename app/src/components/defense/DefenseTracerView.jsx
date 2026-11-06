@@ -15,12 +15,12 @@ const ICON_MAP = {
 };
 
 const COLOR_MAP = {
-  amber: { bg: '#fffbeb', border: '#fde68a', text: '#b45309', badge: '#d97706' },
-  blue: { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8', badge: '#2563eb' },
-  rose: { bg: '#fff1f2', border: '#fecdd3', text: '#be123c', badge: '#e11d48' },
-  red: { bg: '#fef2f2', border: '#fecaca', text: '#b91c1c', badge: '#dc2626' },
-  teal: { bg: '#f0fdfa', border: '#99f6e4', text: '#0f766e', badge: '#0d9488' },
-  indigo: { bg: '#eef2ff', border: '#c7d2fe', text: '#4338ca', badge: '#4f46e5' }
+  amber: { bg: 'var(--warning-light)', border: 'var(--warning)', text: 'var(--warning)', badge: 'var(--warning)' },
+  blue: { bg: 'var(--color-hub-quick-bg)', border: 'var(--color-hub-quick-border)', text: 'var(--color-hub-quick-border)', badge: 'var(--color-hub-quick-border)' },
+  rose: { bg: 'var(--danger-light)', border: 'var(--danger)', text: 'var(--danger)', badge: 'var(--danger)' },
+  red: { bg: 'var(--danger-light)', border: 'var(--danger)', text: 'var(--danger)', badge: 'var(--danger)' },
+  teal: { bg: 'var(--primary-light)', border: 'var(--primary)', text: 'var(--primary)', badge: 'var(--primary)' },
+  indigo: { bg: 'var(--color-hub-dept-bg)', border: 'var(--color-hub-dept-border)', text: 'var(--color-hub-dept-border)', badge: 'var(--color-hub-dept-border)' }
 };
 
 export default function DefenseTracerView({ onOpenRule }) {
@@ -59,7 +59,7 @@ export default function DefenseTracerView({ onOpenRule }) {
                 border: '1px solid',
                 borderColor: isActive ? 'var(--primary)' : 'var(--border)',
                 background: isActive ? 'var(--primary)' : 'var(--surface)',
-                color: isActive ? '#fff' : 'var(--text-sub)',
+                color: isActive ? 'var(--color-white)' : 'var(--text-sub)',
                 fontSize: '12px',
                 fontWeight: isActive ? 800 : 600,
                 cursor: 'pointer',
@@ -68,7 +68,7 @@ export default function DefenseTracerView({ onOpenRule }) {
                 transition: 'all 0.15s ease'
               }}
             >
-              <TabIcon size={14} color={isActive ? '#fff' : 'var(--text-muted)'} />
+              <TabIcon size={14} color={isActive ? 'var(--color-white)' : 'var(--text-muted)'} />
               <span>{s.title}</span>
             </button>
           );
@@ -111,7 +111,7 @@ export default function DefenseTracerView({ onOpenRule }) {
                 style={{
                   fontSize: '10.5px',
                   fontWeight: 900,
-                  color: '#fff',
+                  color: 'var(--color-white)',
                   background: theme.badge,
                   padding: '2px 7px',
                   borderRadius: '4px'
@@ -133,8 +133,8 @@ export default function DefenseTracerView({ onOpenRule }) {
         {activeScenario.surveyorQuestion && (
           <div
             style={{
-              background: 'linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%)',
-              border: '1px solid #fecdd3',
+              background: 'var(--danger-light)',
+              border: '1px solid var(--color-rule-report-border)',
               borderRadius: '10px',
               padding: '12px 14px',
               display: 'flex',
@@ -142,11 +142,11 @@ export default function DefenseTracerView({ onOpenRule }) {
               gap: '4px'
             }}
           >
-            <div style={{ fontSize: '11px', fontWeight: 900, color: '#be123c', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <AlertTriangle size={13} color="#e11d48" />
+            <div style={{ fontSize: '11px', fontWeight: 900, color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <AlertTriangle size={13} color="var(--danger)" />
               <span>조사위원 돌발 현장 질문 (상황 부여)</span>
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 800, color: '#881337', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--danger)', lineHeight: 1.5 }}>
               "{activeScenario.surveyorQuestion}"
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function DefenseTracerView({ onOpenRule }) {
                   height: '24px',
                   borderRadius: '50%',
                   background: 'var(--primary)',
-                  color: '#fff',
+                  color: 'var(--color-white)',
                   fontSize: '11px',
                   fontWeight: 900,
                   display: 'flex',
@@ -237,8 +237,8 @@ export default function DefenseTracerView({ onOpenRule }) {
       {activeScenario.keyTip && (
         <div
           style={{
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
+            background: 'var(--warning-light)',
+            border: '1px solid var(--warning)',
             borderRadius: 'var(--radius-lg)',
             padding: '14px 16px',
             boxShadow: 'var(--shadow-xs)',
@@ -247,11 +247,11 @@ export default function DefenseTracerView({ onOpenRule }) {
             gap: '6px'
           }}
         >
-          <div style={{ fontSize: '12.5px', fontWeight: 900, color: '#92400e', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Zap size={14} color="#d97706" />
+          <div style={{ fontSize: '12.5px', fontWeight: 900, color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Zap size={14} color="var(--warning)" />
             <span>조사위원 감점 방지 꿀팁 (합격 포인트)</span>
           </div>
-          <div style={{ fontSize: '12.5px', color: '#78350f', lineHeight: 1.55, fontWeight: 700 }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--warning)', lineHeight: 1.55, fontWeight: 700 }}>
             {activeScenario.keyTip}
           </div>
         </div>

@@ -2,9 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { CHAPTERS, getChapterIdByCode } from '../data/chaptersData';
 import { isRuleMatchingDept } from '../utils/deptUtils';
 import {
-  Search, X, Star, Bookmark, Filter, ChevronRight, Check,
-  Sparkles, CheckCircle2, AlertTriangle, Layers, BookOpen, ShieldAlert
-} from 'lucide-react';
+  Search, X, Star, Bookmark, Filter, ChevronRight, Check, Sparkles, CheckCircle2, AlertTriangle, Layers, BookOpen, ShieldAlert, FileText } from 'lucide-react';
 
 // Choseong Helper
 function getChoseong(str) {
@@ -242,23 +240,23 @@ export default function HandbookBrowser({
         <div style={{
           margin: '10px 0 12px',
           padding: '12px 14px',
-          background: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
-          border: '1.5px solid #fda4af',
+          background: 'var(--color-rule-report-bg)',
+          border: '1.5px solid var(--color-rule-report-border)',
           borderRadius: '12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 10,
-          boxShadow: '0 2px 6px rgba(225,29,72,0.06)'
+          boxShadow: '0 2px 6px var(--color-shadow-tint)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: '20px', flexShrink: 0 }}>🚨</span>
+            <ShieldAlert size={20} color="var(--danger)" style={{ flexShrink: 0 }} />
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span>10대 탈락방지 필수 규정 (Must-Pass) 집중 모드</span>
-                <span style={{ fontSize: '10px', background: '#e11d48', color: '#fff', padding: '1px 5px', borderRadius: '4px' }}>필수</span>
+                <span style={{ fontSize: '10px', background: 'var(--danger)', color: 'var(--color-white)', padding: '1px 5px', borderRadius: '4px' }}>필수</span>
               </div>
-              <div style={{ fontSize: '11px', color: '#881337', marginTop: 2 }}>
+              <div style={{ fontSize: '11px', color: 'var(--danger)', marginTop: 2 }}>
                 인증 불인증 직결 항목 · 전 직원 100% 암기 및 즉시 행동 지침
               </div>
             </div>
@@ -269,9 +267,9 @@ export default function HandbookBrowser({
               padding: '5px 9px',
               fontSize: '11px',
               fontWeight: 700,
-              background: '#fff',
-              border: '1px solid #f43f5e',
-              color: '#e11d48',
+              background: 'var(--color-white)',
+              border: '1px solid var(--danger)',
+              color: 'var(--danger)',
               borderRadius: '6px',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
@@ -368,7 +366,7 @@ export default function HandbookBrowser({
                 <div className="item-footer">
                   <div className="item-tags-wrap">
                     {rule.forms && rule.forms[0] && (
-                      <span className="item-form-badge">📄 {rule.forms[0]}</span>
+                      <span className="item-form-badge"><FileText size={11} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '3px' }} />{rule.forms[0]}</span>
                     )}
                   </div>
                   <div className="item-open-btn">

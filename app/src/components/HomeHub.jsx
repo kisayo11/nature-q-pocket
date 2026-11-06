@@ -1,12 +1,29 @@
 import React from 'react';
 import {
-  BookOpen, ChevronRight, ShieldCheck, Stethoscope,
-  ShieldAlert, Zap, Clock, Award, Calculator
+  BookOpen, ChevronRight, ShieldCheck, Stethoscope, ShieldAlert, Zap, Clock,
+  Award, Star, Flame, UserCheck, Target, ClipboardList, Accessibility, Scan,
+  Pill, UtensilsCrossed, Wrench, FileText
 } from 'lucide-react';
 import {
   DEPARTMENTS,
   getRulesByDept
 } from '../utils/deptUtils';
+
+function getDeptIcon(name) {
+  switch (name) {
+    case '간호부': return <Stethoscope size={15} />;
+    case '진료부': return <UserCheck size={15} />;
+    case 'QPS실': return <Target size={15} />;
+    case '감염관리실': return <ShieldAlert size={15} />;
+    case '원무과': return <ClipboardList size={15} />;
+    case '재활치료실': return <Accessibility size={15} />;
+    case '방사선실': return <Scan size={15} />;
+    case '약제과': return <Pill size={15} />;
+    case '영양팀': return <UtensilsCrossed size={15} />;
+    case '시설팀': return <Wrench size={15} />;
+    default: return <Stethoscope size={15} />;
+  }
+}
 
 export default function HomeHub({
   rules = [],
@@ -23,238 +40,228 @@ export default function HomeHub({
   const masteryRate = Math.round((mustPassCheckedCount / mustPassTotal) * 100);
 
   return (
-    <div className="home-hub-clean-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '880px', margin: '0 auto', width: '100%' }}>
-      {/* 1. Integrated Hero Card (소속 부서 + 10대 필수 달성도 + 인쇄본 링크) */}
+    <div className="home-hub-clean-wrap">
+      {/* 1. Clinical Command Hero Station */}
       <section className="hub-hero-card">
+        {/* Masthead Header Strip */}
         <div className="hero-top-row">
-          <span className="hero-dept-tag">
-            <span className="hero-dept-dot" />
-            <span>{selectedDept} 인증 규정</span>
-          </span>
-          <span className="hero-status-pill">
-            4주기 인증 기준
+          <div className="hero-badge-cluster">
+            <span className="hero-dept-tag">
+              <span className="hero-dept-dot" />
+              <span>{selectedDept} 인증 규정</span>
+            </span>
+            <span className="hero-status-pill mono-num">
+              4주기 인증 기준 // OFFICIAL
+            </span>
+          </div>
+          <span className="hero-audit-badge mono-num">
+            58 RULES
           </span>
         </div>
 
-        <h1 className="hero-main-title">
-          네이처 요양병원 실무 규정집
-        </h1>
+        {/* Hero Title & Subtitle */}
+        <div className="hero-title-block">
+          <h1 className="hero-main-title">
+            네이처 요양병원 실무 규정집
+          </h1>
+          <p className="hero-subtitle">
+            의료기관 인증평가 12개 장 58개 규정 및 현장 조사위원 구두 질의 수검 방어 핸드북
+          </p>
+        </div>
 
-        {/* Must-Pass Checklist Progress */}
+        {/* Physical 10-Segmented LED Must-Pass Meter */}
         <div className="hero-progress-wrap">
           <div className="hero-progress-head">
-            <span className="hp-title">
-              <ShieldCheck size={15} color="var(--primary)" />
-              <span>★ 10대 탈락방지 필수 규정 (Must-Pass)</span>
-            </span>
-            <span className="hp-score">
-              <strong>{mustPassCheckedCount}</strong> / {mustPassTotal}항목 ({masteryRate}%)
-            </span>
+            <div className="hp-title">
+              <ShieldCheck size={16} />
+              <span>10대 탈락방지 필수 규정 (Must-Pass)</span>
+            </div>
+            <div className="hp-score mono-num">
+              <strong>{mustPassCheckedCount}</strong> / {mustPassTotal} 완료
+              <span className="hp-rate-pill">{masteryRate}%</span>
+            </div>
           </div>
-          <div className="hero-progress-track">
-            <div
-              className="hero-progress-fill"
-              style={{ width: `${Math.min(masteryRate, 100)}%` }}
-            />
+
+          {/* Discrete 10 LED Segment Cells */}
+          <div className="hero-progress-segments">
+            {Array.from({ length: mustPassTotal }).map((_, idx) => (
+              <div
+                key={idx}
+                className={`hp-segment-cell ${idx < mustPassCheckedCount ? 'active' : ''}`}
+                title={`필수 규정 ${idx + 1}번 숙지 현황`}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Direct Must-Pass Hotline Banner Button */}
-        <button
-          onClick={() => {
-            if (onOpenMustPass) onOpenMustPass();
-            else onNavigateTab('handbook');
-          }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '11px 14px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
-            border: '1.5px solid #fecdd3',
-            cursor: 'pointer',
-            color: '#9f1239',
-            transition: 'all 0.15s ease'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>🚨</span>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#e11d48' }}>
-                10대 필수 규정 핫라인 (원클릭 모드)
+        {/* Action Tray: Direct Hotline & Official Printed Handbook */}
+        <div className="hero-action-tray">
+          <button
+            className="hub-hotline-btn"
+            onClick={() => {
+              if (onOpenMustPass) onOpenMustPass();
+              else onNavigateTab('handbook');
+            }}
+            aria-label="10대 필수 규정 핫라인 열람"
+          >
+            <div className="hhb-left">
+              <div className="hhb-icon-wrap">
+                <ShieldAlert size={18} />
               </div>
-              <div style={{ fontSize: '11px', color: '#9f1239', marginTop: '1px' }}>
-                불인증 직결 핵심 10대 규정만 모아서 보기
+              <div className="hhb-text">
+                <div className="hhb-title">10대 필수 규정 핫라인</div>
+                <div className="hhb-sub">불인증 직결 필수 규정 모아보기</div>
               </div>
             </div>
+            <div className="hhb-cta-pill">
+              <span>열람</span>
+              <ChevronRight size={13} />
+            </div>
+          </button>
+
+          <a
+            href="/nature_handbook_print.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-handbook-link"
+            aria-label="핸드북 인쇄본 소책자 PDF 열람"
+          >
+            <div className="hhl-left">
+              <div className="hhl-icon-wrap">
+                <BookOpen size={16} />
+              </div>
+              <div className="hhl-text">
+                <span className="hhl-title">핸드북 소책자 PDF (68P)</span>
+                <span className="hhl-sub">원내 배포 인쇄본 원문 열람</span>
+              </div>
+            </div>
+            <div className="hhl-cta-pill">
+              <span>PDF</span>
+              <ChevronRight size={13} />
+            </div>
+          </a>
+        </div>
+      </section>
+
+      {/* 2. Dual Master Shortcuts Tray */}
+      <section className="hub-dual-shortcuts">
+        <button
+          className="hub-shortcut-btn shortcut-master"
+          onClick={() => onNavigateTab('common')}
+          aria-label="전직원 17대 마스터 수칙 열기"
+        >
+          <div className="hsc-left">
+            <div className="hsc-icon-wrap master">
+              <Star size={15} />
+            </div>
+            <div className="hsc-text">
+              <div className="hsc-title">전직원 17대 마스터 수칙</div>
+              <div className="hsc-sub">신체보호대·화재·욕창 핵심 질문</div>
+            </div>
           </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '3px',
-            fontSize: '11px',
-            fontWeight: 800,
-            background: '#fff',
-            color: '#e11d48',
-            padding: '4px 8px',
-            borderRadius: '6px',
-            border: '1px solid #fda4af'
-          }}>
-            <span>열람</span>
-            <ChevronRight size={13} />
+          <ChevronRight size={14} />
+        </button>
+
+        <button
+          className="hub-shortcut-btn shortcut-brigade"
+          onClick={() => onNavigateTab('brigade')}
+          aria-label="내 자위소방대 역할 열기"
+        >
+          <div className="hsc-left">
+            <div className="hsc-icon-wrap brigade">
+              <Flame size={15} />
+            </div>
+            <div className="hsc-text">
+              <div className="hsc-title">내 자위소방대 역할</div>
+              <div className="hsc-sub">주간 5대팀 & 야간 2대축 비상행동</div>
+            </div>
+          </div>
+          <ChevronRight size={14} />
+        </button>
+      </section>
+
+      {/* 3. 4-Grid Core Action Shortcuts */}
+      <section className="hub-core-actions-grid">
+        <button
+          className="hub-core-card active-tracer"
+          onClick={() => onNavigateTab('inspection')}
+          aria-label="실사 조사대응 콘솔 열기"
+        >
+          <div className="hcc-icon-wrap tracer">
+            <Zap size={20} />
+          </div>
+          <div className="hcc-info">
+            <div className="hcc-header-row">
+              <strong className="hcc-title">실사 조사대응</strong>
+              <span className="hcc-tag mono-num">3SEC</span>
+            </div>
+            <span className="hcc-sub">3초 구두답변 & 질의응답 Tracer</span>
           </div>
         </button>
 
-        {/* Essential Shortcuts Grid (전직원 공통 15대 + 자위소방대) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <button
-            onClick={() => onNavigateTab('common')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '10px 12px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
-              border: '1.5px solid #a7f3d0',
-              cursor: 'pointer',
-              textAlign: 'left',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '16px' }}>⭐</span>
-              <div>
-                <div style={{ fontSize: '12px', fontWeight: 900, color: '#047857' }}>
-                  전직원 17대 마스터 수칙
-                </div>
-                <div style={{ fontSize: '10px', color: '#065f46', marginTop: '1px' }}>
-                  신체보호대·화재·욕창 등
-                </div>
-              </div>
-            </div>
-            <ChevronRight size={13} color="#047857" />
-          </button>
-
-          <button
-            onClick={() => onNavigateTab('brigade')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '10px 12px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)',
-              border: '1.5px solid #fed7aa',
-              cursor: 'pointer',
-              textAlign: 'left',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '16px' }}>🚒</span>
-              <div>
-                <div style={{ fontSize: '12px', fontWeight: 900, color: '#c2410c' }}>
-                  내 자위소방대 역할
-                </div>
-                <div style={{ fontSize: '10px', color: '#9a3412', marginTop: '1px' }}>
-                  주간 5대팀 & 야간 2대축
-                </div>
-              </div>
-            </div>
-            <ChevronRight size={13} color="#c2410c" />
-          </button>
-        </div>
-
-        {/* Integrated Printed Handbook Link Button */}
-        <a
-          href="/nature_handbook_print.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hero-handbook-link"
-        >
-          <div className="hhl-left">
-            <BookOpen size={16} className="hhl-icon" />
-            <div className="hhl-text">
-              <span className="hhl-title">핸드북 소책자 PDF (68P)</span>
-              <span className="hhl-sub">원내 실물 배포본 전자책 전체 페이지 열람</span>
-            </div>
-          </div>
-          <ChevronRight size={16} className="hhl-arrow" />
-        </a>
-      </section>
-
-      {/* 2. 4-Grid Core Action Shortcuts (핵심 4대 기능 런처) */}
-      <section className="hub-core-actions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px' }}>
-        <div
-          className="hub-core-card"
-          onClick={() => onNavigateTab('inspection')}
-          style={{ cursor: 'pointer', padding: '13px 14px' }}
-        >
-          <div className="hcc-icon" style={{ background: '#ecfdf5', color: '#059669', width: '38px', height: '38px' }}>
-            <Zap size={22} />
-          </div>
-          <div className="hcc-info">
-            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>실사 조사대응</strong>
-            <span className="hcc-sub" style={{ fontSize: '11px' }}>3초 구두답변 & Tracer</span>
-          </div>
-        </div>
-
-        <div
-          className="hub-core-card"
+        <button
+          className="hub-core-card active-quick"
           onClick={() => onNavigateTab('golden')}
-          style={{ cursor: 'pointer', padding: '13px 14px' }}
+          aria-label="기준수치 및 계산기 열기"
         >
-          <div className="hcc-icon" style={{ background: '#eff6ff', color: '#2563eb', width: '38px', height: '38px' }}>
-            <Clock size={22} />
+          <div className="hcc-icon-wrap quick">
+            <Clock size={20} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>기준수치·계산기</strong>
-            <span className="hcc-sub" style={{ fontSize: '11px' }}>골든넘버 & 낙상·욕창</span>
+            <div className="hcc-header-row">
+              <strong className="hcc-title">기준수치·계산기</strong>
+              <span className="hcc-tag mono-num">14종</span>
+            </div>
+            <span className="hcc-sub">골든넘버 수치 & 낙상·욕창 도구</span>
           </div>
-        </div>
+        </button>
 
-        <div
-          className="hub-core-card"
+        <button
+          className="hub-core-card active-dept"
           onClick={() => onNavigateTab('quiz')}
-          style={{ cursor: 'pointer', padding: '13px 14px' }}
+          aria-label="실전 모의퀴즈 열기"
         >
-          <div className="hcc-icon" style={{ background: '#fffbeb', color: '#d97706', width: '38px', height: '38px' }}>
-            <Award size={22} />
+          <div className="hcc-icon-wrap quiz">
+            <Award size={20} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>실전 모의퀴즈</strong>
-            <span className="hcc-sub" style={{ fontSize: '11px' }}>60문항 암기카드 & 복습</span>
+            <div className="hcc-header-row">
+              <strong className="hcc-title">실전 모의퀴즈</strong>
+              <span className="hcc-tag mono-num">60Q</span>
+            </div>
+            <span className="hcc-sub">60문항 암기카드 & 복습 훈련</span>
           </div>
-        </div>
+        </button>
 
-        <div
-          className="hub-core-card"
+        <button
+          className="hub-core-card active-handbook"
           onClick={() => onNavigateTab('handbook')}
-          style={{ cursor: 'pointer', padding: '13px 14px' }}
+          aria-label="규정집 전체 열람하기"
         >
-          <div className="hcc-icon" style={{ background: '#fdf4ff', color: '#9333ea', width: '38px', height: '38px' }}>
-            <BookOpen size={22} />
+          <div className="hcc-icon-wrap handbook">
+            <BookOpen size={20} />
           </div>
           <div className="hcc-info">
-            <strong className="hcc-title" style={{ fontSize: '13.5px' }}>규정집 전체</strong>
-            <span className="hcc-sub" style={{ fontSize: '11px' }}>12개 챕터 58규정 원문</span>
+            <div className="hcc-header-row">
+              <strong className="hcc-title">규정집 전체</strong>
+              <span className="hcc-tag mono-num">58개</span>
+            </div>
+            <span className="hcc-sub">12개 챕터 58규정 원문 열람</span>
           </div>
-        </div>
+        </button>
       </section>
 
-      {/* 3. Department Filter Chips (부서별 주요 규정 바로가기) */}
+      {/* 4. Laboratory 10-Department Sequencer Rack */}
       <section className="hub-section-block">
-        <div className="hub-sec-header" style={{ marginBottom: '10px' }}>
+        <div className="hub-sec-header">
           <div className="hub-sec-title">
-            <Stethoscope size={17} color="var(--primary)" />
+            <Stethoscope size={16} />
             <span>부서별 주요 규정 바로가기</span>
           </div>
-          <span className="hub-sec-hint">선택 시 해당 부서 규정만 필터링</span>
+          <span className="hub-sec-hint mono-num">10 DEPARTMENTS</span>
         </div>
 
-        <div className="dept-chips-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 8 }}>
+        <div className="dept-chips-grid">
           {DEPARTMENTS.map((dept, idx) => {
             const ruleCount = getRulesByDept(rules, dept.name).length;
             const isSelected = selectedDept === dept.name;
@@ -267,11 +274,18 @@ export default function HomeHub({
                   onSelectDept(dept.name);
                   onNavigateTab('handbook');
                 }}
-                style={{ padding: '11px 8px' }}
+                aria-label={`${dept.name} 규정 ${ruleCount}개 보기`}
               >
-                <span className="dcb-icon">{dept.icon}</span>
-                <span className="dcb-name">{dept.name}</span>
-                <span className="dcb-count">{ruleCount}개</span>
+                <div className="dcb-icon-box">
+                  {getDeptIcon(dept.name)}
+                </div>
+                <div className="dcb-info">
+                  <span className="dcb-name">{dept.name}</span>
+                  <span className="dcb-count mono-num">{ruleCount}개</span>
+                </div>
+                {isSelected && (
+                  <div className="dcb-active-dot" />
+                )}
               </button>
             );
           })}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, HeartPulse, Droplets, ShieldAlert, X, PhoneCall, AlertTriangle, Clock } from 'lucide-react';
+import { Flame, HeartPulse, Droplets, ShieldAlert, X, PhoneCall, AlertTriangle, Clock, MapPin, Zap, FlaskConical } from 'lucide-react';
 
 export default function EmergencyModal({ type, onClose, spillKitData }) {
   const [currentType, setCurrentType] = useState(() => (type === 'menu' ? 'fire' : type));
@@ -41,8 +41,8 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         <div className="modal-header">
           <div className="modal-title">
             {currentType === 'fire' && <><Flame color="var(--danger)" /> 화재 비상 대응 (코드 레드)</>}
-            {currentType === 'cpr' && <><HeartPulse color="hsl(30, 95%, 45%)" /> 심폐소생술 & 제세동기 (코드 블루)</>}
-            {currentType === 'spill' && <><Droplets color="hsl(270, 70%, 50%)" /> Spill Kit (혈액·화학물질 유출)</>}
+            {currentType === 'cpr' && <><HeartPulse color="var(--warning)" /> 심폐소생술 & 제세동기 (코드 블루)</>}
+            {currentType === 'spill' && <><Droplets color="var(--color-emer-spill-fg)" /> Spill Kit (혈액·화학물질 유출)</>}
             {currentType === 'security' && <><ShieldAlert color="var(--secondary)" /> 원내 보안 비상 (폭력·도난·이탈)</>}
           </div>
           <button className="close-btn" onClick={onClose}><X size={18} /></button>
@@ -52,8 +52,8 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, marginBottom: 14 }}>
           {[
             { id: 'fire', label: '화재(900)', icon: Flame, color: 'var(--danger)' },
-            { id: 'cpr', label: 'CPR(900)', icon: HeartPulse, color: 'hsl(30, 95%, 45%)' },
-            { id: 'spill', label: '유출(스필)', icon: Droplets, color: 'hsl(270, 70%, 50%)' },
+            { id: 'cpr', label: 'CPR(900)', icon: HeartPulse, color: 'var(--warning)' },
+            { id: 'spill', label: '유출(스필)', icon: Droplets, color: 'var(--color-emer-spill-fg)' },
             { id: 'security', label: '보안(901)', icon: ShieldAlert, color: 'var(--secondary)' }
           ].map((item) => {
             const Icon = item.icon;
@@ -76,7 +76,7 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 3,
-                  transition: 'all 0.15s ease'
+                  transition: 'color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease'
                 }}
               >
                 <Icon size={14} color={isActive ? item.color : 'var(--text-muted)'} />
@@ -90,16 +90,16 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         {currentType === 'fire' && (
           <div>
             <div className="quick-answer-banner" style={{ background: 'var(--danger-light)', borderColor: 'var(--danger)' }}>
-              <div style={{ color: 'var(--danger)', fontWeight: 800, marginBottom: 4 }}>🚨 화재 발견 시 즉시 통보 번호</div>
+              <div style={{ color: 'var(--danger)', fontWeight: 800, marginBottom: 4 }}><ShieldAlert size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />화재 발견 시 즉시 통보 번호</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
                 <span style={{ fontSize: '15px', fontWeight: 900 }}>주간 원무과: 내선 900번</span>
-                <a href="tel:900" style={{ background: 'var(--danger)', color: '#fff', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <a href="tel:900" style={{ background: 'var(--danger)', color: 'var(--color-white)', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
                   <PhoneCall size={13} /> 주간 900번
                 </a>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px dashed rgba(220, 38, 38, 0.3)' }}>
-                <span style={{ fontSize: '14px', fontWeight: 800, color: '#991b1b' }}>야간/휴일: 당직실 010-4297-2770</span>
-                <a href="tel:01042972770" style={{ background: '#991b1b', color: '#fff', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 6, borderTop: '1px dashed var(--color-rule-report-border)' }}>
+                <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--danger)' }}>야간/휴일: 당직실 010-4297-2770</span>
+                <a href="tel:01042972770" style={{ background: 'var(--danger)', color: 'var(--color-white)', padding: '4px 10px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}>
                   <PhoneCall size={13} /> 당직실 연결
                 </a>
               </div>
@@ -108,7 +108,7 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
             <div style={{ marginTop: 14 }}>
               <div className="detail-subheading">인원별 초기 행동 요령</div>
               <div style={{ background: 'var(--surface-raised)', borderRadius: '8px', padding: '10px 12px', fontSize: '13px', lineHeight: 1.6 }}>
-                <div><strong>• 1인 근무:</strong> 최초 발견자가 "00호실 불났어요!" 구두 전파 ➔ 내선 900 통보 및 발신기 누름 ➔ 소화기 초기진화</div>
+                <div><strong>• 1인 근무:</strong> 최초 발견자가 “00호실 불났어요!” 구두 전파 ➔ 내선 900 통보 및 발신기 누름 ➔ 소화기 초기진화</div>
                 <div><strong>• 2인 근무:</strong> 1명(선임간호사: 통보 및 방송의뢰) ➔ 1명(보조간호인력: 소화기 진화 및 피난 유도)</div>
                 <div><strong>• 3인 이상:</strong> 1명(통보/방송의뢰) ➔ 1명(피난 유도 및 방화문 폐쇄) ➔ 1명(소화기/소화전 초기진화)</div>
               </div>
@@ -133,7 +133,7 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
             </div>
 
             <div style={{ marginTop: 14, background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: '8px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800 }}>📍 최종 옥외 집결지: <span style={{ color: 'var(--danger)' }}>병원 앞 공터</span></div>
+              <div style={{ fontSize: '13px', fontWeight: 800 }}><MapPin size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />최종 옥외 집결지: <span style={{ color: 'var(--danger)' }}>병원 앞 공터</span></div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 2 }}>대피 시 승강기(엘리베이터) 탑승 절대 금지! 방화문 닫으며 계단 이동.</div>
             </div>
           </div>
@@ -142,16 +142,16 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         {/* 2. CPR & AED Content */}
         {currentType === 'cpr' && (
           <div>
-            <div className="quick-answer-banner" style={{ background: 'hsl(45, 100%, 94%)', borderColor: 'hsl(40, 95%, 50%)' }}>
-              <div style={{ color: 'hsl(30, 95%, 40%)', fontWeight: 800, marginBottom: 4 }}>⚡ CPR 비상방송 요청</div>
+            <div className="quick-answer-banner" style={{ background: 'var(--warning-light)', borderColor: 'var(--warning)' }}>
+              <div style={{ color: 'var(--warning)', fontWeight: 800, marginBottom: 4 }}><Zap size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />CPR 비상방송 요청</div>
               <div style={{ fontSize: '14.5px', fontWeight: 800, lineHeight: 1.5 }}>
-                내선 <strong>900번</strong> (야간/휴일: <strong>당직실 010-4297-2770</strong>) ➔ <strong>"CPR + 발생장소"</strong> 2회 방송 요청
+                내선 <strong>900번</strong> (야간/휴일: <strong>당직실 010-4297-2770</strong>) ➔ <strong>“CPR + 발생장소”</strong> 2회 방송 요청
               </div>
               <div style={{ marginTop: 6, display: 'flex', gap: 8 }}>
-                <a href="tel:900" style={{ background: 'hsl(30, 95%, 45%)', color: '#fff', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <a href="tel:900" style={{ background: 'var(--warning)', color: 'var(--color-white)', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <PhoneCall size={13} /> 주간 900번
                 </a>
-                <a href="tel:01042972770" style={{ background: '#92400e', color: '#fff', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <a href="tel:01042972770" style={{ background: 'var(--warning)', color: 'var(--color-white)', padding: '4px 10px', borderRadius: '6px', textDecoration: 'none', fontWeight: 700, fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <PhoneCall size={13} /> 당직실 연결
                 </a>
               </div>
@@ -166,7 +166,7 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
               <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
                 <button
                   onClick={() => setTimerRunning(!timerRunning)}
-                  style={{ background: timerRunning ? 'var(--text-muted)' : 'var(--danger)', color: '#fff', border: 'none', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
+                  style={{ background: timerRunning ? 'var(--text-muted)' : 'var(--danger)', color: 'var(--color-white)', border: 'none', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
                 >
                   {timerRunning ? '일시정지' : '3분 타이머 시작'}
                 </button>
@@ -182,14 +182,14 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
             <div style={{ marginTop: 12 }}>
               <div className="detail-subheading">원내 제세동기(AED) 보관 위치</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                <div style={{ background: 'var(--surface-raised)', padding: '10px', borderRadius: '8px', borderLeft: '4px solid var(--primary)' }}>
+                <div style={{ background: 'var(--surface-raised)', padding: '10px', borderRadius: '8px', border: '1px solid var(--primary)' }}>
                   <div style={{ fontWeight: 800, fontSize: '13px' }}>1층 ~ 4층 관할</div>
                   <div style={{ fontSize: '14px', fontWeight: 900, color: 'var(--primary)', marginTop: 2 }}>3병동 간호스테이션 앞</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>내선: 300번</div>
                 </div>
-                <div style={{ background: 'var(--surface-raised)', padding: '10px', borderRadius: '8px', borderLeft: '4px solid var(--secondary)' }}>
+                <div style={{ background: 'var(--surface-raised)', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                   <div style={{ fontWeight: 800, fontSize: '13px' }}>5층 ~ 8층 관할</div>
-                  <div style={{ fontSize: '14px', fontWeight: 900, color: 'var(--secondary)', marginTop: 2 }}>6병동 간호스테이션 앞</div>
+                  <div style={{ fontSize: '14px', fontWeight: 900, color: 'var(--text-main)', marginTop: 2 }}>6병동 간호스테이션 앞</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>내선: 600번</div>
                 </div>
               </div>
@@ -204,8 +204,8 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         {/* 3. Spill Kit Content */}
         {currentType === 'spill' && (
           <div>
-            <div className="quick-answer-banner" style={{ background: 'hsl(270, 70%, 95%)', borderColor: 'hsl(270, 60%, 60%)' }}>
-              <div style={{ color: 'hsl(270, 60%, 45%)', fontWeight: 800, marginBottom: 4 }}>🧪 {spillKitData.blood.title}</div>
+            <div className="quick-answer-banner" style={{ background: 'var(--color-emer-spill-bg)', borderColor: 'var(--color-card-purple)' }}>
+              <div style={{ color: 'var(--color-emer-spill-fg)', fontWeight: 800, marginBottom: 4 }}><FlaskConical size={14} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />{spillKitData.blood.title}</div>
               <div style={{ fontSize: '12px', marginBottom: 6 }}>적용 부서: {spillKitData.blood.departments.join(', ')}</div>
               <div style={{ fontSize: '14px', fontWeight: 700, lineHeight: 1.5 }}>
                 {spillKitData.blood.steps.map((step, index) => (
@@ -228,7 +228,7 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
             </div>
 
             <div style={{ marginTop: 12, fontSize: '12px', color: 'var(--text-muted)' }}>
-              ⚠️ 주의: {spillKitData.blood.cautions}
+              <AlertTriangle size={13} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: '4px' }} />주의: {spillKitData.blood.cautions}
             </div>
 
             <details style={{ marginTop: 14, background: 'var(--surface-raised)', padding: '10px 12px', borderRadius: 8 }}>
@@ -251,17 +251,17 @@ export default function EmergencyModal({ type, onClose, spillKitData }) {
         {currentType === 'security' && (
           <div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid var(--secondary)' }}>
-                <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--secondary)' }}>폭력 및 진료방해/난동</div>
+              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--text-main)' }}>폭력 및 진료방해/난동</div>
                 <div style={{ fontSize: '13px', marginTop: 4 }}>원무과장(내선 901) 보고 ➔ 직원 분리 및 피해자 보호 ➔ 112 경찰 신고</div>
               </div>
 
-              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid hsl(30, 95%, 45%)' }}>
-                <div style={{ fontWeight: 800, fontSize: '14px', color: 'hsl(30, 95%, 45%)' }}>도난 사고</div>
+              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--warning)' }}>도난 사고</div>
                 <div style={{ fontSize: '13px', marginTop: 4 }}>시설팀장(내선 923) 통보 ➔ 행정부장 보고 ➔ 원내 방송 및 CCTV 확인</div>
               </div>
 
-              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', borderLeft: '4px solid var(--danger)' }}>
+              <div style={{ background: 'var(--surface-raised)', padding: '12px', borderRadius: '8px', border: '1px solid var(--danger)' }}>
                 <div style={{ fontWeight: 800, fontSize: '14px', color: 'var(--danger)' }}>인지저하 환자 무단외출 (이탈)</div>
                 <div style={{ fontSize: '13px', marginTop: 4 }}>목격 즉시 원무과장(내선 901) 연락 ➔ 전 직원 비상 순찰 방송 ➔ 관할 대왕파출소(02-3411-0323, 112) 및 보호자 즉시 연락</div>
               </div>
