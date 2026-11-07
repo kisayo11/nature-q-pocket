@@ -3,26 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>야간근무자 소방안전 전달교육 교보재 - 네이처요양병원</title>
+  <title>야간근무자 소방안전 전달교육자료 - 네이처요양병원</title>
   <style>
-    /* Hallmark Floor & Base Reset */
-    :root {
-      --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", Dotum, sans-serif;
-      --color-primary: #1e3a8a;       /* Deep Navy */
-      --color-primary-dark: #0f172a;  /* Dark Slate */
-      --color-danger: #dc2626;        /* Fire Red */
-      --color-danger-dark: #991b1b;   /* Crimson */
-      --color-danger-light: #fef2f2;  /* Soft Red Tint */
-      --color-amber: #b45309;         /* Amber */
-      --color-amber-light: #fffbeb;   /* Warm Yellow Tint */
-      --color-slate-50: #f8fafc;
-      --color-slate-100: #f1f5f9;
-      --color-slate-200: #e2e8f0;
-      --color-slate-400: #94a3b8;
-      --color-slate-600: #475569;
-      --color-slate-700: #334155;
-      --color-slate-900: #0f172a;
-    }
+    /* ==========================================================================
+       네이처요양병원 공식 인쇄 문서 스타일 (A4 규격 / 정규 보고서·교보재 양식)
+       - 가독성 중심: 본문 10.5pt ~ 11pt, 제목 13pt ~ 20pt
+       - 웹 요소(플로팅 바, 파스텔 카드, 배지 등) 전면 배제
+       - 공문서·병원 지침서 표준 흑백/단색 표 및 테두리 레이아웃
+       ========================================================================== */
 
     * {
       box-sizing: border-box;
@@ -33,79 +21,31 @@
     }
 
     html, body {
-      font-family: var(--font-base);
-      background-color: #525659;
-      color: var(--color-slate-900);
-      line-height: 1.45;
-      font-size: 11pt;
-      overflow-x: clip;
+      font-family: "Malgun Gothic", "맑은 고딕", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", Dotum, sans-serif;
+      background-color: #f1f3f5;
+      color: #111827;
+      line-height: 1.55;
+      font-size: 10.5pt;
+      letter-spacing: -0.3px;
     }
 
-    /* Screen-only Action Toolbar */
-    .screen-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 9999;
-      background: #1e293b;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    }
-    .screen-toolbar h1 {
-      font-size: 14pt;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .screen-toolbar .actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .btn-print {
-      background: #dc2626;
-      color: #fff;
-      border: none;
-      padding: 8px 18px;
-      font-size: 11pt;
-      font-weight: 700;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s ease;
-    }
-    .btn-print:hover {
-      background: #b91c1c;
-    }
-    .toolbar-tip {
-      font-size: 9.5pt;
-      color: #cbd5e1;
-    }
-
-    /* Sheet Layout (Simulated A4 Pages) */
-    .page-container {
-      padding: 24px 0 40px;
+    /* Screen Wrapper: 실제 A4 용지 2장 중앙 배치 */
+    .doc-wrapper {
+      padding: 30px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 24px;
+      gap: 30px;
     }
 
     .sheet {
       width: 210mm;
-      min-height: 297mm;
       height: 297mm;
       max-height: 297mm;
-      padding: 12mm 14mm 10mm 14mm;
+      min-height: 297mm;
+      padding: 15mm 16mm 14mm 16mm;
       background: #ffffff;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -113,279 +53,236 @@
       overflow: hidden;
     }
 
-    /* Header Component */
-    .doc-header {
-      border-bottom: 2px solid var(--color-danger);
-      padding-bottom: 8px;
-      margin-bottom: 10px;
+    /* --------------------------------------------------
+       공식 문서 헤더 (Official Document Header)
+       -------------------------------------------------- */
+    .doc-top-bar {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      border-bottom: 2px solid #1e293b;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
     }
-    .header-main {
-      flex: 1;
-    }
-    .badge-sub {
-      display: inline-block;
-      font-size: 8pt;
-      font-weight: 700;
-      color: #fff;
-      background: var(--color-danger);
-      padding: 2px 7px;
-      border-radius: 3px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-    .doc-title {
-      font-size: 17pt;
-      font-weight: 800;
-      color: var(--color-slate-900);
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .doc-subtitle {
+    .doc-category {
       font-size: 9.5pt;
-      color: var(--color-slate-600);
-      margin-top: 2px;
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.5px;
     }
-    .header-meta {
+    .doc-meta {
+      font-size: 9pt;
+      color: #475569;
       text-align: right;
-      font-size: 8.5pt;
-      color: var(--color-slate-600);
-      border-left: 1px solid var(--color-slate-200);
-      padding-left: 12px;
       line-height: 1.4;
     }
-    .header-meta strong {
-      color: var(--color-slate-900);
+    .doc-meta strong {
+      color: #0f172a;
+    }
+    .doc-meta .danger-text {
+      color: #b91c1c;
+      font-weight: 700;
     }
 
-    /* Content Area */
+    .doc-title-area {
+      text-align: center;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    .main-title {
+      font-size: 19pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .sub-title {
+      font-size: 10.5pt;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    /* --------------------------------------------------
+       본문 레이아웃 및 섹션 (Body Sections)
+       -------------------------------------------------- */
     .sheet-body {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 13px;
     }
 
-    /* Section Component */
-    .section-block {
-      border: 1px solid var(--color-slate-200);
-      border-radius: 6px;
-      background: #fff;
-      overflow: hidden;
-    }
     .section-title {
-      font-size: 10.5pt;
+      font-size: 12.5pt;
       font-weight: 700;
-      background: var(--color-slate-100);
-      padding: 5px 10px;
-      border-bottom: 1px solid var(--color-slate-200);
+      color: #0f172a;
+      border-left: 4.5px solid #1e3a8a;
+      padding-left: 8px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: var(--color-primary-dark);
     }
-    .section-title .step-pill {
-      font-size: 7.5pt;
-      background: var(--color-primary);
-      color: #fff;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: 600;
+    .section-title.danger {
+      border-left-color: #b91c1c;
     }
-    .section-content {
-      padding: 7px 10px;
+    .section-tag {
       font-size: 9pt;
-      color: var(--color-slate-700);
+      font-weight: 600;
+      color: #475569;
     }
 
-    /* Grid & Cards */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+    /* 표준 문서 박스 */
+    .doc-box {
+      border: 1px solid #94a3b8;
+      background: #f8fafc;
+      padding: 9px 12px;
+      border-radius: 2px;
     }
-    .grid-3 {
+    .doc-box.alert {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+
+    /* 3단 그리드 (RACE 단계) */
+    .race-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      gap: 9px;
     }
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+    .race-card {
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      padding: 9px 10px;
     }
+    .race-card.c1 { border-top: 3.5px solid #dc2626; }
+    .race-card.c2 { border-top: 3.5px solid #b45309; }
+    .race-card.c3 { border-top: 3.5px solid #1e3a8a; }
 
-    /* Step Cards */
-    .action-step-card {
-      border: 1px solid var(--color-slate-200);
-      border-radius: 5px;
-      background: var(--color-slate-50);
-      padding: 6px 8px;
-      position: relative;
-    }
-    .action-step-card.danger {
-      border-color: #fca5a5;
-      background: #fff5f5;
-    }
-    .action-step-card.warning {
-      border-color: #fcd34d;
-      background: #fffbeb;
-    }
-    .action-step-card.primary {
-      border-color: #93c5fd;
-      background: #eff6ff;
-    }
-    .card-head {
+    .race-head {
+      font-size: 11pt;
       font-weight: 700;
-      font-size: 9pt;
-      margin-bottom: 3px;
+      color: #0f172a;
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
       gap: 5px;
     }
-    .card-head.danger { color: var(--color-danger); }
-    .card-head.warning { color: var(--color-amber); }
-    .card-head.primary { color: var(--color-primary); }
+    .race-head.c1 { color: #b91c1c; }
+    .race-head.c2 { color: #b45309; }
+    .race-head.c3 { color: #1e3a8a; }
 
-    .card-desc {
-      font-size: 8.5pt;
-      line-height: 1.35;
-      color: var(--color-slate-700);
+    .race-desc {
+      font-size: 9.5pt;
+      line-height: 1.5;
+      color: #334155;
     }
-
-    /* Callout & Tables */
-    .callout-box {
-      border-left: 3px solid var(--color-danger);
-      background: var(--color-danger-light);
-      padding: 6px 10px;
-      border-radius: 0 4px 4px 0;
-      margin: 3px 0;
-    }
-    .callout-title {
-      font-size: 9pt;
-      font-weight: 700;
-      color: var(--color-danger-dark);
-      margin-bottom: 2px;
-    }
-    .callout-desc {
-      font-size: 8.5pt;
-      color: var(--color-slate-800);
-      line-height: 1.35;
+    .race-desc strong {
+      color: #0f172a;
     }
 
-    /* High-Density Data Tables */
-    table.data-table {
+    /* --------------------------------------------------
+       공식 문서 표 스타일 (Official Data Table)
+       -------------------------------------------------- */
+    table.doc-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 8.5pt;
-      text-align: left;
+      font-size: 10pt;
+      margin-top: 2px;
+      line-height: 1.45;
     }
-    table.data-table th, table.data-table td {
-      border: 1px solid var(--color-slate-200);
-      padding: 4px 7px;
+    table.doc-table th,
+    table.doc-table td {
+      border: 1px solid #94a3b8;
+      padding: 6px 9px;
       vertical-align: middle;
     }
-    table.data-table th {
-      background: var(--color-slate-100);
+    table.doc-table th {
+      background: #e2e8f0;
       font-weight: 700;
-      color: var(--color-slate-700);
+      color: #0f172a;
       text-align: center;
     }
-    table.data-table td.center {
+    table.doc-table td.center {
       text-align: center;
     }
-    table.data-table tr.highlight {
-      background: #fffbeb;
+    table.doc-table tr.highlight td {
+      background: #f1f5f9;
     }
 
-    /* Key Numbers Badge */
-    .golden-pill {
-      display: inline-block;
-      font-size: 8pt;
+    /* 2단 나란히 배치 */
+    .row-2col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 10px;
+    }
+
+    /* 3단 대피구역 */
+    .zone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .zone-box {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      padding: 8px 10px;
+    }
+    .zone-title {
+      font-size: 10pt;
       font-weight: 700;
-      color: #fff;
-      background: var(--color-primary);
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-right: 4px;
+      color: #1e3a8a;
+      margin-bottom: 3px;
     }
-    .danger-pill {
-      display: inline-block;
-      font-size: 8pt;
-      font-weight: 700;
-      color: #fff;
-      background: var(--color-danger);
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-right: 4px;
+    .zone-title.danger {
+      color: #b91c1c;
+    }
+    .zone-desc {
+      font-size: 9pt;
+      color: #334155;
+      line-height: 1.4;
     }
 
-    /* Sign-off Table */
-    table.sign-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 8pt;
-    }
-    table.sign-table th, table.sign-table td {
-      border: 1px solid var(--color-slate-300);
-      padding: 3px 6px;
-      text-align: center;
-    }
-    table.sign-table th {
-      background: var(--color-slate-100);
-      font-weight: 600;
-      height: 20px;
-    }
-    table.sign-table td {
-      height: 22px;
-    }
-
-    /* Footer */
+    /* --------------------------------------------------
+       공식 문서 푸터 (Official Document Footer)
+       -------------------------------------------------- */
     .doc-footer {
-      border-top: 1px solid var(--color-slate-200);
+      border-top: 1px solid #94a3b8;
       padding-top: 6px;
-      margin-top: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 7.5pt;
-      color: var(--color-slate-400);
+      font-size: 8.5pt;
+      color: #64748b;
     }
-    .doc-footer .institution {
+    .doc-footer .org-name {
       font-weight: 700;
-      color: var(--color-slate-600);
-      letter-spacing: 0.5px;
+      color: #334155;
     }
 
-    /* Print Styles */
+    /* --------------------------------------------------
+       인쇄 미디어 쿼리 (A4 Print Exact Settings)
+       -------------------------------------------------- */
     @media print {
       @page {
         size: A4 portrait;
         margin: 0;
       }
-      body, html {
-        background: #fff;
-        font-size: 9.5pt;
+      html, body {
+        background: #ffffff;
+        font-size: 10.5pt;
         margin: 0;
         padding: 0;
       }
-      .screen-toolbar {
-        display: none !important;
-      }
-      .page-container {
+      .doc-wrapper {
         padding: 0;
-        margin: 0;
         gap: 0;
       }
       .sheet {
         box-shadow: none;
         margin: 0;
-        padding: 10mm 13mm 8mm 13mm;
+        padding: 13mm 16mm 12mm 16mm;
         width: 210mm;
         height: 297mm;
         max-height: 297mm;
@@ -404,178 +301,161 @@
 </head>
 <body>
 
-  <!-- Screen Action Toolbar -->
-  <aside class="screen-toolbar" aria-label="인쇄 도구">
-    <h1>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      네이처요양병원 소방안전 교보재 (야간 전달교육용 유인물)
-    </h1>
-    <div class="actions">
-      <span class="toolbar-tip">A4 용지 규격 (2페이지 양면 인쇄 최적화 / 여백: 보통 또는 기본값 권장)</span>
-      <button class="btn-print" onclick="window.print()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        A4 즉시 인쇄 (Ctrl+P)
-      </button>
-    </div>
-  </aside>
+  <div class="doc-wrapper">
 
-  <main class="page-container">
-
-    <!-- ========================================== -->
-    <!-- PAGE 1: 야간 비상대응 행동요령 & 자위소방대 -->
-    <!-- ========================================== -->
+    <!-- ========================================================================== -->
+    <!-- [PAGE 1] 야간근무자 화재대응 실무 매뉴얼                                    -->
+    <!-- ========================================================================== -->
     <article class="sheet" id="page-1">
-      <!-- Document Header -->
-      <header class="doc-header">
-        <div class="header-main">
-          <span class="badge-sub">2025~2026 소방안전교육 전달교육 교보재</span>
-          <h1 class="doc-title">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-            야간근무자 화재대응 핵심 실무 매뉴얼
-          </h1>
-          <p class="doc-subtitle">화재안전 관리활동(인증규정 10.6) 기반 취약시간대 초기진압 및 인명피난 행동수칙</p>
+      
+      <!-- 상단 공문서 헤더 -->
+      <div>
+        <div class="doc-top-bar">
+          <div class="doc-category">[소방안전 전달교육자료] 4주기 요양병원 인증기준 10.6 준용</div>
+          <div class="doc-meta">
+            주관부서: <strong>시설팀</strong> &nbsp;|&nbsp;
+            소방안전관리자: <strong>정평오 팀장</strong> &nbsp;|&nbsp;
+            비상연락: <span class="danger-text">내선 900번</span> (원무과)
+          </div>
         </div>
-        <div class="header-meta">
-          <div>주관부서: <strong>시설팀 · 간호부</strong></div>
-          <div>소방안전관리자: <strong>정평오 시설팀장</strong></div>
-          <div>비상내선: <strong style="color:var(--color-danger); font-size:11pt;">900번</strong> (상황실)</div>
-        </div>
-      </header>
 
-      <!-- Sheet Body -->
+        <div class="doc-title-area">
+          <h1 class="main-title">야간근무자 화재대응 실무 매뉴얼</h1>
+          <p class="sub-title">화재안전 취약시간대(야간·휴일) 초기진압 및 인명피난 표준 행동수칙</p>
+        </div>
+      </div>
+
+      <!-- 본문 영역 -->
       <div class="sheet-body">
 
-        <!-- 섹션 1: 야간 화재 발견 시 즉시 3대 행동 (골든타임 3분) -->
-        <section class="section-block">
+        <!-- 1. RACE 초기대응 -->
+        <section>
           <div class="section-title">
             <span>1. 화재 발견 시 즉시 3대 행동 요령 (RACE 초기대응)</span>
-            <span class="step-pill">골든타임 3분 이내</span>
+            <span class="section-tag">※ 골든타임 3분 이내 신속 조치</span>
           </div>
-          <div class="section-content">
-            <div class="grid-3">
-              <div class="action-step-card danger">
-                <div class="card-head danger">
-                  <span class="danger-pill">1단계</span> 알리기 (전파·신고)
-                </div>
-                <div class="card-desc">
-                  • 큰 소리로 <strong>"불이야!"</strong> 3회 외침<br>
-                  • 복도 <strong>소화전 발신기 버튼</strong> 강타<br>
-                  • <strong>원내 900번</strong>(원무당직) + <strong>119</strong> 신고<br>
-                  <em>(화재 층수, 호실, 환자 상태 전달)</em>
-                </div>
+          <div class="race-grid">
+            <div class="race-card c1">
+              <div class="race-head c1">[1단계] 알리기 (전파·신고)</div>
+              <div class="race-desc">
+                • 육성으로 <strong>"불이야!"</strong> 3회 크게 외침<br>
+                • 복도 <strong>소화전 발신기(비상벨)</strong> 강타<br>
+                • <strong>원내 900번</strong>(원무당직) 즉시 보고<br>
+                • <strong>119 신고</strong> (층수, 호실, 환자상태)
               </div>
-              <div class="action-step-card warning">
-                <div class="card-head warning">
-                  <span class="golden-pill">2단계</span> 가두기 (연기 차단)
-                </div>
-                <div class="card-desc">
-                  • 발화실 내 환자 우선 구출<br>
-                  • <strong>발화실 출입문 즉시 닫기</strong><br>
-                  • 복도 <strong>방화문(양측 계단실) 폐쇄</strong><br>
-                  <em>(산소 유입 및 연기 확산 차단 필수)</em>
-                </div>
+            </div>
+            <div class="race-card c2">
+              <div class="race-head c2">[2단계] 가두기 (연기 차단)</div>
+              <div class="race-desc">
+                • 발화실 내 환자 최우선 구출<br>
+                • <strong>발화실 출입문 즉시 폐쇄</strong><br>
+                • 복도 <strong>방화문(계단실 입구) 닫기</strong><br>
+                • 산소 유입 및 유독가스 확산 방지
               </div>
-              <div class="action-step-card primary">
-                <div class="card-head primary">
-                  <span class="golden-pill">3단계</span> 끄기 / 대피 전환
-                </div>
-                <div class="card-desc">
-                  • 소화기/옥내소화전 <strong>초기진화</strong><br>
-                  • <strong>화염이 천장 도달 시 즉시 중단</strong><br>
-                  • 소화 포기 ➔ <strong>환자 피난유도 전환</strong><br>
-                  <em>(無理한 단독 진화 절대 금지)</em>
-                </div>
+            </div>
+            <div class="race-card c3">
+              <div class="race-head c3">[3단계] 끄기 / 대피 전환</div>
+              <div class="race-desc">
+                • 소화기·옥내소화전으로 <strong>초기소화</strong><br>
+                • <strong>화염이 천장 도달 시 즉시 소화 중단</strong><br>
+                • 지체 없이 <strong>환자 피난유도로 전환</strong><br>
+                • <em>(무리한 단독 진화 절대 금지)</em>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- 섹션 2: 야간 최소인력 자위소방대 역할 분담표 -->
-        <section class="section-block">
+        <!-- 2. 야간 자위소방대 편성 및 임무 -->
+        <section>
           <div class="section-title">
-            <span>2. 야간 자위소방대 편성 및 필수 임무 (당직 인력 체계)</span>
-            <span class="step-pill">10.6 부록3 준용</span>
+            <span>2. 야간 자위소방대 편성 및 핵심 임무 (당직 최소인력 체계)</span>
+            <span class="section-tag">규정 10.6 부록3</span>
           </div>
-          <div class="section-content">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th style="width: 17%;">구분 / 직책</th>
-                  <th style="width: 25%;">담당 인력</th>
-                  <th>화재 발생 시 핵심 임무 및 행동 절차</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="highlight">
-                  <td class="center"><strong>지휘통제반</strong></td>
-                  <td class="center"><strong>야간 당직의사</strong></td>
-                  <td>• 현장 총괄 지휘 및 환자 대피 우선순위 결정<br>• 원무당직실에 119 신고 확인 및 소방대 도착 시 현장 브리핑</td>
-                </tr>
-                <tr>
-                  <td class="center"><strong>통보연락반</strong></td>
-                  <td class="center"><strong>원무과(보안) 당직자</strong></td>
-                  <td>• <strong>원내 코드레드 비상방송 2회</strong> 즉시 실시<br>• 119 신고, 승강기 정지(1층), 지상 1층 출입구 개방 및 소방차 유도</td>
-                </tr>
-                <tr>
-                  <td class="center"><strong>초기소화반</strong></td>
-                  <td class="center"><strong>발화층 간호사 (Night)</strong></td>
-                  <td>• 복도 소화기(ABC분말) 및 옥내소화전 즉시 분사 (초기진압)<br>• 산소 공급 밸브(Zone Valve) 차단 및 이동형 산소탱크 반출</td>
-                </tr>
-                <tr>
-                  <td class="center"><strong>피난유도반</strong></td>
-                  <td class="center"><strong>인접층 간호사 · 간병사</strong></td>
-                  <td>• 화재 반대편 피난계단으로 환자 유도 (와상환자 시트 슬라이딩)<br>• 대피 완료된 병실 문에 <strong>"대피완료" 표식</strong> 부착 및 인원 점검</td>
-                </tr>
-              </tbody>
-            </table>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width: 18%;">구분 / 직책</th>
+                <th style="width: 26%;">담당 인력</th>
+                <th>화재 발생 시 핵심 임무 및 행동 절차</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlight">
+                <td class="center"><strong>지휘통제반</strong></td>
+                <td class="center"><strong>야간 당직의사</strong></td>
+                <td>• 화재 현장 총괄 지휘 및 환자 대피 우선순위 결정<br>• 원무당직실 119 신고 확인 및 소방대 도착 시 현장 지휘 인계</td>
+              </tr>
+              <tr>
+                <td class="center"><strong>통보연락반</strong></td>
+                <td class="center"><strong>원무과 야간 당직자</strong></td>
+                <td>• <strong>원내 코드레드 비상방송 2회</strong> 즉시 실시<br>• 119 신고, 승강기 1층 정지, 지상 1층 출입구 개방 및 소방차 유도</td>
+              </tr>
+              <tr>
+                <td class="center"><strong>초기소화반</strong></td>
+                <td class="center"><strong>발화층 간호사 (Night)</strong></td>
+                <td>• 복도 분말소화기 및 옥내소화전 전개 초기진압<br>• <strong>산소 공급 밸브(Zone Valve) 차단</strong> 및 이동형 산소통 반출</td>
+              </tr>
+              <tr>
+                <td class="center"><strong>피난유도반</strong></td>
+                <td class="center"><strong>인접층 간호사 · 간병사</strong></td>
+                <td>• <strong>C ➔ B ➔ A 대피순서</strong>에 따라 환자 이송 유도<br>• 피난 완료된 병실 문에 <strong>"대피완료" 표식</strong> 부착 및 잔류자 점검</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 3. 비상방송 & 산소차단 긴급조치 -->
+        <section>
+          <div class="section-title">
+            <span>3. 원내 비상방송 문안 및 산소밸브 긴급 차단 수칙</span>
+          </div>
+          <div class="row-2col">
+            <!-- 비상방송 문안 -->
+            <div class="doc-box">
+              <strong style="color:#1e3a8a; font-size:10pt; display:block; margin-bottom:4px;">
+                ■ 원내 코드레드(화재) 비상방송 표준 문안 (내선 900번)
+              </strong>
+              <div style="background:#ffffff; border:1px solid #cbd5e1; padding:7px 9px; font-size:9.5pt; line-height:1.5;">
+                <strong>"(사이렌) 코드레드! 코드레드! O층 O호실 화재 발생! 자위소방대는 즉시 현장으로 출동 바랍니다. 간병사 및 보호자분들은 의료진 안내에 따라 화재 반대편 피난계단을 통해 대피해 주시기 바랍니다."</strong> (2회 반복 방송)
+              </div>
+            </div>
+
+            <!-- 산소 밸브 차단 -->
+            <div class="doc-box alert">
+              <strong style="color:#b91c1c; font-size:10pt; display:block; margin-bottom:4px;">
+                ■ 산소 구역 차단밸브(Oxygen) 긴급 조치
+              </strong>
+              <div style="font-size:9.5pt; line-height:1.5; color:#1f2937;">
+                • <strong>폭발 방지 필수</strong>: 화재 발생 병동 복도 벽면의 <strong>산소 차단밸브(Oxygen Zone Valve) 아크릴 커버를 열고 레버를 즉시 닫음</strong>.<br>
+                • 병실 내 사용 중인 <strong>이동형 산소탱크(10L)</strong>는 환자 대피 시 외부로 신속 반출하여 연쇄 폭발 예방.
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- 섹션 3: 코드레드 방송 문안 & 산소 차단 경고 -->
-        <div class="grid-2">
-          <!-- 코드레드 방송 문안 -->
-          <div class="action-step-card primary" style="background:#f8fafc;">
-            <div class="card-head primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-              원내 코드레드(화재) 비상방송 표준 문안
-            </div>
-            <div class="card-desc" style="font-size:8.3pt; background:#fff; padding:6px; border:1px solid #cbd5e1; border-radius:4px;">
-              <strong>"(사이렌 삐-삐-) 코드레드! 코드레드! O층 O호실 화재 발생! 자위소방대는 즉시 현장으로 출동 바랍니다. 간병사 및 보호자분들은 의료진 안내에 따라 화재 반대편 피난계단을 통해 대피해 주시기 바랍니다."</strong> (2회 반복)
-            </div>
-          </div>
-
-          <!-- 산소 Zone Valve 긴급 차단 -->
-          <div class="action-step-card danger">
-            <div class="card-head danger">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              산소 구역 차단밸브(Oxygen) 긴급 조치
-            </div>
-            <div class="card-desc" style="font-size:8.3pt;">
-              • <strong>폭발 방지 필수</strong>: 화재 발생 병동 복도 벽면의 <strong>산소 차단밸브(Oxygen Zone Valve) 아크릴 커버를 열고 레버를 즉시 닫음</strong>.<br>
-              • 병실 내 사용 중인 <strong>이동형 산소통(10L)</strong>은 환자 대피 시 외부로 신속 반출하여 연쇄 폭발 예방.
-            </div>
-          </div>
-        </div>
-
-        <!-- 섹션 4: 방화구획 및 층별 안전구역 원칙 -->
-        <section class="section-block">
+        <!-- 4. 피난구역 설정 및 단계별 경로 -->
+        <section>
           <div class="section-title">
-            <span>3. 병원 피난구역 설정 및 단계별 대피 경로</span>
-            <span class="step-pill">규정 10.6 피난계획</span>
+            <span>4. 병원 피난구역 설정 및 단계별 대피 경로</span>
+            <span class="section-tag">규정 10.6 피난계획</span>
           </div>
-          <div class="section-content">
-            <div class="grid-3" style="font-size:8.5pt;">
-              <div style="background:var(--color-slate-50); padding:5px 8px; border-radius:4px; border:1px solid var(--color-slate-200);">
-                <strong style="color:var(--color-primary);">1차 안전구획 (수평대피)</strong>
-                <p style="margin-top:2px; font-size:8pt; color:var(--color-slate-600);">화재실 반대편 복도로 이동 후, <strong>중앙 방화문 폐쇄</strong>하여 연기·열기 격리.</p>
+          <div class="zone-grid">
+            <div class="zone-box">
+              <div class="zone-title">1차 안전구획 (수평대피)</div>
+              <div class="zone-desc">
+                화재실 반대편 복도 안전구역으로 신속 이동 후, <strong>중앙 방화문을 폐쇄</strong>하여 연기 및 화염 격리.
               </div>
-              <div style="background:var(--color-slate-50); padding:5px 8px; border-radius:4px; border:1px solid var(--color-slate-200);">
-                <strong style="color:var(--color-primary);">2차 안전구획 (수직대피)</strong>
-                <p style="margin-top:2px; font-size:8pt; color:var(--color-slate-600);">양측 <strong>피난계단실</strong> 진입 후 방화문 닫고, <strong>지상 1층 피난층</strong> 외부로 이동.</p>
+            </div>
+            <div class="zone-box">
+              <div class="zone-title">2차 안전구획 (수직대피)</div>
+              <div class="zone-desc">
+                양측 <strong>피난계단실</strong>로 진입 후 방화문을 닫고, <strong>지상 1층(피난층)</strong> 외부 안전지대로 이동.
               </div>
-              <div style="background:var(--color-slate-50); padding:5px 8px; border-radius:4px; border:1px solid var(--color-slate-200);">
-                <strong style="color:var(--color-danger);">상층부 옥상 대피 (9층)</strong>
-                <p style="margin-top:2px; font-size:8pt; color:var(--color-slate-600);">화재층 아래로 피난 불가 시 <strong>9층 옥상</strong> 대피 (화재 시 비상문 자동개폐장치 자동 해제).</p>
+            </div>
+            <div class="zone-box">
+              <div class="zone-title danger">상층부 옥상 대피 (9층)</div>
+              <div class="zone-desc">
+                아래층 화염으로 하향 피난이 불가할 경우 <strong>9층 옥상</strong>으로 대피 <em>(화재 시 비상문 자동개폐장치 해제)</em>.
               </div>
             </div>
           </div>
@@ -583,243 +463,175 @@
 
       </div>
 
-      <!-- Document Footer -->
+      <!-- 공문서 푸터 -->
       <footer class="doc-footer">
-        <span class="institution">네이처요양병원 Q-Pocket 인증관리 시스템</span>
-        <span>야간근무자 소방안전 전달교육 유인물 [1/2]</span>
+        <span class="org-name">네이처요양병원 소방안전관리위원회</span>
+        <span>야간근무자 소방안전 전달교육 교재 [제1면 / 총 2면]</span>
       </footer>
+
     </article>
 
-    <!-- ========================================== -->
-    <!-- PAGE 2: 환자 유형별 피난 & 소화기구 & 서명부 -->
-    <!-- ========================================== -->
-    <article class="sheet" id="page-2">
-      <!-- Document Header -->
-      <header class="doc-header">
-        <div class="header-main">
-          <span class="badge-sub">요양병원 특화 인명피난 및 장비 조작</span>
-          <h1 class="doc-title">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            입원환자 유형별 피난유도 및 전달교육 이수대장
-          </h1>
-          <p class="doc-subtitle">자립·준와상·와상 환자 맞춤형 이송 기법 및 전달교육 수료 서명부</p>
-        </div>
-        <div class="header-meta">
-          <div>편철위치: <strong>소방안전교육 결과보고서</strong></div>
-          <div>대상: <strong>야간 당직의 · 간호사 · 간병사</strong></div>
-          <div>인증기준: <strong>10.6 화재안전 관리활동</strong></div>
-        </div>
-      </header>
 
-      <!-- Sheet Body -->
+    <!-- ========================================================================== -->
+    <!-- [PAGE 2] 입원환자 유형별 피난유도 및 소화설비 조작                          -->
+    <!-- ========================================================================== -->
+    <article class="sheet" id="page-2">
+      
+      <!-- 상단 공문서 헤더 -->
+      <div>
+        <div class="doc-top-bar">
+          <div class="doc-category">[소방안전 전달교육자료] 요양병원 특화 피난유도 및 장비실무</div>
+          <div class="doc-meta">
+            교육대상: <strong>야간 당직의사 · 간호사 · 간병사</strong> &nbsp;|&nbsp;
+            관련기준: <strong>인증규정 10.6</strong>
+          </div>
+        </div>
+
+        <div class="doc-title-area">
+          <h1 class="main-title">입원환자 유형별 피난유도 및 소화설비 실무</h1>
+          <p class="sub-title">환자 신체기능별 맞춤 이송(C·B·A) 기법 및 초기 소화기구(PASS·소화전) 조작 요령</p>
+        </div>
+      </div>
+
+      <!-- 본문 영역 -->
       <div class="sheet-body">
 
-        <!-- 섹션 5: 요양병원 환자 3단계 피난 우선순위 및 이송법 -->
-        <section class="section-block">
+        <!-- 5. 입원환자 피난 우선순위 및 유형별 대피 실무 -->
+        <section>
           <div class="section-title">
-            <span>4. 입원환자 피난 우선순위 및 유형별 대피 실무</span>
-            <span class="step-pill">요양병원 핵심 실사평가 항목</span>
+            <span>5. 입원환자 피난 우선순위 및 유형별 대피 실무</span>
+            <span class="section-tag">※ 요양병원 인증조사 필수 점검 항목</span>
           </div>
-          <div class="section-content">
-            <div class="callout-box" style="margin-bottom:6px;">
-              <div class="callout-title">🚨 피난 유도 순서 (반드시 지킬 것)</div>
-              <div class="callout-desc">
-                <strong>[1순위] 발화실 환자</strong> ➔ <strong>[2순위] 인접 병실 환자</strong> ➔ <strong>[3순위] 직상층 병실 환자</strong> ➔ <strong>[4순위] 기타 병실 환자</strong>
+
+          <!-- 피난 우선순위 바 -->
+          <div style="background:#fef2f2; border:1.5px solid #dc2626; padding:8px 12px; margin-bottom:8px; font-size:10.5pt;">
+            <strong style="color:#b91c1c;">[피난 유도 우선순위]:</strong> &nbsp;
+            <strong>① 발화실 환자</strong> &nbsp;➔&nbsp; 
+            <strong>② 인접 병실 환자</strong> &nbsp;➔&nbsp; 
+            <strong>③ 직상층 병실 환자</strong> &nbsp;➔&nbsp; 
+            <strong>④ 기타 병실 환자</strong>
+          </div>
+
+          <!-- 환자 분류별 피난방법 표 -->
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width: 17%;">환자 분류</th>
+                <th style="width: 25%;">환자 특성</th>
+                <th>피난 유도 및 이송 방법 (야간 간호사 · 간병사 협력)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="center">
+                  <strong style="color:#1e3a8a; font-size:11pt;">C군 환자</strong><br>
+                  <span style="font-size:9pt; color:#475569;">(자립 대피)</span>
+                </td>
+                <td>보행 가능 환자<br>(경증 환자)</td>
+                <td>
+                  • 젖은 수건 또는 마스크로 코와 입을 막고 낮은 자세로 유도<br>
+                  • <strong>직원 1명이 5~10명을 인솔</strong>하여 화재 반대편 피난계단으로 신속 대피
+                </td>
+              </tr>
+              <tr>
+                <td class="center">
+                  <strong style="color:#b45309; font-size:11pt;">B군 환자</strong><br>
+                  <span style="font-size:9pt; color:#475569;">(부축 대피)</span>
+                </td>
+                <td>휠체어·보행기 의존 환자<br>(불완전 거동)</td>
+                <td>
+                  • 휠체어에 탑승하여 이동하거나 직원·간병사 <strong>2인 1조로 부축 대피</strong><br>
+                  • <strong>승강기(엘리베이터) 탑승 절대 금지</strong>, 1차 수평대피 구역으로 우선 이동
+                </td>
+              </tr>
+              <tr class="highlight">
+                <td class="center">
+                  <strong style="color:#b91c1c; font-size:11pt;">A군 환자</strong><br>
+                  <span style="font-size:9pt; color:#475569;">(침상 대피)</span>
+                </td>
+                <td>완전 와상·의식저하 환자<br>(거동 불가)</td>
+                <td>
+                  • <strong>침상 시트(Bed Sheet) 또는 피난용 담요(모포)</strong>에 환자를 감싼 후 바닥으로 조심스럽게 내려 복도로 <strong>끌기(Slide) 대피</strong><br>
+                  • 들것을 이용한 2인 1조 이송 또는 피난용 미끄럼포/경사로 적극 활용
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:9pt; color:#64748b; margin-top:4px;">
+            ※ 대피 순서 원칙: <strong>C군(자립) 환자를 먼저 대피시켜 통로를 확보</strong>한 후, B군(휠체어) 및 A군(와상) 중증 환자를 순차적으로 이송합니다.
+          </p>
+        </section>
+
+        <!-- 6. 초기 소화설비 조작 요령 -->
+        <section>
+          <div class="section-title">
+            <span>6. 초기 소화설비 조작 요령 (소화기 PASS & 옥내소화전)</span>
+            <span class="section-tag">※ 현장 구술 및 시연 평가 항목</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            
+            <!-- 소화기 PASS -->
+            <div style="border:1.5px solid #1e3a8a; background:#ffffff; padding:10px 12px;">
+              <strong style="color:#1e3a8a; font-size:11pt; display:block; margin-bottom:6px; border-bottom:1px solid #cbd5e1; padding-bottom:4px;">
+                ■ 분말소화기 조작 요령 (P · A · S · S)
+              </strong>
+              <div style="font-size:9.5pt; line-height:1.55; color:#1e293b;">
+                • <strong>1. P (Pull - 핀 뽑기)</strong>:<br>
+                &nbsp;&nbsp;손잡이를 쥐지 않은 상태에서 <strong>안전핀을 힘껏 뽑는다</strong>.<br>
+                • <strong>2. A (Aim - 노즐 향하기)</strong>:<br>
+                &nbsp;&nbsp;바람을 등지고 서서 <strong>노즐을 불 쪽(바닥)으로 향한다</strong>.<br>
+                • <strong>3. S (Squeeze - 손잡이 쥐기)</strong>:<br>
+                &nbsp;&nbsp;손잡이를 <strong>강하게 힘껏 움켜쥔다</strong>.<br>
+                • <strong>4. S (Sweep - 골고루 쓸기)</strong>:<br>
+                &nbsp;&nbsp;빗자루로 바닥을 쓸듯이 <strong>좌우로 골고루 방사한다</strong>.
               </div>
             </div>
 
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th style="width: 18%;">환자 구분</th>
-                  <th style="width: 25%;">환자 특성</th>
-                  <th>피난 유도 및 이송 방법 (야간 간호/간병 협력)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="center"><span class="golden-pill">1단계</span> <strong>자립 환자</strong></td>
-                  <td>보행 가능 (경증 환자)</td>
-                  <td>• 젖은 수건/마스크로 코와 입을 가리고 낮은 자세 유도<br>• 직원 1명이 5~10명을 인솔하여 피난계단으로 일괄 유도</td>
-                </tr>
-                <tr>
-                  <td class="center"><span class="golden-pill">2단계</span> <strong>준와상 환자</strong></td>
-                  <td>휠체어·보행기 의존</td>
-                  <td>• 휠체어 탑승 후 이동 또는 2인 1조 부축 대피<br>• <strong>엘리베이터 사용 절대 금지</strong>, 수평대피 구역으로 우선 이동</td>
-                </tr>
-                <tr class="highlight">
-                  <td class="center"><span class="danger-pill">3단계</span> <strong>와상 환자</strong></td>
-                  <td>거동 불가 (중증·침상 환자)</td>
-                  <td>• <strong>침상 시트(Bed Sheet) 또는 피난용 모포</strong>에 환자를 감싸 바닥으로 조심스럽게 내린 후 복도로 <strong>끌기(Slide) 대피</strong><br>• 들것 2인 1조 이송 또는 피난용 미끄럼포/경사로 활용</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- 섹션 6: 소화기구 조작법 (PASS & 옥내소화전) -->
-        <section class="section-block">
-          <div class="section-title">
-            <span>5. 초기 소화설비 조작 요령 (소화기 PASS & 옥내소화전)</span>
-            <span class="step-pill">현장 구술·시연 필수</span>
-          </div>
-          <div class="section-content">
-            <div class="grid-2">
-              <!-- 소화기 PASS -->
-              <div class="action-step-card primary">
-                <div class="card-head primary">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                  분말소화기 사용법 (P · A · S · S)
-                </div>
-                <div class="card-desc" style="font-size:8.3pt;">
-                  • <strong>P (Pull)</strong>: 손잡이를 잡지 말고 <strong>안전핀을 뽑는다</strong>.<br>
-                  • <strong>A (Aim)</strong>: 바람을 등지고 노즐을 <strong>불 쪽으로 향한다</strong>.<br>
-                  • <strong>S (Squeeze)</strong>: 손잡이를 <strong>힘껏 움켜쥔다</strong>.<br>
-                  • <strong>S (Sweep)</strong>: 빗자루로 쓸듯이 <strong>좌우로 골고루 방사한다</strong>.
-                </div>
-              </div>
-
-              <!-- 옥내소화전 -->
-              <div class="action-step-card danger">
-                <div class="card-head danger">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24"/></svg>
-                  옥내소화전 사용법 (2인 1조 원칙)
-                </div>
-                <div class="card-desc" style="font-size:8.3pt;">
-                  • <strong>1번 근무자</strong>: 소화전 함을 열고 호스를 빼서 불 앞(2~3m)까지 전개 후 노즐(관창)을 꽉 잡는다.<br>
-                  • <strong>2번 근무자</strong>: 호스 꼬임을 펴고 <strong>개폐 밸브를 반시계 방향으로 돌려 개방</strong>하여 방수를 시작한다.
-                </div>
+            <!-- 옥내소화전 -->
+            <div style="border:1.5px solid #b91c1c; background:#ffffff; padding:10px 12px;">
+              <strong style="color:#b91c1c; font-size:11pt; display:block; margin-bottom:6px; border-bottom:1px solid #cbd5e1; padding-bottom:4px;">
+                ■ 옥내소화전 조작 요령 (2인 1조 원칙)
+              </strong>
+              <div style="font-size:9.5pt; line-height:1.55; color:#1e293b;">
+                • <strong>1번 근무자 (방수 및 관창 담당)</strong>:<br>
+                &nbsp;&nbsp;① 소화전 함을 열고 호스를 꺼내 화점 앞(2~3m)까지 전개한다.<br>
+                &nbsp;&nbsp;② 관창(노즐)을 양손으로 단단히 잡고 방수 자세를 취한다.<br><br>
+                • <strong>2번 근무자 (개폐 밸브 담당)</strong>:<br>
+                &nbsp;&nbsp;① 호스의 꺾임과 꼬임이 없는지 확인한다.<br>
+                &nbsp;&nbsp;② 소화전 밸브를 <strong>반시계 방향으로 돌려 개방</strong>하여 물을 공급한다.
               </div>
             </div>
+
           </div>
         </section>
 
-        <!-- 섹션 7: 야간근무자 전달교육 수강 확인서 및 서명란 -->
-        <section class="section-block">
-          <div class="section-title">
-            <span>6. 야간근무자 소방안전 전달교육 수강 확인 및 서명대장</span>
-            <span class="step-pill">인증평가 증빙 편철용</span>
-          </div>
-          <div class="section-content" style="padding:6px 10px;">
-            <p style="font-size:8pt; color:var(--color-slate-600); margin-bottom:5px;">
-              ※ 본인은 2025~2026년도 야간/교대근무자 소방안전 전달교육 교보재를 수령 및 열람하고, 원내 화재 대응체계(900번 신고, 야간 자위소방대 임무, 산소밸브 차단, 환자 유형별 피난방법)를 완전히 숙지하였음을 확인합니다.
+        <!-- 7. 핵심 행동 체크포인트 요약 박스 -->
+        <section>
+          <div style="border:1.5px solid #475569; background:#f8fafc; padding:8px 12px;">
+            <strong style="color:#0f172a; font-size:10pt; display:block; margin-bottom:3px;">
+              ■ 야간근무자 필수 암기 골든룰 (Golden Rule)
+            </strong>
+            <p style="font-size:9.5pt; line-height:1.5; color:#334155;">
+              1. 불을 발견하면 당황하지 말고 즉시 <strong>"불이야!"</strong>를 외치고 <strong>비상벨(발신기)을 누른다</strong>.<br>
+              2. 야간 상황실(원무과) 비상 보고 번호는 <strong>내선 900번</strong>이다.<br>
+              3. 연기 확산을 막기 위해 환자를 구출한 즉시 <strong>발화실 문과 방화문을 반드시 닫는다</strong>.<br>
+              4. 병동 산소 차단 밸브(Zone Valve)를 신속히 잠그고, <strong>화재 시 엘리베이터는 절대 탑승하지 않는다</strong>.
             </p>
-
-            <table class="sign-table">
-              <thead>
-                <tr>
-                  <th style="width: 7%;">번호</th>
-                  <th style="width: 14%;">부서</th>
-                  <th style="width: 13%;">직종/직위</th>
-                  <th style="width: 14%;">성명</th>
-                  <th style="width: 18%;">교육확인일자</th>
-                  <th style="width: 18%;">자필서명</th>
-                  <th style="width: 16%;">비고</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>진료부</td>
-                  <td>당직의사</td>
-                  <td>안문성</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>야간당직</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>진료부</td>
-                  <td>당직의사</td>
-                  <td>조운</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>야간당직</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>진료부</td>
-                  <td>당직의사</td>
-                  <td>오수윤</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>야간당직</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>간호부</td>
-                  <td>간호사</td>
-                  <td>구가윤</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>나이트전달</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>간호부</td>
-                  <td>간호사</td>
-                  <td>서수연</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>나이트전달</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>간호부</td>
-                  <td>간호사</td>
-                  <td>김유경</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>나이트전달</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>간호부</td>
-                  <td>간호사</td>
-                  <td>유은정</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>나이트전달</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>원무과</td>
-                  <td>원무당직</td>
-                  <td>권준혁</td>
-                  <td>2026. 09. 23.</td>
-                  <td></td>
-                  <td>야간상황실</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>간호부</td>
-                  <td>간병사/조무</td>
-                  <td></td>
-                  <td>2026. . .</td>
-                  <td></td>
-                  <td>병동상주</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div style="margin-top:6px; display:flex; justify-content:space-between; align-items:center; font-size:8pt; color:var(--color-slate-600);">
-              <span>전달교육 실시자 (소방안전관리자): <strong>정 평 오</strong> (인)</span>
-              <span>확인자 (간호부서장): <strong>김 옥 경</strong> (인)</span>
-              <span>병원장 확인: <strong>윤 휘 중</strong> (인)</span>
-            </div>
           </div>
         </section>
 
       </div>
 
-      <!-- Document Footer -->
+      <!-- 공문서 푸터 -->
       <footer class="doc-footer">
-        <span class="institution">네이처요양병원 Q-Pocket 인증관리 시스템</span>
-        <span>야간근무자 소방안전 전달교육 유인물 [2/2]</span>
+        <span class="org-name">네이처요양병원 소방안전관리위원회</span>
+        <span>야간근무자 소방안전 전달교육 교재 [제2면 / 총 2면]</span>
       </footer>
+
     </article>
 
-  </main>
+  </div>
 
 </body>
 </html>
