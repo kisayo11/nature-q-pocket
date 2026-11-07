@@ -3,9 +3,14 @@ const path = require('path');
 
 const rulesDataPath = path.resolve(__dirname, '../app/src/data/rulesData.json');
 const authenticDataPath = path.resolve(__dirname, '../app/src/data/authenticRulesData.json');
+const extractedPath = path.resolve(__dirname, '../app/src/data/hwp_extracted.json');
 
 const rulesData = JSON.parse(fs.readFileSync(rulesDataPath, 'utf8'));
 const authenticData = JSON.parse(fs.readFileSync(authenticDataPath, 'utf8'));
+let extractedData = {};
+if (fs.existsSync(extractedPath)) {
+  extractedData = JSON.parse(fs.readFileSync(extractedPath, 'utf8'));
+}
 
 const authMap = {};
 authenticData.forEach(item => {
@@ -21,6 +26,7 @@ const merged = rulesData.map(rule => {
 
   const faqText = `Q: ${auth.faqQuestion}\nA: ${auth.faqAnswer}`;
   const searchKey = `${auth.code} ${auth.title} ${rule.choseong || ''} ${(auth.department || []).join(' ')} ${auth.isMustPass ? '필수 mustpass' : ''}`.trim();
+  const freshText = extractedData[rule.code]?.text || rule.fullTextSnippet || '';
 
   return {
     ...rule,
@@ -36,7 +42,8 @@ const merged = rulesData.map(rule => {
     keyPoints: auth.keyPoints,
     forms: auth.forms || rule.forms || [],
     searchKey: searchKey,
-    pdfUrl: `/regulations/${auth.code}.pdf`
+    pdfUrl: `/regulations/${auth.code}.pdf`,
+    fullTextSnippet: freshText
   };
 });
 
